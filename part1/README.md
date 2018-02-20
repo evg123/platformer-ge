@@ -1,5 +1,7 @@
 # Part 1
 
+(Note: Part 1 is quite large! Get started early! Part 2 will mostly be polish and AI. Part 3 will be the final game)
+
 ## The Business
 
 The gaming business is a volatile business. It is volatile because it changes and moves forward, innovates, and then the cycle repeats. The good news is that your team has made millions from the success of breakout. You have successfully completed your contract with your old boss and your companies getting positive publicity.
@@ -61,7 +63,7 @@ Forming some good habits now will help us later on when our project grows.
 - ThirdParty - Code that you have not written if any.
 - Tools -- Any tools that you develop can be in this folder (and follow a similar hierarchy)
 
-Note that src should only contain ".cpp" or ".h" files. Why? It makes it very fast to do a backup of your src directory as one example. Secondly, binary files that are generated often clutter up directories. I should not see any binaries in your repository. 
+Note that src should only contain ".cpp" or ".h" files. Why? It makes it very fast to do a backup of your src directory as one example. Secondly, binary files that are generated often clutter up directories. I should not see any binaries in your repository until the final release. 
 
 ## Game Requirements
 
@@ -72,9 +74,11 @@ The platform game you are building in part 1 has the following requirements.
 - Your character should be able to run and jump (arrowkeys and spacebar or WASD and spacebar)
 - There should be tiles that a character can run on and jump over
   - That means you should think about a 2D collision system
-- There should be some 'background' image (i.e. clouds in the sky, mountains, a blue gradient, etc) in your world.
+- There should have some 'background' image (i.e. clouds in the sky, mountains, a blue gradient, etc) in your world.
 - You should think about 'enemy characters' (This will be implemented in part 2)
+- You should think about a 'special feature' or gameplay mechanic that makes your game unique.
 - There should be a tile editor (see next section)
+- You should include a sprite editor (see next section)
 
 ### Tile Editor
 A tile editor is a simple tool that allows you to place, select, and draw tiles to preview your level.
@@ -96,27 +100,43 @@ A simplistic tile editor may be think of a tile map is a collection of values st
 1 = some enemy character
 2 = some tile
 
-If I click within some x and y coordinates, that increments or decrements the value and changes the tile.
+If I click within some x and y coordinates, that increments or decrements the value and changes the tile. This is considered an acceptable version of a tile editor for this assignment.
 
-You may use any language (Python, C++, C#, etc.) to implement your tile editor. It need not have a fancy GUI, but that is encouraged.
+You may use any language (Python, C++, C#, etc.) to implement your tile editor. It need not have a fancy GUI, but that is encouraged as time permits
 
 Here is some inspiration for building a tile editor
 
 * V-Play editor https://www.youtube.com/watch?v=65SQoW2Jd94 
 * Dev blog showing an editor https://www.youtube.com/watch?v=nnm2ARAcSJ0
 
+### Sprite Editor
+
+A sprite editor is a tool that can allow you to slice a single sprite sheet into various animations.
+
+Your sprite editor needs the following functionality.
+
+- Specify dimensions of how big each tile is.
+- Be able to preview an arbitrary number of frames
+
+A simplisitic sprite editor may be a terminal based tool that loads an image, asks you the dimensions of a sprite, and then which frames to play.  This is considered an acceptable version of a tile editor for this assignment.
+
+Here is some inspiration for building a (fancy) sprite editor:
+
+* https://www.youtube.com/watch?v=8bKCdmgJnPM
+
+You may use any language (Python, C++, C#, etc.) to implement your tile editor. It need not have a fancy GUI, but that is encouraged as time permits.
+
 ### Game
 
 Beyond those requirements, you may get as creative as you like.
 
 Tips:
-* Start early and stay on track for the milestones!
+* Start early and stay on track for each milestone!
 
 ## Rubric (5% of overall grade)
 
 * (50%) The Game requirements should be met above.
-* (50%) The game should feel polished
-
+* (50%) The game and editors should feel polished and work.
 
 ## More Resources and Assets
 
