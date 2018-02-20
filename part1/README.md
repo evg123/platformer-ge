@@ -7,7 +7,7 @@ The gaming business is a volatile business. It is volatile because it changes an
 This time however, you have caught the attention of another game designer: Shigeru Miyamoto
 
 ## Shigeru Miyamoto
-<img align="left" width="250px" src="./../media/miyamoto.JPG" style="float:left;">
+<img align="left" width="100px" src="./../media/miyamoto.JPG" style="float:left;">
 Shigeru Miyamoto is the legendary game designer of Donkey Kong, Mario and several other Nintendo franchises. Miyamoto does not care about fancy graphics, he only wants to make sure the game is fun. Shigeru 
 
 Read more about Shigeru Miyamoto here: https://en.wikipedia.org/wiki/Shigeru_Miyamoto
