@@ -7,13 +7,13 @@ The gaming business is a volatile business. It is volatile because it changes an
 This time however, you have caught the attention of another game designer: Shigeru Miyamoto
 
 ## Shigeru Miyamoto
-<img align="left" width="250px" src="./../media/miyamoto.JPG">
+<img align="left" width="250px" src="./../media/miyamoto.JPG" style="float:left;">
 Shigeru Miyamoto is the legendary game designer of Donkey Kong, Mario and several other Nintendo franchises. Miyamoto does not care about fancy graphics, he only wants to make sure the game is fun. Shigeru 
 
 Read more about Shigeru Miyamoto here: https://en.wikipedia.org/wiki/Shigeru_Miyamoto
 
 ## Platformer Games
-<img align="left" width="250px" src="./../media/mario.png">
+<img align="left" width="250px" src="./../media/mario.png" style="float:right;">
 For this series of assignments, we are going to build a 2D platformer game. Platformer games are games in which you typically run, jump, and battle bad guys in real time. The specific type of platformer we are going to develop is 2D and a [side scroller](https://en.wikipedia.org/wiki/Side-scrolling_video_game).
 
 Step 1 - Play the game!
