@@ -13,6 +13,7 @@ Shigeru Miyamoto is the legendary game designer of Donkey Kong, Mario and severa
 
 Read more about Shigeru Miyamoto here: https://en.wikipedia.org/wiki/Shigeru_Miyamoto
 
+For inspiration during this project, it may be worthwhile to discuss with your team you favorite Nintendo game. :)
 
 ## Platformer Games
 <img align="right" width="250px" src="./../media/mario.png" style="float:right;">
