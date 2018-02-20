@@ -13,29 +13,24 @@ Shigeru Miyamoto is the legendary game designer of Donkey Kong, Mario and severa
 
 Read more about Shigeru Miyamoto here: https://en.wikipedia.org/wiki/Shigeru_Miyamoto
 
+
 ## Platformer Games
 <img align="right" width="250px" src="./../media/mario.png" style="float:right;">
 For this series of assignments, we are going to build a 2D platformer game. Platformer games are games in which you typically run, jump, and battle bad guys in real time. The specific type of platformer we are going to develop is 2D and a [side scroller](https://en.wikipedia.org/wiki/Side-scrolling_video_game).
 
-Step 1 - Play the game!
-If you are unfamaliar with Mario or platformer games, you can play a version here:
-
-http://supermarioemulator.com/mario.php
-
-Step 2 - Form a team!
-https://docs.google.com/spreadsheets/d/1bglePE3sfvoe5yCSCp8BKBt8lg0e9SQcGptQPyVkkTU/edit?usp=sharing
-
-Make sure you form a team! (If you are reading this, make sure your teammates join your same repository)
-
-Step 3 - Game Design
-
-Miyamoto focuses on fun and on developing franchisable characters (think about how many Mario games there have been!). What makes a game fun or memorable is a difficult question and often involves much trial and error! For us however, we only have a few weeks to complete the contract for this game.
+- Step 1 - Play the game!
+  - If you are unfamaliar with Mario or platformer games, you can play a version here:
+  - http://supermarioemulator.com/mario.php
+- Step 2 - Form a team!
+  - https://docs.google.com/spreadsheets/d/1bglePE3sfvoe5yCSCp8BKBt8lg0e9SQcGptQPyVkkTU/edit?usp=sharing
+  - Make sure you form a team! (If you are reading this, make sure your teammates join your same repository)
+- Step 3 - Game Design
+  - Miyamoto focuses on fun and on developing franchisable characters (think about how many Mario games there have been!). What makes a game fun or memorable is a difficult question and often involves much trial and error! For us however, we only have a few weeks to complete the contract for this game.
 
 For that reason we are going to focus on:
 
 * Building tools that can be reused (A sprite editor and tilemap editor) to speed up the develpment of our game.
 * Implementing 1 special technique/powerup/gameplay feature that makes our game unique
-* 
 
 ## Our technology stack
 
@@ -44,9 +39,9 @@ Shigeru has decided that you will be using the following technology stack:
 * Modern C++ (11/14/17)
 * SDL library
 
-Nolan prefers these tools because SDL is an industry standard, cross platform, and using C++ will give us some additional speed. 
+Miyamoto prefers these tools because SDL is an industry standard, cross platform, and using C++ will give us some additional speed. 
 
-Right now, Nolan wants us to produce the game quickly however, as demand is high for this title!
+Nintendo however likes to do things there own way. Perhaps there will be some surprises in the future! Program your project accordingly.
 
 ## Project Hieararchy
 
