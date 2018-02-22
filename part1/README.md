@@ -11,7 +11,7 @@ This time however, you have caught the attention of another game designer: Shige
 ## Shigeru Miyamoto
 <img align="left" width="100px" src="./../media/miyamoto.JPG" style="float:left;">
 
-Shigeru Miyamoto is the legendary game designer of Donkey Kong, Mario and several other Nintendo franchises. Miyamoto does not care about fancy graphics, he only wants to make sure the game is fun. Shigeru 
+Shigeru Miyamoto is the legendary game designer of Donkey Kong, Mario and several other Nintendo franchises. Miyamoto does not care about fancy graphics, he only wants to make sure the game is fun. 
 
 Read more about Shigeru Miyamoto here: https://en.wikipedia.org/wiki/Shigeru_Miyamoto
 
