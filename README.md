@@ -1,3 +1,28 @@
+# A 2D Platformer using SDL2
+Website: https://evg-game-engines.herokuapp.com/platformer.html
+
+### Features:
+* 
+* 
+
+
+### Controls:
+* Use the arrow keys or A and D to move left and right
+* Press Spacebar to jump
+* The F key toggles an FPS display
+
+
+### Build Instructions:
+1. From the root directory run "python src/build.py"  
+   A Game directory will be created containing the binary and all assets needed.
+1. Run the game with "./Game/Hopman"
+1. Enjoy
+
+Only tested on OSX 10.12
+
+******************
+Original README
+
 # Assignment - Platformer
 
 * Part 1 will be released first.
