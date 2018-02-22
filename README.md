@@ -10,7 +10,7 @@ Think of each part as a project milestone. Stay on track!
 
 ## Part 1
 
-Released January 26
+Released February 21
 
 ## Part 2
 
