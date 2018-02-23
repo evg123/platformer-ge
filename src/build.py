@@ -35,7 +35,7 @@ os.system(compileString)
 if (len(sys.argv) > 1 and sys.argv[1] == "release"):
     # build a tarball
     print "Creating tarball"
-    os.system("tar -zcf breakout.tar.gz Game")
+    os.system("tar -zcf hopman.tar.gz Game")
 
 print "Done"
 
