@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 import pygame
+import math
+import argparse
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -9,10 +12,10 @@ WINDOW_HEIGHT = 720
 TILE_SIDE_PX = 32
 TILE_TYPE_COUNT = 2
 NEW_TILE_NUM = 0
-TILE_IMAGE_PATTERN = './Assets/images/tiles/tile_{0}.png'
+TILE_IMAGE_PATTERN = '../Assets/images/tiles/tile_{0}.png'
 
-WINDOW_WIDTH_XN = WINDOW_WIDTH // TILE_SIDE_PX
-WINDOW_HEIGHT_XN = WINDOW_HEIGHT // TILE_SIDE_PX
+WINDOW_WIDTH_TILES = math.ceil(WINDOW_WIDTH / TILE_SIDE_PX)
+WINDOW_HEIGHT_TILES = math.ceil(WINDOW_HEIGHT / TILE_SIDE_PX)
 
 LMB = 1
 RMB = 3
@@ -26,14 +29,13 @@ class Editor(object):
         self.xn_off = 0
         self.yn_off = 0
         self.image_bank = []
+        self.level_filename = None
     
     def setup(self, level_file):
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.load_image_bank()
-        if level_file:
-            self.load_level(level_file)
-        else:
-            self.blank_level()
+        self.level_filename = level_file
+        self.load_level()
     
     def load_image_bank(self):
         for num in range(TILE_TYPE_COUNT):
@@ -41,13 +43,26 @@ class Editor(object):
             img = pygame.image.load(filename)
             self.image_bank.append(img)
     
-    def load_level(self, level_file):
+    def load_level(self):
+        # check if file exists
+        if not os.path.isfile(self.level_filename):
+            # new level file, start with a blank level
+            self.blank_level()
+            return
+        
         # load an existing level from a file
-        pass
+        with open(self.level_filename, 'r') as lvl_file:
+            level_lines = lvl_file.readlines()
+            self.tiles = [[int(tile) for tile in line.split()] for line in level_lines]
+    
+    def save_level(self):
+        with open(self.level_filename, 'w') as lvl_file:
+            for row in self.tiles:
+                lvl_file.write(' '.join(str(item) for item in row) + '\n')
     
     def blank_level(self):
-        start_xn = WINDOW_WIDTH_XN
-        start_yn = WINDOW_HEIGHT_XN
+        start_xn = WINDOW_WIDTH_TILES
+        start_yn = WINDOW_HEIGHT_TILES
         self.tiles = [[NEW_TILE_NUM] * start_yn for _ in range(start_xn)]
     
     def loop(self):
@@ -58,10 +73,24 @@ class Editor(object):
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                # exit game
                 self.running = False
             elif event.type == pygame.MOUSEBUTTONUP:
+                # cycle tiles
                 self.handle_click(event)
-            # move viewable portion of the level
+            elif event.type == pygame.KEYUP:
+                # move viewable portion of the level
+                if event.key == pygame.K_LEFT:
+                    self.shift_screen(-1, 0)
+                elif event.key == pygame.K_RIGHT:
+                    self.shift_screen(1, 0)
+                elif event.key == pygame.K_UP:
+                    self.shift_screen(0, -1)
+                elif event.key == pygame.K_DOWN:
+                    self.shift_screen(0, 1)
+                # save the level to file
+                elif event.key == pygame.K_s:
+                    self.save_level()
     
     def handle_click(self, event):
         increment = 0
@@ -77,6 +106,8 @@ class Editor(object):
     def tile_n_from_pos(self, xpos, ypos):
         xn = xpos // TILE_SIDE_PX
         yn = ypos // TILE_SIDE_PX
+        xn += self.xn_off
+        yn += self.yn_off
         return xn, yn
     
     def shift_screen(self, x_shift, y_shift):
@@ -85,13 +116,24 @@ class Editor(object):
         self.yn_off += y_shift
         
         # expand the level as the user shifts right
-        while len(self.tiles[0]) < WINDOW_WIDTH_XN + self.xn_off:
-            for xn in range(len(self.tiles[0])):
-                self.tiles[xn].append(0)
+        while len(self.tiles) < WINDOW_WIDTH_TILES + self.xn_off:
+            self.tiles.append([NEW_TILE_NUM] * len(self.tiles[0]))
+        
+        # shift left
+        while self.xn_off < 0:
+            self.tiles.insert(0, [NEW_TILE_NUM] * len(self.tiles[0]))
+            self.xn_off += 1
         
         # expand the level as the user shifts downward
-        while len(self.tiles[0]) < WINDOW_HEIGHT_XN + self.yn_off:
-            self.tiles.append([NEW_TILE_NUM] * len(self.tiles[0]))
+        while len(self.tiles[0]) < WINDOW_HEIGHT_TILES + self.yn_off:
+            for xn in range(len(self.tiles)):
+                self.tiles[xn].append(NEW_TILE_NUM)
+        
+        # shift upward
+        while self.yn_off < 0:
+            for xn in range(len(self.tiles)):
+                self.tiles[xn].insert(0, NEW_TILE_NUM)
+            self.yn_off += 1
     
     def cycle_tile(self, xn, yn, increment):
         t_type = self.tiles[xn][yn]
@@ -138,8 +180,12 @@ class Editor(object):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("level_file", help="Filename of the level to create/edit")
+    args = parser.parse_args()
+    
     ed = Editor()
-    ed.setup(None)
+    ed.setup(args.level_file)
     ed.loop()
 
 
