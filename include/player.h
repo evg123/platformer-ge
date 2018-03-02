@@ -19,13 +19,29 @@
 #include "drawable.h"
 #include "graphics.h"
 
+constexpr int PLAYER_WIDTH = 20;
+constexpr int PLAYER_HEIGHT = 20;
+
 constexpr auto PLAYER_SPRITE_SHEET = "sprites/player.png";
+
+constexpr float GRAVITY = 0.001;
+constexpr float PLAYER_JUMP_POWER = 0.5;
 
 class Player : public Drawable {
 private:
+    float jump_power = PLAYER_JUMP_POWER;
 public:
     Player();
-    void render();
+    void setPosition(int xpos, int ypos) override;
+    void render() override;
+    
+    void moveRight();
+    void stopRight();
+    void moveLeft();
+    void stopLeft();
+    void jump();
+
+    bool canJump();
 };
 
 #endif /* player_h */

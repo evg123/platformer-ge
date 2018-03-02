@@ -24,6 +24,8 @@
  */
 class Graphics {
 private:
+    Graphics();
+    ~Graphics();
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     int window_width;
@@ -31,8 +33,6 @@ private:
     int screen_off_x = 0;
     int screen_off_y = 0;
 public:
-    Graphics();
-    ~Graphics();
     void init(int window_width, int window_height);
     static Graphics& instance();
     
@@ -52,8 +52,9 @@ public:
     void swapFrame();
     void updateWindowTitle(std::string window_title);
     
-    /** return the current world offset that the screen is showing in number of tiles */
+    /** return the current world offset that the screen is showing */
     std::tuple<int, int> getScreenOffsets() { return std::make_tuple(screen_off_x, screen_off_y); }
+    void focusScreenOffsets(SDL_Rect &rect);
 };
 
 #endif /* graphics_h */

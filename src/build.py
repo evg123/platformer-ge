@@ -14,7 +14,7 @@ ARGUMENTS="-D MAC -std=c++14"
 INCLUDE_DIR="-I ./include/ -I ./lib/SDL2.framework/Headers"
 
 # What libraries do we want to include
-LIBRARIES="-F ./lib/ -framework SDL2 -framework SDL2_image -framework SDL2_ttf -framework SDL2_mixer"
+LIBRARIES="-F ./lib/osx/ -framework SDL2 -framework SDL2_image -framework SDL2_ttf -framework SDL2_mixer"
 
 # The name of our executable
 EXECUTABLE="./Game/Hopman"

@@ -10,8 +10,9 @@ WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
 TILE_SIDE_PX = 32
-TILE_TYPE_COUNT = 2
-NEW_TILE_NUM = 0
+TILE_TYPE_START = 1
+TILE_TYPE_COUNT = 4
+EMPTY_TILE_NUM = 0
 TILE_IMAGE_PATTERN = '../Assets/images/tiles/tile_{0}.png'
 DIM_LINE_FORMAT = '{0} {1}'
 
@@ -29,7 +30,7 @@ class Editor(object):
         self.tiles = []
         self.xn_off = 0
         self.yn_off = 0
-        self.image_bank = []
+        self.image_bank = [0]
         self.level_filename = None
     
     def setup(self, level_file):
@@ -39,10 +40,11 @@ class Editor(object):
         self.load_level()
     
     def load_image_bank(self):
-        for num in range(TILE_TYPE_COUNT):
+        for num in range(TILE_TYPE_START, TILE_TYPE_COUNT):
             filename = TILE_IMAGE_PATTERN.format(num)
             img = pygame.image.load(filename)
             self.image_bank.append(img)
+        print(self.image_bank)
     
     def load_level(self):
         # check if file exists
@@ -79,7 +81,7 @@ class Editor(object):
     def blank_level(self):
         start_xn = WINDOW_WIDTH_TILES
         start_yn = WINDOW_HEIGHT_TILES
-        self.tiles = [[NEW_TILE_NUM] * start_yn for _ in range(start_xn)]
+        self.tiles = [[EMPTY_TILE_NUM] * start_yn for _ in range(start_xn)]
     
     def loop(self):
         while self.running:
@@ -133,22 +135,22 @@ class Editor(object):
         
         # expand the level as the user shifts right
         while len(self.tiles) < WINDOW_WIDTH_TILES + self.xn_off:
-            self.tiles.append([NEW_TILE_NUM] * len(self.tiles[0]))
+            self.tiles.append([EMPTY_TILE_NUM] * len(self.tiles[0]))
         
         # shift left
         while self.xn_off < 0:
-            self.tiles.insert(0, [NEW_TILE_NUM] * len(self.tiles[0]))
+            self.tiles.insert(0, [EMPTY_TILE_NUM] * len(self.tiles[0]))
             self.xn_off += 1
         
         # expand the level as the user shifts downward
         while len(self.tiles[0]) < WINDOW_HEIGHT_TILES + self.yn_off:
             for xn in range(len(self.tiles)):
-                self.tiles[xn].append(NEW_TILE_NUM)
+                self.tiles[xn].append(EMPTY_TILE_NUM)
         
         # shift upward
         while self.yn_off < 0:
             for xn in range(len(self.tiles)):
-                self.tiles[xn].insert(0, NEW_TILE_NUM)
+                self.tiles[xn].insert(0, EMPTY_TILE_NUM)
             self.yn_off += 1
     
     def cycle_tile(self, xn, yn, increment):
@@ -176,6 +178,9 @@ class Editor(object):
         for xn in range(len(self.tiles)):
             for yn in range(len(self.tiles[0])):
                 t_type = self.tiles[xn][yn]
+                if t_type == EMPTY_TILE_NUM:
+                    # don't draw blank tiles
+                    continue
                 img = self.image_bank[t_type]
                 rect = self.rect_from_coord(xn, yn)
                 self.screen.blit(img, rect)

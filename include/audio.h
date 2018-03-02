@@ -25,10 +25,10 @@
  */
 class Audio {
 private:
-    Mix_Music *bg_track = NULL;
-public:
     Audio();
     ~Audio();
+    Mix_Music *bg_track = NULL;
+public:
     static Audio& instance();
     void setBgTrack(const std::string &track_name);
     void playSound(const std::string &sound_name);

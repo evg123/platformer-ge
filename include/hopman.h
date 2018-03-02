@@ -13,7 +13,7 @@ constexpr int ERROR = 1;
 constexpr int OK = 0;
 
 constexpr int STARTING_LEVEL = 1;
-constexpr auto BG_TRACK = "./Assets/music/bg_track.wav";
+constexpr auto BG_TRACK = "bg_track.wav";
 
 constexpr int DEFAULT_FPS_LIMIT = 60;
 constexpr int DEFAULT_WINDOW_WIDTH = 1280;
@@ -62,21 +62,26 @@ struct LevelConfig {
 
 class Hopman {
 private:
-    Input input;
     int level = STARTING_LEVEL;
     GameState game_state = GameState::PLAYING;
     int fps_limit = DEFAULT_FPS_LIMIT;
     int score = 0;
     int lives = DEFAULT_EXTRA_LIVES;
 
+    bool display_fps = false;
     int fps_display = 0;
     std::string screen_message = "";
 
-    Player player;
+    Player *player;
     std::vector<Drawable*> objects = {};
 
+    /** set game state to start quitting */
+    void exitGame() { game_state = GameState::EXITING; }
+    /** toggle the fps display UI */
+    void toggleFps() { display_fps = !display_fps; }
+    
     void handleInput();
-    void handleLevelEnd();
+    void advanceScreen();
     void registerInputCallbacks();
     void update(int delta);
     void render();
@@ -89,12 +94,12 @@ private:
     void cleanupLevel();
 
     void parseLevelConfig(LevelConfig &config);
+    void setupLevel();
     void add_tile(int tile_type, int tx, int ty);
 public:
     Hopman();
     ~Hopman();
     int play();
-    void setupLevel();
 };
 
 #endif /* hopman_h */

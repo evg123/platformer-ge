@@ -10,7 +10,7 @@
  */
 Hopman::Hopman() {
     // init SDL
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         throw std::runtime_error("Failed to initialize SDL");
     }
     
@@ -40,8 +40,11 @@ int Hopman::play() {
     while (game_state != GameState::EXITING) {
         // wait until it is time to render the next frame
         timer.delayUntilNextFrame();
-        
+
         fps_display = timer.getFps();
+
+        // tell the input singleton to poll for events
+        Input::instance().handleEvents();
         
         // signal a new frame to the fps timer and get the delta since the last frame
         int delta = timer.newFrame();
@@ -50,10 +53,7 @@ int Hopman::play() {
         if (game_state == GameState::PLAYING) {
             update(delta);
         }
-        
-        // handle game over / next level
-        handleLevelEnd();
-        
+
         // draw the new frame
         render();
     }
@@ -65,7 +65,17 @@ int Hopman::play() {
  register callbacks with the input subsystem that get called on certain actions
  */
 void Hopman::registerInputCallbacks() {
+    // game events
+    Input::instance().registerCallback(Action::EXIT_GAME, std::bind(&Hopman::exitGame, this));
+    Input::instance().registerCallback(Action::ADVACNE, std::bind(&Hopman::advanceScreen, this));
+    Input::instance().registerCallback(Action::TOGGLE_FPS, std::bind(&Hopman::toggleFps, this));
     
+    // player movement
+    Input::instance().registerCallback(Action::MOVE_LEFT, std::bind(&Player::moveLeft, player));
+    Input::instance().registerCallback(Action::STOP_LEFT, std::bind(&Player::stopLeft, player));
+    Input::instance().registerCallback(Action::MOVE_RIGHT, std::bind(&Player::moveRight, player));
+    Input::instance().registerCallback(Action::STOP_RIGHT, std::bind(&Player::stopRight, player));
+    Input::instance().registerCallback(Action::JUMP, std::bind(&Player::jump, player));
 }
 
 /**
@@ -90,21 +100,17 @@ void Hopman::removeDestroyed() {
 /**
  Check if the user is ready to move on from the end of a level / loss
  */
-void Hopman::handleLevelEnd() {
+void Hopman::advanceScreen() {
     if (game_state == GameState::LOSS) {
-        if (input.hasClicked()) {
-            // restart game
-            level = STARTING_LEVEL;
-            score = 0;
-            lives = DEFAULT_EXTRA_LIVES;
-            setupLevel();
-        }
+        // restart game
+        level = STARTING_LEVEL;
+        score = 0;
+        lives = DEFAULT_EXTRA_LIVES;
+        setupLevel();
     } else if (game_state == GameState::LEVEL_WON) {
-        if (input.hasClicked()) {
-            // move to next level
-            ++level;
-            setupLevel();
-        }
+        // move to next level
+        ++level;
+        setupLevel();
     }
 }
 
@@ -128,7 +134,7 @@ void Hopman::render() {
  */
 void Hopman::renderUI() {
     int xpos = 0, ypos = 0;
-    if (input.shouldDisplayFps()) {
+    if (display_fps) {
         renderText(xpos, ypos, UI_FONT_SIZE, std::to_string(fps_display));
     }
     renderText(xpos, ypos, UI_FONT_SIZE, "score " + std::to_string(score));
@@ -158,11 +164,14 @@ void Hopman::add_tile(int tile_type, int tx, int ty) {
 
     Drawable *obj;
     if (tile_type == PLAYER_POS_TILE) {
-        obj = &player;
+        player = new Player();
+        obj = player;
+        
     } else {
         obj = new Tile(tile_type);
     }
-    
+
+    // calculate position based on tile index
     int xpos = tx * TILE_SIDE;
     int ypos = ty * TILE_SIDE;
     obj->setPosition(xpos, ypos);

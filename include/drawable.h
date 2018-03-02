@@ -32,7 +32,7 @@ protected:
     
     float x_vel = 0, y_vel = 0; // velocity
     float x_acc = 0, y_acc = 0; // acceleration
-    float speed = 1.0; // velocity modifier
+    float speed = 0.3; // velocity modifier
     
     bool marked_for_removal = false; // will be cleaned up and removed from game if true
     int score_on_destruction = 0; // points earned/lost for the destruction of this object

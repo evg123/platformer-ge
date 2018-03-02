@@ -11,6 +11,17 @@
 
 Player::Player() {
     texture = ResourceManager::instance().getImageTexture(PLAYER_SPRITE_SHEET);
+    y_acc = GRAVITY;
+    rect.w = PLAYER_WIDTH;
+    rect.h = PLAYER_HEIGHT;
+}
+
+/**
+ Set the position to an absolute value
+ */
+void Player::setPosition(int x_pos, int y_pos) {
+    Drawable::setPosition(x_pos, y_pos);
+    Graphics::instance().focusScreenOffsets(rect);
 }
 
 void Player::render() {
@@ -19,4 +30,30 @@ void Player::render() {
     SDL_Rect rend_rect = {rect.x - screen_off_x, rect.y - screen_off_y, rect.w, rect.h};
     SDL_Renderer *renderer = Graphics::instance().getRenderer();
     SDL_RenderCopy(renderer, texture, NULL, &rend_rect);
+}
+
+void Player::moveRight() {
+    x_vel += 1.0 * speed;
+}
+
+void Player::stopRight() {
+    x_vel -= 1.0 * speed;
+}
+
+void Player::moveLeft() {
+    x_vel -= 1.0 * speed;
+}
+
+void Player::stopLeft() {
+    x_vel += 1.0 * speed;
+}
+
+void Player::jump() {
+    if (canJump()) {
+        y_vel -= 1.0 * jump_power;
+    }
+}
+
+bool Player::canJump() {
+    return true;
 }

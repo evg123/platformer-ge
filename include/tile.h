@@ -29,8 +29,8 @@ private:
     int tile_num;
 public:
     Tile(int tile_num);
-    void update(int delta, std::vector<Drawable*> &objects);
-    void render();
+    void update(int delta, std::vector<Drawable*> &objects) override;
+    void render() override;
 };
 
 #endif /* tile_h */

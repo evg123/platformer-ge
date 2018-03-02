@@ -20,6 +20,14 @@ Input::~Input() {
 }
 
 /**
+ Get the singleton instance
+ */
+Input& Input::instance() {
+    static Input *instance = new Input();
+    return *instance;
+}
+
+/**
  Check for events from SDL.
  This includes keyboard, mouse, and SDL window changes
  */
@@ -28,16 +36,16 @@ void Input::handleEvents() {
         switch (event.type) {
             case SDL_QUIT:
                 // user closed window
-                should_exit = true;
+                callAction(EXIT_GAME);
                 break;
             case SDL_KEYDOWN:
-                setKey(event.key.keysym.scancode, true);
+                handleKey(event.key.keysym.scancode, true);
                 break;
             case SDL_KEYUP:
-                setKey(event.key.keysym.scancode, false);
+                handleKey(event.key.keysym.scancode, false);
                 break;
             case SDL_MOUSEBUTTONUP:
-                waiting_for_click = false;
+                callAction(ADVACNE);
                 break;
             default:
                 break;
@@ -45,31 +53,40 @@ void Input::handleEvents() {
     }
 }
 
-/**
- Mark a key as being pressed or released
- */
-void Input::setKey(SDL_Scancode key, bool pressed) {
-    keystates[key] = pressed;
-    
-    // toggle fps display
-    if (!pressed && key == FPS_TOGGLE_KEY) {
-        display_fps = !display_fps;
-    } else if (!pressed && key == QUIT_KEY) {
-        should_exit = true;
-    }
-    
+void Input::registerCallback(Action action, std::function<void()> callback) {
+    callbacks[action] = callback;
+}
+
+void Input::callAction(Action action) {
+    callbacks[action]();
 }
 
 /**
- Figure out which direction the player wants to move based on keypresses
+ Mark a key as being pressed or released
  */
-int Input::movementX() {
-    int movex = 0;
-    if (keystates[SDL_SCANCODE_LEFT] || keystates[SDL_SCANCODE_A]) {
-        movex -= 1;
+void Input::handleKey(SDL_Scancode key, bool pressed) {
+    // toggle fps display
+    if (!pressed && key == KEY_FPS_TOGGLE) {
+        callAction(TOGGLE_FPS);
     }
-    if (keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D]) {
-        movex += 1;
+    else if (!pressed && key == KEY_QUIT) {
+        callAction(EXIT_GAME);
     }
-    return movex;
+    else if (key == KEY_LEFT_1 || key == KEY_LEFT_2) {
+        if (pressed) {
+            callAction(MOVE_LEFT);
+        } else {
+            callAction(STOP_LEFT);
+        }
+    }
+    else if (key == KEY_RIGHT_1 || key == KEY_RIGHT_2) {
+        if (pressed) {
+            callAction(MOVE_RIGHT);
+        } else {
+            callAction(STOP_RIGHT);
+        }
+    }
+    else if (!pressed && key == KEY_JUMP) {
+        callAction(JUMP);
+    }
 }

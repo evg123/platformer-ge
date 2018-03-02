@@ -18,37 +18,45 @@
 #include <unordered_map>
 #include "graphics.h"
 
-constexpr SDL_Scancode QUIT_KEY = SDL_SCANCODE_Q;
-constexpr SDL_Scancode FPS_TOGGLE_KEY = SDL_SCANCODE_F;
+// keycode assignments
+constexpr SDL_Scancode KEY_QUIT = SDL_SCANCODE_Q;
+constexpr SDL_Scancode KEY_FPS_TOGGLE = SDL_SCANCODE_F;
+constexpr SDL_Scancode KEY_RIGHT_1 = SDL_SCANCODE_D;
+constexpr SDL_Scancode KEY_RIGHT_2 = SDL_SCANCODE_RIGHT;
+constexpr SDL_Scancode KEY_LEFT_1 = SDL_SCANCODE_A;
+constexpr SDL_Scancode KEY_LEFT_2 = SDL_SCANCODE_LEFT;
+constexpr SDL_Scancode KEY_JUMP = SDL_SCANCODE_SPACE;
+
+enum Action {
+    EXIT_GAME,
+    ADVACNE,
+    TOGGLE_FPS,
+    
+    MOVE_LEFT,
+    STOP_LEFT,
+    MOVE_RIGHT,
+    STOP_RIGHT,
+    JUMP,
+};
 
 /**
  Handles keyboard and mouse input from the user
  */
 class Input {
 private:
-    SDL_Event event;
-    std::unordered_map<SDL_Scancode, bool> keystates;
-    void setKey(SDL_Scancode key, bool pressed);
-    bool should_exit = false;
-    bool display_fps = false;
-    bool waiting_for_click = false;
-public:
     Input();
     ~Input();
     
-    /** true if the user has asked to quit the game */
-    bool shouldExit() { return should_exit; }
+    SDL_Event event;
+
+    std::unordered_map<Action, std::function<void()>> callbacks;
+    void callAction(Action action);
     
-    /** true if the fps display has been toggled on */
-    bool shouldDisplayFps() { return display_fps; }
+    void handleKey(SDL_Scancode key, bool pressed);
+public:
+    static Input& instance();
     void handleEvents();
-    int movementX();
-    
-    /** begin waiting for the user to click */
-    void waitForClick() { waiting_for_click = true; }
-    
-    /** true if the user has clicked since the last time waitForClick() was called */
-    bool hasClicked() { return !waiting_for_click; }
+    void registerCallback(Action action, std::function<void()> callback);
 };
 
 #endif /* input_h */

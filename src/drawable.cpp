@@ -103,7 +103,7 @@ void Drawable::doMove(int x_offset, int y_offset, std::vector<Drawable*> &object
         }
     }
     
-    rect.move(new_x_off, new_y_off);
+    setPosition(rect.x + new_x_off, rect.y + new_y_off);
 }
 
 /**
@@ -111,8 +111,8 @@ void Drawable::doMove(int x_offset, int y_offset, std::vector<Drawable*> &object
  */
 std::tuple<int, int> Drawable::calcVelocityOffset(int delta) {
     // move according to current velocity
-    int x_off = x_vel * delta * speed;
-    int y_off = y_vel * delta * speed;
+    int x_off = x_vel * delta;
+    int y_off = y_vel * delta;
     
     return std::make_tuple(x_off, y_off);
 }

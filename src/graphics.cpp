@@ -76,3 +76,9 @@ void Graphics::swapFrame() {
 void Graphics::updateWindowTitle(std::string window_title) {
     SDL_SetWindowTitle(window, window_title.c_str());
 }
+
+/** set the world offset that the screen is showing */
+void Graphics::focusScreenOffsets(SDL_Rect &rect) {
+    screen_off_x = rect.x + (rect.w / 2) - (window_width / 2);
+    screen_off_y = rect.y + (rect.h / 2) - (window_height / 2);
+}
