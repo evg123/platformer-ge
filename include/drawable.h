@@ -15,8 +15,11 @@
 #include "../lib/osx/SDL2.framework/Headers/SDL.h"
 #endif
 
+#include <vector>
 #include <tuple>
+#include <algorithm>
 #include "evg_rect.h"
+#include "resource_manager.h"
 
 /**
  Abstract base class for things drawn to the screen.
@@ -25,22 +28,26 @@
 class Drawable {
 protected:
     EvgRect rect;
-    Uint8 color_r = 0xFF, color_g = 0xFF, color_b = 0xFF, alpha = 0xFF;
+    SDL_Texture *texture = NULL;
+    
     float x_vel = 0, y_vel = 0; // velocity
+    float x_acc = 0, y_acc = 0; // acceleration
     float speed = 1.0; // velocity modifier
+    
     bool marked_for_removal = false; // will be cleaned up and removed from game if true
     int score_on_destruction = 0; // points earned/lost for the destruction of this object
 
     std::tuple<int, int> calcVelocityOffset(int delta);
+    void applyAcceleration(int delta);
 public:
-    Drawable(int x_pos, int y_pos, int width, int height);
+    Drawable();
     virtual ~Drawable();
+    void init(int x_pos, int y_pos, int width, int height);
 
     // update based on delta in ms since last update
-    // return whether collisions should be checked
-    virtual bool update(int delta, std::vector<Drawable*> &objects);
-
-    virtual void render(SDL_Renderer *renderer) = 0;
+    virtual void update(int delta, std::vector<Drawable*> &objects);
+    virtual void render() = 0;
+    virtual void doMove(int x_offset, int y_offset, std::vector<Drawable*> &objects);
 
     /** Get the bounding rect of this object */
     virtual EvgRect* getRect() { return &rect; }
@@ -53,8 +60,8 @@ public:
 
     void setColor(int color_r, int color_g, int color_b, int alpha);
     void setVelocity(float x_vel, float y_vel);
+    void setAcceleration(float x_acceleration, float y_acceleration);
     virtual void setPosition(int x_pos, int y_pos);
-    virtual void move(int x_offset, int y_offset);
 
     /** true if this object needs to be cleaned up */
     bool needsRemoval() { return marked_for_removal; }

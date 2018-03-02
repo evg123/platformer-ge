@@ -115,7 +115,7 @@ void Hopman::render() {
     Graphics::instance().clear();
     
     for (auto &obj : objects) {
-        obj->render(Graphics::instance().getRenderer());
+        obj->render();
     }
     
     renderUI();
@@ -149,6 +149,28 @@ void Hopman::renderText(int xpos, int ypos, int font_size, std::string text) {
 }
 
 /**
+ create a tile object at the given tile coordinates
+ */
+void Hopman::add_tile(int tile_type, int tx, int ty) {
+    if (tile_type == EMPTY_TILE_NUM) {
+        return;
+    }
+
+    Drawable *obj;
+    if (tile_type == PLAYER_POS_TILE) {
+        obj = &player;
+    } else {
+        obj = new Tile(tile_type);
+    }
+    
+    int xpos = tx * TILE_SIDE;
+    int ypos = ty * TILE_SIDE;
+    obj->setPosition(xpos, ypos);
+
+    objects.push_back(obj);
+}
+
+/**
  Load the next level from config
  */
 void Hopman::setupLevel() {
@@ -158,9 +180,18 @@ void Hopman::setupLevel() {
     LevelConfig lvl_conf;
     parseLevelConfig(lvl_conf);
 
+    // instantiate level objects
+    for (int tx = 0; tx < lvl_conf.tiles.size(); ++tx) {
+        for (int ty = 0; ty < lvl_conf.tiles[0].size(); ++ty) {
+            int tile_num = lvl_conf.tiles[tx][ty];
+            add_tile(tile_num, tx, ty);
+        }
+    }
+
     // start the background track for the level
-    Audio::instance().setBgTrack(lvl_conf.bg_track);
-    
+    //TODO make custom for each level
+    Audio::instance().setBgTrack(BG_TRACK);
+
     // ready to go!
     game_state = GameState::PLAYING;
 }
@@ -169,21 +200,50 @@ void Hopman::setupLevel() {
  Read a level config file and fill in the passed in config struct
  */
 void Hopman::parseLevelConfig(LevelConfig &config) {
-    // glob levels in level dir and order alphabetically
-    // repeat last level if we run out
+    // find the largest level file that is <= level
+    // this lets you repeat levels by skipping some filenames
+    // you must at least provide a level_1 file
+    // wanted to read all files from the level directory, but OSX still doesn't
+    // have support for std::filesystem
     std::ifstream cfg_stream("");
-    //TODO
+    int effective_lvl = level;
+    while (effective_lvl > 0 && !cfg_stream.good()) {
+        // see if we can load this level file
+        std::string lvl_file = LEVEL_FILE_PREFIX + std::to_string(effective_lvl);
+        cfg_stream.open(lvl_file);
+        --effective_lvl;
+    }
     
     if (!cfg_stream.good()) {
         // couldn't load any level files
         throw std::runtime_error("Failed to find a level config file");
     }
     
-    // default to no bg track
-    config.bg_track = "";
-    
     try {
-        //TODO read level config file
+        std::string line;
+        
+        // first line is level dimensions
+        std::getline(cfg_stream, line);
+        std::stringstream ss(line);
+        std::string tok;
+        ss >> tok;
+        int level_width = std::stoi(tok);
+        ss >> tok;
+        int level_height = std::stoi(tok);
+        // initialize the size of the 2d vector of tiles
+        config.tiles.resize(level_width, std::vector<int>(level_height, EMPTY_TILE_NUM));
+        
+        // read line by line
+        int xt = 0, yt = 0; // tile indicies
+        while (std::getline(cfg_stream, line)) {
+            std::stringstream line_stream(line);
+            std::string tile_str;
+            while (std::getline(line_stream, tile_str, ' ')) {
+                config.tiles[xt][yt] = std::stoi(tile_str);
+                ++yt;
+            }
+            ++xt;
+        }
     } catch (const std::exception &ex) {
         throw std::runtime_error(std::string("Failed to parse config file: %s") + ex.what());
     }

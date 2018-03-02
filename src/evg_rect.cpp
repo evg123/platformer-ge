@@ -9,10 +9,7 @@
 /**
  Create a new EvgRect
  */
-EvgRect::EvgRect(int x_pos, int y_pos, int width, int height) {
-        w = width;
-        h = height;
-}
+EvgRect::EvgRect() {}
 
 /**
  Set position to absolute values.

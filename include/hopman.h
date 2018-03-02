@@ -13,6 +13,7 @@ constexpr int ERROR = 1;
 constexpr int OK = 0;
 
 constexpr int STARTING_LEVEL = 1;
+constexpr auto BG_TRACK = "./Assets/music/bg_track.wav";
 
 constexpr int DEFAULT_FPS_LIMIT = 60;
 constexpr int DEFAULT_WINDOW_WIDTH = 1280;
@@ -20,10 +21,12 @@ constexpr int DEFAULT_WINDOW_HEIGHT = 720;
 
 constexpr int UI_FONT_SIZE = 24;
 
-constexpr auto LEVEL_FILE_DIR = "./Assets/levels/";
-constexpr auto LEVEL_FILE_PREFIX = "level_";
+constexpr auto LEVEL_FILE_PREFIX = "./Assets/levels/level_";
 
 constexpr int DEFAULT_EXTRA_LIVES = 2;
+
+constexpr unsigned int EMPTY_TILE_NUM = 0;
+constexpr unsigned int PLAYER_POS_TILE = 1;
 
 #include <iostream>
 #include <vector>
@@ -38,6 +41,8 @@ constexpr int DEFAULT_EXTRA_LIVES = 2;
 #include "input.h"
 #include "resource_manager.h"
 #include "drawable.h"
+#include "player.h"
+#include "tile.h"
 
 
 enum GameState {
@@ -52,7 +57,7 @@ enum GameState {
  Structure to hold config from level config files
  */
 struct LevelConfig {
-    std::string bg_track;
+    std::vector<std::vector<int>> tiles;
 };
 
 class Hopman {
@@ -67,7 +72,7 @@ private:
     int fps_display = 0;
     std::string screen_message = "";
 
-    //Player player;
+    Player player;
     std::vector<Drawable*> objects = {};
 
     void handleInput();
@@ -84,6 +89,7 @@ private:
     void cleanupLevel();
 
     void parseLevelConfig(LevelConfig &config);
+    void add_tile(int tile_type, int tx, int ty);
 public:
     Hopman();
     ~Hopman();

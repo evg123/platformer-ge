@@ -23,7 +23,7 @@
 class EvgRect : public SDL_Rect {
 private:
 public:
-    EvgRect(int x_pos, int y_pos, int width, int height);
+    EvgRect();
 
     /** Get the left edge of the rect */
     int left() { return x; };

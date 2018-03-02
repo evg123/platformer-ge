@@ -28,6 +28,8 @@ private:
     SDL_Renderer *renderer = NULL;
     int window_width;
     int window_height;
+    int screen_off_x = 0;
+    int screen_off_y = 0;
 public:
     Graphics();
     ~Graphics();
@@ -49,6 +51,9 @@ public:
     void clear();
     void swapFrame();
     void updateWindowTitle(std::string window_title);
+    
+    /** return the current world offset that the screen is showing in number of tiles */
+    std::tuple<int, int> getScreenOffsets() { return std::make_tuple(screen_off_x, screen_off_y); }
 };
 
 #endif /* graphics_h */

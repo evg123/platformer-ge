@@ -13,6 +13,7 @@ TILE_SIDE_PX = 32
 TILE_TYPE_COUNT = 2
 NEW_TILE_NUM = 0
 TILE_IMAGE_PATTERN = '../Assets/images/tiles/tile_{0}.png'
+DIM_LINE_FORMAT = '{0} {1}'
 
 WINDOW_WIDTH_TILES = math.ceil(WINDOW_WIDTH / TILE_SIDE_PX)
 WINDOW_HEIGHT_TILES = math.ceil(WINDOW_HEIGHT / TILE_SIDE_PX)
@@ -52,13 +53,28 @@ class Editor(object):
         
         # load an existing level from a file
         with open(self.level_filename, 'r') as lvl_file:
+            # first line is dimensions, but we don't need it
+            # it's helpful for the c++ parser
+            _ = lvl_file.readline()
+            
             level_lines = lvl_file.readlines()
-            self.tiles = [[int(tile) for tile in line.split()] for line in level_lines]
+            for line in level_lines:
+                tile_line = line.split()
+                
+                while len(self.tiles) < len(tile_line):
+                    # widen tiles 2d array to match loaded level
+                    self.tiles.append([])
+                
+                for xn in range(len(tile_line)):
+                    self.tiles[xn].append(int(tile_line[xn]))
     
     def save_level(self):
         with open(self.level_filename, 'w') as lvl_file:
-            for row in self.tiles:
-                lvl_file.write(' '.join(str(item) for item in row) + '\n')
+            # write dimensions on first line
+            lvl_file.write(DIM_LINE_FORMAT.format(len(self.tiles), len(self.tiles[0])))
+            
+            for yn in range(len(self.tiles[0])):
+                lvl_file.write(' '.join(str(col[yn]) for col in self.tiles) + '\n')
     
     def blank_level(self):
         start_xn = WINDOW_WIDTH_TILES
