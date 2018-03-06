@@ -21,6 +21,7 @@
 // keycode assignments
 constexpr SDL_Scancode KEY_QUIT = SDL_SCANCODE_Q;
 constexpr SDL_Scancode KEY_FPS_TOGGLE = SDL_SCANCODE_F;
+constexpr SDL_Scancode KEY_PAUSE = SDL_SCANCODE_ESCAPE;
 constexpr SDL_Scancode KEY_RIGHT_1 = SDL_SCANCODE_D;
 constexpr SDL_Scancode KEY_RIGHT_2 = SDL_SCANCODE_RIGHT;
 constexpr SDL_Scancode KEY_LEFT_1 = SDL_SCANCODE_A;
@@ -31,6 +32,7 @@ enum Action {
     EXIT_GAME,
     ADVACNE,
     TOGGLE_FPS,
+    TOGGLE_PAUSE,
     
     MOVE_LEFT,
     STOP_LEFT,

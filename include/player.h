@@ -16,7 +16,7 @@
 #endif
 
 #include <vector>
-#include "drawable.h"
+#include "being.h"
 #include "graphics.h"
 
 constexpr int PLAYER_WIDTH = 20;
@@ -24,12 +24,11 @@ constexpr int PLAYER_HEIGHT = 20;
 
 constexpr auto PLAYER_SPRITE_SHEET = "sprites/player.png";
 
-constexpr float GRAVITY = 0.001;
-constexpr float PLAYER_JUMP_POWER = 0.5;
+constexpr int PLAYER_JUMP_COUNT = 2;
+constexpr float PLAYER_JUMP_POWER = 0.3;
 
-class Player : public Drawable {
+class Player : public Being {
 private:
-    float jump_power = PLAYER_JUMP_POWER;
 public:
     Player();
     void setPosition(int xpos, int ypos) override;
@@ -39,9 +38,6 @@ public:
     void stopRight();
     void moveLeft();
     void stopLeft();
-    void jump();
-
-    bool canJump();
 };
 
 #endif /* player_h */

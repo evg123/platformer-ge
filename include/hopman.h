@@ -12,7 +12,7 @@
 constexpr int ERROR = 1;
 constexpr int OK = 0;
 
-constexpr int STARTING_LEVEL = 1;
+constexpr int STARTING_LEVEL = 2;
 constexpr auto BG_TRACK = "bg_track.wav";
 
 constexpr int DEFAULT_FPS_LIMIT = 60;
@@ -63,7 +63,7 @@ struct LevelConfig {
 class Hopman {
 private:
     int level = STARTING_LEVEL;
-    GameState game_state = GameState::PLAYING;
+    GameState game_state = GameState::PAUSED;
     int fps_limit = DEFAULT_FPS_LIMIT;
     int score = 0;
     int lives = DEFAULT_EXTRA_LIVES;
@@ -79,6 +79,7 @@ private:
     void exitGame() { game_state = GameState::EXITING; }
     /** toggle the fps display UI */
     void toggleFps() { display_fps = !display_fps; }
+    void pause();
     
     void handleInput();
     void advanceScreen();

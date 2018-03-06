@@ -32,13 +32,13 @@ protected:
     
     float x_vel = 0, y_vel = 0; // velocity
     float x_acc = 0, y_acc = 0; // acceleration
-    float speed = 0.3; // velocity modifier
+    float speed = 0.3; // movement velocity modifier
     
     bool marked_for_removal = false; // will be cleaned up and removed from game if true
     int score_on_destruction = 0; // points earned/lost for the destruction of this object
 
     std::tuple<int, int> calcVelocityOffset(int delta);
-    void applyAcceleration(int delta);
+    virtual void applyAcceleration(int delta);
 public:
     Drawable();
     virtual ~Drawable();
@@ -48,9 +48,10 @@ public:
     virtual void update(int delta, std::vector<Drawable*> &objects);
     virtual void render() = 0;
     virtual void doMove(int x_offset, int y_offset, std::vector<Drawable*> &objects);
+    virtual void processCollision(Drawable &other, int x_off, int y_off);
 
     /** Get the bounding rect of this object */
-    virtual EvgRect* getRect() { return &rect; }
+    virtual EvgRect& getRect() { return rect; }
     
     /** Set the speed modifier of this object */
     virtual void setSpeed(float speed) { this->speed = speed; };

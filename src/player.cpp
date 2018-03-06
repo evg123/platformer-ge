@@ -11,9 +11,10 @@
 
 Player::Player() {
     texture = ResourceManager::instance().getImageTexture(PLAYER_SPRITE_SHEET);
-    y_acc = GRAVITY;
     rect.w = PLAYER_WIDTH;
     rect.h = PLAYER_HEIGHT;
+    max_jumps = PLAYER_JUMP_COUNT;
+    jump_power = PLAYER_JUMP_POWER;
 }
 
 /**
@@ -48,12 +49,3 @@ void Player::stopLeft() {
     x_vel += 1.0 * speed;
 }
 
-void Player::jump() {
-    if (canJump()) {
-        y_vel -= 1.0 * jump_power;
-    }
-}
-
-bool Player::canJump() {
-    return true;
-}

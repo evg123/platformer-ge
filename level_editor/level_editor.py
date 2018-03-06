@@ -14,7 +14,7 @@ TILE_TYPE_START = 1
 TILE_TYPE_COUNT = 4
 EMPTY_TILE_NUM = 0
 TILE_IMAGE_PATTERN = '../Assets/images/tiles/tile_{0}.png'
-DIM_LINE_FORMAT = '{0} {1}'
+DIM_LINE_FORMAT = '{0} {1}\n'
 
 WINDOW_WIDTH_TILES = math.ceil(WINDOW_WIDTH / TILE_SIDE_PX)
 WINDOW_HEIGHT_TILES = math.ceil(WINDOW_HEIGHT / TILE_SIDE_PX)
@@ -44,7 +44,6 @@ class Editor(object):
             filename = TILE_IMAGE_PATTERN.format(num)
             img = pygame.image.load(filename)
             self.image_bank.append(img)
-        print(self.image_bank)
     
     def load_level(self):
         # check if file exists

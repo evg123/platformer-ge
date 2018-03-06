@@ -69,6 +69,7 @@ void Hopman::registerInputCallbacks() {
     Input::instance().registerCallback(Action::EXIT_GAME, std::bind(&Hopman::exitGame, this));
     Input::instance().registerCallback(Action::ADVACNE, std::bind(&Hopman::advanceScreen, this));
     Input::instance().registerCallback(Action::TOGGLE_FPS, std::bind(&Hopman::toggleFps, this));
+    Input::instance().registerCallback(Action::TOGGLE_PAUSE, std::bind(&Hopman::pause, this));
     
     // player movement
     Input::instance().registerCallback(Action::MOVE_LEFT, std::bind(&Player::moveLeft, player));
@@ -95,6 +96,14 @@ void Hopman::update(int delta) {
 void Hopman::removeDestroyed() {
     // remove destroyed objects
     //TODO
+}
+
+void Hopman::pause() {
+    if (game_state == GameState::PAUSED) {
+        game_state = GameState::PLAYING;
+    } else if (game_state == GameState::PAUSED) {
+        game_state = GameState::PLAYING;
+    }
 }
 
 /**
@@ -197,12 +206,18 @@ void Hopman::setupLevel() {
         }
     }
 
+    // make sure we had a player tile in the level
+    if (player == NULL) {
+        throw std::runtime_error("Invalid level file, no player tile found!");
+    }
+    
     // start the background track for the level
     //TODO make custom for each level
     Audio::instance().setBgTrack(BG_TRACK);
 
-    // ready to go!
-    game_state = GameState::PLAYING;
+    
+    // start out paused
+    game_state = GameState::PAUSED;
 }
 
 /**
@@ -252,6 +267,7 @@ void Hopman::parseLevelConfig(LevelConfig &config) {
                 ++yt;
             }
             ++xt;
+            yt = 0;
         }
     } catch (const std::exception &ex) {
         throw std::runtime_error(std::string("Failed to parse config file: %s") + ex.what());

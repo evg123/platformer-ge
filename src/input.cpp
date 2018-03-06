@@ -69,6 +69,9 @@ void Input::handleKey(SDL_Scancode key, bool pressed) {
     if (!pressed && key == KEY_FPS_TOGGLE) {
         callAction(TOGGLE_FPS);
     }
+    else if (!pressed && key == KEY_PAUSE) {
+        callAction(TOGGLE_PAUSE);
+    }
     else if (!pressed && key == KEY_QUIT) {
         callAction(EXIT_GAME);
     }
