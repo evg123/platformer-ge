@@ -45,7 +45,7 @@ constexpr unsigned int PLAYER_POS_TILE = 1;
 #include "tile.h"
 
 
-enum GameState {
+enum class GameState {
     PLAYING,
     EXITING,
     PAUSED,

@@ -24,6 +24,12 @@ constexpr int PLAYER_WIDTH = 20;
 constexpr int PLAYER_HEIGHT = 20;
 
 constexpr auto PLAYER_SPRITE_SHEET = "sprites/player.png";
+constexpr FrameConfig PLAYER_FRAME_CONFIG =
+{
+    0, 3, // idle
+    5, 7, // walking
+    8, 8, // jump
+};
 
 constexpr int PLAYER_JUMP_COUNT = 2;
 constexpr float PLAYER_JUMP_POWER = 0.3;
@@ -33,12 +39,6 @@ private:
 public:
     Player();
     void setPosition(int xpos, int ypos) override;
-    void render() override;
-    
-    void moveRight();
-    void stopRight();
-    void moveLeft();
-    void stopLeft();
 };
 
 #endif /* player_h */

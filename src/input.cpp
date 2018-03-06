@@ -36,7 +36,7 @@ void Input::handleEvents() {
         switch (event.type) {
             case SDL_QUIT:
                 // user closed window
-                callAction(EXIT_GAME);
+                callAction(Action::EXIT_GAME);
                 break;
             case SDL_KEYDOWN:
                 handleKey(event.key.keysym.scancode, true);
@@ -45,7 +45,7 @@ void Input::handleEvents() {
                 handleKey(event.key.keysym.scancode, false);
                 break;
             case SDL_MOUSEBUTTONUP:
-                callAction(ADVACNE);
+                callAction(Action::ADVACNE);
                 break;
             default:
                 break;
@@ -67,29 +67,29 @@ void Input::callAction(Action action) {
 void Input::handleKey(SDL_Scancode key, bool pressed) {
     // toggle fps display
     if (!pressed && key == KEY_FPS_TOGGLE) {
-        callAction(TOGGLE_FPS);
+        callAction(Action::TOGGLE_FPS);
     }
     else if (!pressed && key == KEY_PAUSE) {
-        callAction(TOGGLE_PAUSE);
+        callAction(Action::TOGGLE_PAUSE);
     }
     else if (!pressed && key == KEY_QUIT) {
-        callAction(EXIT_GAME);
+        callAction(Action::EXIT_GAME);
     }
     else if (key == KEY_LEFT_1 || key == KEY_LEFT_2) {
         if (pressed) {
-            callAction(MOVE_LEFT);
+            callAction(Action::MOVE_LEFT);
         } else {
-            callAction(STOP_LEFT);
+            callAction(Action::STOP_LEFT);
         }
     }
     else if (key == KEY_RIGHT_1 || key == KEY_RIGHT_2) {
         if (pressed) {
-            callAction(MOVE_RIGHT);
+            callAction(Action::MOVE_RIGHT);
         } else {
-            callAction(STOP_RIGHT);
+            callAction(Action::STOP_RIGHT);
         }
     }
     else if (!pressed && key == KEY_JUMP) {
-        callAction(JUMP);
+        callAction(Action::JUMP);
     }
 }

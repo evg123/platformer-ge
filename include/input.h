@@ -28,7 +28,7 @@ constexpr SDL_Scancode KEY_LEFT_1 = SDL_SCANCODE_A;
 constexpr SDL_Scancode KEY_LEFT_2 = SDL_SCANCODE_LEFT;
 constexpr SDL_Scancode KEY_JUMP = SDL_SCANCODE_SPACE;
 
-enum Action {
+enum class Action {
     EXIT_GAME,
     ADVACNE,
     TOGGLE_FPS,

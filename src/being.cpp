@@ -18,6 +18,7 @@ void Being::resetJumps() {
 
 void Being::jump() {
     if (canJump()) {
+        sprite.jump();
         y_vel = 1.0 * jump_power;
         --jumps;
     }
@@ -25,6 +26,20 @@ void Being::jump() {
 
 bool Being::canJump() {
     return jumps > 0;
+}
+
+void Being::update(int delta, std::vector<Drawable*> &objects) {
+    Drawable::update(delta, objects);
+    sprite.update();
+}
+
+void Being::render() {
+    int screen_off_x, screen_off_y;
+    std::tie(screen_off_x, screen_off_y) = Graphics::instance().getScreenOffsets();
+    SDL_Rect rend_rect = {rect.x - screen_off_x, rect.y - screen_off_y, rect.w, rect.h};
+    SDL_Renderer *renderer = Graphics::instance().getRenderer();
+    SDL_RendererFlip flip_mode = facing == Facing::RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+    SDL_RenderCopyEx(renderer, texture, &sprite.getFrameRect(), &rend_rect, 0, NULL, flip_mode);
 }
 
 void Being::doMove(int x_offset, int y_offset, std::vector<Drawable*> &objects) {
@@ -45,6 +60,7 @@ void Being::processCollision(Drawable &other, int x_off, int y_off) {
         // we have collided while moving down,
         // so we have landed on something
         on_ground = true;
+        sprite.land();
         resetJumps();
     }
 }
@@ -59,4 +75,26 @@ void Being::applyAcceleration(int delta) {
     if (y_vel > TERMINAL_VELOCITY) {
         y_vel = TERMINAL_VELOCITY;
     }
+}
+
+void Being::moveRight() {
+    x_vel += 1.0 * speed;
+    facing = Facing::RIGHT;
+    sprite.move();
+}
+
+void Being::stopRight() {
+    x_vel = std::max(0.0, x_vel - 1.0 * speed);
+    sprite.stop();
+}
+
+void Being::moveLeft() {
+    x_vel -= 1.0 * speed;
+    facing = Facing::LEFT;
+    sprite.move();
+}
+
+void Being::stopLeft() {
+    x_vel = std::min(0.0, x_vel + 1.0 * speed);
+    sprite.stop();
 }
