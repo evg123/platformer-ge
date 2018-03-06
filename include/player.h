@@ -16,6 +16,7 @@
 #endif
 
 #include <vector>
+#include <algorithm>
 #include "being.h"
 #include "graphics.h"
 

@@ -18,7 +18,7 @@ void Being::resetJumps() {
 
 void Being::jump() {
     if (canJump()) {
-        y_vel -= 1.0 * jump_power;
+        y_vel = 1.0 * jump_power;
         --jumps;
     }
 }

@@ -256,18 +256,18 @@ void Hopman::parseLevelConfig(LevelConfig &config) {
         int level_height = std::stoi(tok);
         // initialize the size of the 2d vector of tiles
         config.tiles.resize(level_width, std::vector<int>(level_height, EMPTY_TILE_NUM));
-        
+
         // read line by line
         int xt = 0, yt = 0; // tile indicies
         while (std::getline(cfg_stream, line)) {
             std::stringstream line_stream(line);
             std::string tile_str;
             while (std::getline(line_stream, tile_str, ' ')) {
-                config.tiles[xt][yt] = std::stoi(tile_str);
-                ++yt;
+                config.tiles.at(xt).at(yt) = std::stoi(tile_str);
+                ++xt;
             }
-            ++xt;
-            yt = 0;
+            ++yt;
+            xt = 0;
         }
     } catch (const std::exception &ex) {
         throw std::runtime_error(std::string("Failed to parse config file: %s") + ex.what());

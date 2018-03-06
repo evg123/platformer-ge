@@ -38,7 +38,7 @@ void Player::moveRight() {
 }
 
 void Player::stopRight() {
-    x_vel -= 1.0 * speed;
+    x_vel = std::max(0.0, x_vel - 1.0 * speed);
 }
 
 void Player::moveLeft() {
@@ -46,6 +46,6 @@ void Player::moveLeft() {
 }
 
 void Player::stopLeft() {
-    x_vel += 1.0 * speed;
+    x_vel = std::min(0.0, x_vel + 1.0 * speed);
 }
 
