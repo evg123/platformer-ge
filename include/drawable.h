@@ -31,8 +31,7 @@ protected:
     SDL_Texture *texture = NULL;
     
     float x_vel = 0, y_vel = 0; // velocity
-    float x_acc = 0, y_acc = 0; // acceleration
-    float speed = 0.3; // movement velocity modifier
+    float x_accel = 0, y_accel = 0; // acceleration
     
     bool marked_for_removal = false; // will be cleaned up and removed from game if true
     int score_on_destruction = 0; // points earned/lost for the destruction of this object
@@ -52,9 +51,6 @@ public:
 
     /** Get the bounding rect of this object */
     virtual EvgRect& getRect() { return rect; }
-    
-    /** Set the speed modifier of this object */
-    virtual void setSpeed(float speed) { this->speed = speed; };
 
     /** Get the number of points earned for destroying this object */
     int getScoreOnDestruction() { return score_on_destruction; }

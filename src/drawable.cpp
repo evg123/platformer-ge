@@ -52,8 +52,8 @@ void Drawable::setVelocity(float x_velocity, float y_velocity) {
  Update acceleration
  */
 void Drawable::setAcceleration(float x_acceleration, float y_acceleration) {
-    x_acc = x_acceleration;
-    y_acc = y_acceleration;
+    x_accel = x_acceleration;
+    y_accel = y_acceleration;
 }
 
 /**
@@ -157,6 +157,6 @@ std::tuple<int, int> Drawable::calcVelocityOffset(int delta) {
  adjust velocity based on acceleration
  */
 void Drawable::applyAcceleration(int delta) {
-    x_vel += delta * x_acc;
-    y_vel += delta * y_acc;
+    x_vel += delta * x_accel;
+    y_vel += delta * y_accel;
 }

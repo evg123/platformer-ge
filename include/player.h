@@ -29,10 +29,15 @@ constexpr FrameConfig PLAYER_FRAME_CONFIG =
     0, 3, // idle
     5, 7, // walking
     8, 8, // jump
+    9, 9, // braking
 };
 
-constexpr int PLAYER_JUMP_COUNT = 2;
-constexpr float PLAYER_JUMP_POWER = 0.3;
+constexpr float PLAYER_MOVE_ACCEL = 500 / 1000.0f / 1000.0f;
+constexpr float PLAYER_TOP_SPEED = 300 / 1000.0f;
+
+constexpr int PLAYER_AIR_JUMP_COUNT = 1;
+constexpr float PLAYER_JUMP_VELOCITY = 250 / 1000.0f;
+constexpr float PLAYER_JUMP_TIME_MS = 300;
 
 class Player : public Being {
 private:

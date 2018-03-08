@@ -14,8 +14,13 @@ Player::Player() {
     sprite.init(PLAYER_FRAME_CONFIG);
     rect.w = PLAYER_WIDTH;
     rect.h = PLAYER_HEIGHT;
-    max_jumps = PLAYER_JUMP_COUNT;
-    jump_power = PLAYER_JUMP_POWER;
+    
+    movement_accel = PLAYER_MOVE_ACCEL;
+    top_speed = PLAYER_TOP_SPEED;
+    
+    max_air_jumps = PLAYER_AIR_JUMP_COUNT;
+    jump_vel = PLAYER_JUMP_VELOCITY;
+    jump_duration = PLAYER_JUMP_TIME_MS;
 }
 
 /**

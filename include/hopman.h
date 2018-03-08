@@ -12,7 +12,7 @@
 constexpr int ERROR = 1;
 constexpr int OK = 0;
 
-constexpr int STARTING_LEVEL = 2;
+constexpr int STARTING_LEVEL = 1;
 constexpr auto BG_TRACK = "bg_track.wav";
 
 constexpr int DEFAULT_FPS_LIMIT = 60;

@@ -26,6 +26,7 @@ enum class SpriteState {
     IDLE,
     WALKING,
     JUMPING,
+    BRAKING,
 };
 
 struct FrameConfig {
@@ -35,12 +36,13 @@ struct FrameConfig {
     int walking_frame_final;
     int jumping_frame_start;
     int jumping_frame_final;
+    int braking_frame_start;
+    int braking_frame_final;
 };
 
 class Sprite {
 private:
     SpriteState current_state = SpriteState::NONE;
-    bool walking = false; //TODO probably dont need this
     int current_frame;
     int frame_start; // starting frame number in the cycle
     int frame_count; // number of frames in the cycle
@@ -55,10 +57,10 @@ public:
     void setState(SpriteState state);
     void update();
     
-    void move();
-    void stop();
-    void jump();
-    void land();
+    void setWalking() { setState(SpriteState::WALKING); }
+    void setIdle() { setState(SpriteState::IDLE); }
+    void setJumping() { setState(SpriteState::JUMPING); }
+    void setBraking() { setState(SpriteState::BRAKING); }
 };
 
 #endif /* sprite_h */

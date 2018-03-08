@@ -89,7 +89,7 @@ void Input::handleKey(SDL_Scancode key, bool pressed) {
             callAction(Action::STOP_RIGHT);
         }
     }
-    else if (!pressed && key == KEY_JUMP) {
+    else if (pressed && key == KEY_JUMP) {
         callAction(Action::JUMP);
     }
 }

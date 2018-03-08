@@ -8,29 +8,34 @@
 
 #include "being.h"
 
-Being::Being() {
-    y_acc = GRAVITY;
+Being::Being() {}
+
+bool Being::isOnGround() {
+    //TODO could calculate this once on update
+    unsigned int diff = SDL_GetTicks() - last_grounded;
+    return diff <= JUMP_TOLERANCE_MS;
 }
 
 void Being::resetJumps() {
-    jumps = max_jumps;
+    air_jumps = max_air_jumps;
 }
 
 void Being::jump() {
     if (canJump()) {
-        sprite.jump();
-        y_vel = 1.0 * jump_power;
-        --jumps;
+        jump_start_ts = SDL_GetTicks();
+        if (!isOnGround()) {
+            --air_jumps;
+        }
     }
 }
 
 bool Being::canJump() {
-    return jumps > 0;
+    return isOnGround() || air_jumps > 0;
 }
 
 void Being::update(int delta, std::vector<Drawable*> &objects) {
     Drawable::update(delta, objects);
-    sprite.update();
+    updateSprite();
 }
 
 void Being::render() {
@@ -43,11 +48,7 @@ void Being::render() {
 }
 
 void Being::doMove(int x_offset, int y_offset, std::vector<Drawable*> &objects) {
-    // reset our on_ground state.
-    // it will be re-applied if we are on the ground by the superclass doMove.
-    // this updates on_ground for jumps as well as walking off cliffs.
-    on_ground = false;
-
+    //TODO override no longer needed
     // call the superclass doMove
     Drawable::doMove(x_offset, y_offset, objects);
 }
@@ -59,8 +60,8 @@ void Being::processCollision(Drawable &other, int x_off, int y_off) {
     if (y_off > 0) {
         // we have collided while moving down,
         // so we have landed on something
-        on_ground = true;
-        sprite.land();
+        last_grounded = SDL_GetTicks();
+        jump_start_ts = 0; // zero means not jumping
         resetJumps();
     }
 }
@@ -69,32 +70,77 @@ void Being::processCollision(Drawable &other, int x_off, int y_off) {
  adjust velocity based on acceleration
  */
 void Being::applyAcceleration(int delta) {
+    // do default first
     Drawable::applyAcceleration(delta);
+    
+    // apply gravity
+    y_vel += GRAVITY * delta;
     
     // limit max fall velocity
     if (y_vel > TERMINAL_VELOCITY) {
         y_vel = TERMINAL_VELOCITY;
     }
+
+    // vertical movement / jump
+    if (jump_start_ts != 0 && SDL_GetTicks() - jump_start_ts <= jump_duration) {
+        y_vel = -jump_vel;
+    }
+
+    // horizonal movement
+    if (target_x_vel > 0 && x_vel < top_speed) {
+        // moving right
+        //TODO maybe apply additional accel here if we are at negative velocity
+        x_vel += movement_accel * delta;
+        if (x_vel > top_speed) {
+            x_vel = top_speed;
+        }
+    } else if (target_x_vel < 0 && x_vel > -top_speed) {
+        // moving left
+        x_vel -= movement_accel * delta;
+        if (x_vel < -top_speed) {
+            x_vel = -top_speed;
+        }
+    } else if (target_x_vel == 0.0f && isOnGround()) {
+        // stopping
+        // slow to zero unless we are in the air
+        if (x_vel > 0) {
+            SDL_Log("slow");
+            x_vel = std::max(0.0f, x_vel - FRICTION * delta);
+        } else if (x_vel < 0) {
+            x_vel = std::min(0.0f, x_vel + FRICTION * delta);
+        }
+    }
 }
 
 void Being::moveRight() {
-    x_vel += 1.0 * speed;
+    target_x_vel += top_speed;
     facing = Facing::RIGHT;
-    sprite.move();
 }
 
 void Being::stopRight() {
-    x_vel = std::max(0.0, x_vel - 1.0 * speed);
-    sprite.stop();
+    target_x_vel = std::max(0.0f, target_x_vel - top_speed);
 }
 
 void Being::moveLeft() {
-    x_vel -= 1.0 * speed;
+    target_x_vel -= top_speed;
     facing = Facing::LEFT;
-    sprite.move();
 }
 
 void Being::stopLeft() {
-    x_vel = std::min(0.0, x_vel + 1.0 * speed);
-    sprite.stop();
+    target_x_vel = std::min(0.0f, target_x_vel + top_speed);
+}
+
+void Being::updateSprite() {
+    SDL_Log("%d", isOnGround());
+    if (!isOnGround()) {
+        sprite.setJumping();
+    } else if (x_vel == 0.0f) {
+        sprite.setIdle();
+    } else if (target_x_vel != 0.0f) {
+        sprite.setWalking();
+    } else {
+        sprite.setBraking();
+    }
+    
+    sprite.update();
 }
