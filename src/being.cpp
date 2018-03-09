@@ -131,7 +131,7 @@ void Being::stopLeft() {
 }
 
 void Being::updateSprite() {
-    SDL_Log("%d", isOnGround());
+    //SDL_Log("%d", isOnGround());
     if (!isOnGround()) {
         sprite.setJumping();
     } else if (x_vel == 0.0f) {

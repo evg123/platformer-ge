@@ -15,11 +15,11 @@
 #include "../lib/osx/SDL2.framework/Headers/SDL.h"
 #endif
 
-constexpr int FRAME_WIDTH = 32;
-constexpr int FRAME_HEIGHT = 32;
+constexpr int FRAME_WIDTH = 16;
+constexpr int FRAME_HEIGHT = 16;
 constexpr int FRAMES_PER_LINE = 5;
 
-constexpr int TICKS_PER_FRAME = 250;
+constexpr int TICKS_PER_FRAME = 150;
 
 enum class SpriteState {
     NONE,

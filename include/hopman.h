@@ -28,6 +28,13 @@ constexpr int DEFAULT_EXTRA_LIVES = 2;
 constexpr unsigned int EMPTY_TILE_NUM = 0;
 constexpr unsigned int PLAYER_POS_TILE = 1;
 
+constexpr int PAUSE_MENU_WIDTH = 450;
+constexpr int PAUSE_MENU_HEIGHT = 500;
+constexpr int MENU_SIDE_PADDING = 20;
+constexpr auto MAIN_MENU_BG_IMG = "ui/pause_menu.png";
+constexpr int PAUSE_MENU_BTN_HEIGHT = 120;
+constexpr auto BUTTON_IMG = "ui/button.png";
+
 #include <iostream>
 #include <vector>
 #include <set>
@@ -84,6 +91,8 @@ private:
     void handleInput();
     void advanceScreen();
     void registerInputCallbacks();
+    void createUI();
+    void createPauseMenu();
     void update(int delta);
     void render();
     void renderUI();

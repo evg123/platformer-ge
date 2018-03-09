@@ -20,8 +20,8 @@
 #include "being.h"
 #include "graphics.h"
 
-constexpr int PLAYER_WIDTH = 20;
-constexpr int PLAYER_HEIGHT = 20;
+constexpr int PLAYER_WIDTH = 32;
+constexpr int PLAYER_HEIGHT = 32;
 
 constexpr auto PLAYER_SPRITE_SHEET = "sprites/player.png";
 constexpr FrameConfig PLAYER_FRAME_CONFIG =

@@ -15,8 +15,12 @@
 #include "../lib/osx/SDL2.framework/Headers/SDL.h"
 #endif
 
-#include <unordered_map>
+#include <map>
+#import <functional>
+#import <map>
+#import <string>
 #include "graphics.h"
+#include "menu.h"
 
 // keycode assignments
 constexpr SDL_Scancode KEY_QUIT = SDL_SCANCODE_Q;
@@ -48,17 +52,21 @@ class Input {
 private:
     Input();
     ~Input();
-    
+    std::map<MenuId, Menu*> menus;
     SDL_Event event;
 
-    std::unordered_map<Action, std::function<void()>> callbacks;
+    std::map<Action, std::function<void()>> callbacks;
     void callAction(Action action);
     
     void handleKey(SDL_Scancode key, bool pressed);
+    void handleClick(int xpos, int ypos);
 public:
     static Input& instance();
     void handleEvents();
+    void renderMenus();
     void registerCallback(Action action, std::function<void()> callback);
+    void addMenu(Menu *menu);
+    void toggleMenuDisplay(MenuId id);
 };
 
 #endif /* input_h */

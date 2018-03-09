@@ -45,7 +45,7 @@ void Input::handleEvents() {
                 handleKey(event.key.keysym.scancode, false);
                 break;
             case SDL_MOUSEBUTTONUP:
-                callAction(Action::ADVACNE);
+                handleClick(event.button.x, event.button.y);
                 break;
             default:
                 break;
@@ -93,3 +93,30 @@ void Input::handleKey(SDL_Scancode key, bool pressed) {
         callAction(Action::JUMP);
     }
 }
+
+void Input::addMenu(Menu *menu) {
+    menus[menu->getId()] = menu;
+}
+
+void Input::handleClick(int xpos, int ypos) {
+    for (auto &menu : menus) {
+        if (menu.second->handleClick(xpos, ypos)) {
+            // this menu handled the click, we can stop
+            return;
+        }
+    }
+
+    // nothing was clicked on, interperet as an advance action
+    callAction(Action::ADVACNE);
+}
+
+void Input::renderMenus() {
+    for (auto &menu : menus) {
+        menu.second->render();
+    }
+}
+
+void Input::toggleMenuDisplay(MenuId menu_id) {
+    menus[menu_id]->toggleDisplay();
+}
+

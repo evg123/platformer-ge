@@ -23,10 +23,10 @@
 
 #include <string>
 #include <string_view>
-#include <unordered_map>
+#include <map>
+#include <utility>
 #include "graphics.h"
 
-constexpr int FONT_SIZE = 64;
 constexpr auto IMAGE_DIR = "./Assets/images/";
 constexpr auto MUSIC_DIR = "./Assets/music/";
 constexpr auto SOUNDS_DIR = "./Assets/sounds/";
@@ -39,20 +39,23 @@ class ResourceManager {
 private:
     ResourceManager();
     ~ResourceManager();
-    std::unordered_map<std::string, SDL_Texture*> image_map;
-    std::unordered_map<std::string, SDL_Texture*> text_map;
-    std::unordered_map<std::string, Mix_Music*> music_map;
-    std::unordered_map<std::string, Mix_Chunk*> sound_map;
-    TTF_Font *font = NULL;
+    std::map<std::string, SDL_Texture*> image_map;
+    std::map<int, TTF_Font*> font_map;
+    std::map<std::pair<std::string, int>, SDL_Texture*> text_map;
+    std::map<std::string, Mix_Music*> music_map;
+    std::map<std::string, Mix_Chunk*> sound_map;
+    
+    TTF_Font* getFont(int font_size);
     
     void free_images();
     void free_text();
+    void free_fonts();
     void free_music();
     void free_sounds();
 public:
     static ResourceManager& instance();
     SDL_Texture* getImageTexture(const std::string &filename);
-    SDL_Texture* getTextTexture(const std::string &text);
+    SDL_Texture* getTextTexture(const std::string &text, int font_size);
     Mix_Music* getMusic(const std::string &track_name);
     Mix_Chunk* getSound(const std::string &sound_name);
 };

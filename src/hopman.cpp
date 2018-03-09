@@ -34,6 +34,7 @@ int Hopman::play() {
     setupLevel();
     
     registerInputCallbacks();
+    createUI();
     
     FrameTimer timer = FrameTimer(fps_limit);
     
@@ -79,6 +80,33 @@ void Hopman::registerInputCallbacks() {
     Input::instance().registerCallback(Action::JUMP, std::bind(&Player::jump, player));
 }
 
+void Hopman::createUI() {
+    createPauseMenu();
+}
+
+void Hopman::createPauseMenu() {
+    int menu_x = (Graphics::instance().getWindowWidth() / 2) - (PAUSE_MENU_WIDTH / 2);
+    int menu_y = (Graphics::instance().getWindowHeight() / 2) - (PAUSE_MENU_HEIGHT / 2);
+    Menu *menu = new Menu(MenuId::PAUSE,
+                          {menu_x, menu_y, PAUSE_MENU_WIDTH, PAUSE_MENU_HEIGHT},
+                          ResourceManager::instance().getImageTexture(MAIN_MENU_BG_IMG));
+    
+    menu->addItem("Pause Menu", 50,
+                  {0, 0, PAUSE_MENU_WIDTH - (MENU_SIDE_PADDING * 2), PAUSE_MENU_BTN_HEIGHT},
+                  NULL,
+                  NULL);
+    menu->addItem("Restart", 42,
+                  {0, 0, PAUSE_MENU_WIDTH - (MENU_SIDE_PADDING * 2), PAUSE_MENU_BTN_HEIGHT},
+                  ResourceManager::instance().getImageTexture(BUTTON_IMG),
+                  NULL);
+    menu->addItem("Quit", 42,
+                  {0, 0, PAUSE_MENU_WIDTH - (MENU_SIDE_PADDING * 2), PAUSE_MENU_BTN_HEIGHT},
+                  ResourceManager::instance().getImageTexture(BUTTON_IMG),
+                  std::bind(&Hopman::exitGame, this));
+    
+    Input::instance().addMenu(menu);
+}
+
 /**
  Update all the game objects
  */
@@ -104,6 +132,7 @@ void Hopman::pause() {
     } else if (game_state == GameState::PAUSED) {
         game_state = GameState::PLAYING;
     }
+    Input::instance().toggleMenuDisplay(MenuId::PAUSE);
 }
 
 /**
@@ -142,6 +171,9 @@ void Hopman::render() {
  Draw the UI on top of everthing
  */
 void Hopman::renderUI() {
+    Input::instance().renderMenus();
+
+    //TODO redo
     int xpos = 0, ypos = 0;
     if (display_fps) {
         renderText(xpos, ypos, UI_FONT_SIZE, std::to_string(fps_display));
@@ -158,7 +190,7 @@ void Hopman::renderUI() {
  */
 void Hopman::renderText(int xpos, int ypos, int font_size, std::string text) {
     int tw = 0, th = 0;
-    SDL_Texture *fps_text = ResourceManager::instance().getTextTexture(text);
+    SDL_Texture *fps_text = ResourceManager::instance().getTextTexture(text, font_size);
     SDL_Rect rect = {xpos, ypos, tw, th};
     SDL_RenderCopy(Graphics::instance().getRenderer(), fps_text, NULL, &rect);
 }

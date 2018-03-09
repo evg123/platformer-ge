@@ -13,13 +13,6 @@ ResourceManager::ResourceManager() {
         SDL_Log("%s\n", TTF_GetError());
         throw std::runtime_error("Failed to init TTF");
     }
-    
-    font = TTF_OpenFont("./Assets/fonts/open-sans/OpenSans-ExtraBold.ttf", FONT_SIZE);
-    if (font == NULL) {
-        SDL_Log("%s\n", TTF_GetError());
-        throw std::runtime_error("Failed to load font");
-    }
-    
 }
 
 /**
@@ -30,8 +23,8 @@ ResourceManager::~ResourceManager() {
     free_text();
     free_music();
     free_sounds();
+    free_fonts();
 
-    TTF_CloseFont(font);
     TTF_Quit();
 }
 
@@ -43,6 +36,18 @@ void ResourceManager::free_images() {
     while (it != image_map.end()) {
         SDL_Texture *tex = it->second;
         SDL_DestroyTexture(tex);
+        ++it;
+    }
+}
+
+/**
+ Unload and destroy objects
+ */
+void ResourceManager::free_fonts() {
+    auto it = font_map.begin();
+    while (it != font_map.end()) {
+        TTF_Font *font = it->second;
+        TTF_CloseFont(font);
         ++it;
     }
 }
@@ -98,7 +103,7 @@ SDL_Texture* ResourceManager::getImageTexture(const std::string &name) {
     SDL_Texture *texture;
     auto map_val = image_map.find(name);
     
-    if (map_val == text_map.end()) {
+    if (map_val == image_map.end()) {
         // not found, need to initialize
         std::string filename = IMAGE_DIR + name;
         SDL_Surface *surf = IMG_Load(filename.c_str());
@@ -123,15 +128,39 @@ SDL_Texture* ResourceManager::getImageTexture(const std::string &name) {
 }
 
 /**
+ Load or retrieve the texture for an image
+ */
+TTF_Font* ResourceManager::getFont(int font_size) {
+    TTF_Font *font;
+    auto map_val = font_map.find(font_size);
+    
+    if (map_val == font_map.end()) {
+        font = TTF_OpenFont("./Assets/fonts/open-sans/OpenSans-ExtraBold.ttf", font_size);
+        if (font == NULL) {
+            SDL_Log("%s\n", TTF_GetError());
+            throw std::runtime_error("Failed to load font");
+        }
+
+        // add font to map
+        font_map.insert({font_size, font});
+    } else {
+        font = map_val->second;
+    }
+    
+    return font;
+}
+
+/**
  Load or retrieve the texture for a string
  */
-SDL_Texture* ResourceManager::getTextTexture(const std::string &text) {
+SDL_Texture* ResourceManager::getTextTexture(const std::string &text, int font_size) {
     SDL_Texture *texture;
-    auto map_val = text_map.find(text);
+    auto map_val = text_map.find({text, font_size});
     
     if (map_val == text_map.end()) {
         // not found, need to initialize
         SDL_Color text_color = {255, 255, 255};
+        TTF_Font *font = getFont(font_size);
         SDL_Surface *surf = TTF_RenderText_Blended(font, text.c_str(), text_color);
         if (surf == NULL) {
             SDL_Log("%s\n", TTF_GetError());
@@ -145,7 +174,7 @@ SDL_Texture* ResourceManager::getTextTexture(const std::string &text) {
         SDL_FreeSurface(surf);
         
         // add texture to map
-        text_map.insert({text, texture});
+        text_map.insert({{text, font_size}, texture});
     } else {
         texture = map_val->second;
     }
