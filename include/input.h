@@ -19,6 +19,7 @@
 #import <functional>
 #import <map>
 #import <string>
+#include "gui.h"
 #include "graphics.h"
 #include "menu.h"
 
@@ -52,7 +53,6 @@ class Input {
 private:
     Input();
     ~Input();
-    std::map<MenuId, Menu*> menus;
     SDL_Event event;
 
     std::map<Action, std::function<void()>> callbacks;
@@ -63,10 +63,8 @@ private:
 public:
     static Input& instance();
     void handleEvents();
-    void renderMenus();
     void registerCallback(Action action, std::function<void()> callback);
-    void addMenu(Menu *menu);
-    void toggleMenuDisplay(MenuId id);
+    
 };
 
 #endif /* input_h */

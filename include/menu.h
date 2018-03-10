@@ -21,16 +21,6 @@
 #import "graphics.h"
 #import "resource_manager.h"
 
-/**
- Identifiers used to distinguish between menus
- Not all of these are implemented
- */
-enum class MenuId {
-    MAIN,
-    PAUSE,
-    OPTIONS,
-};
-
 class MenuItem {
 private:
     SDL_Texture *text_texture;
@@ -47,19 +37,15 @@ public:
 
 class Menu {
 private:
-    MenuId id;
     std::vector<MenuItem*> items;
     SDL_Rect rect;
     SDL_Texture *texture;
-    bool display = true;
 
     void repositionItems();
 public:
-    Menu(MenuId id, SDL_Rect rect, SDL_Texture *texture);
+    Menu(SDL_Rect rect, SDL_Texture *texture);
     void render();
-    MenuId getId() { return id; }
     void addItem(std::string text, int font_size, SDL_Rect btn_size, SDL_Texture *texture, std::function<void()> callback);
-    void toggleDisplay();
     bool handleClick(int xpos, int ypos);
 };
 

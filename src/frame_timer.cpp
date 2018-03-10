@@ -22,8 +22,14 @@ FrameTimer::FrameTimer(int fps_target) {
  */
 int FrameTimer::newFrame() {
     int now = SDL_GetTicks();
-    int delay = now - frame_start;
+    int delta = now - frame_start;
     frame_start = now;
+
+    // limit delta
+    if (delta > MAX_DELTA) {
+        SDL_Log("WARNING: limiting frame delta of %d ms to %d ms", delta, MAX_DELTA);
+        delta = MAX_DELTA;
+    }
 
     ++frame_count;
     if (now - fps_update_start > FPS_UPDATE_INTERVAL_MS) {
@@ -32,7 +38,7 @@ int FrameTimer::newFrame() {
         fps_update_start = now;
     }
 
-    return delay;
+    return delta;
 }
 
 /**

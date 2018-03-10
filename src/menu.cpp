@@ -35,16 +35,11 @@ void MenuItem::pressButton() {
 
 // Menu definitions
 
-Menu::Menu(MenuId id, SDL_Rect rect, SDL_Texture *texture)
-: id(id), rect(rect), texture(texture) {
+Menu::Menu(SDL_Rect rect, SDL_Texture *texture)
+: rect(rect), texture(texture) {
 }
 
 void Menu::render() {
-    if (!display) {
-        // we are hidden
-        return;
-    }
-    
     SDL_Renderer *renderer = Graphics::instance().getRenderer();
     SDL_RenderCopy(renderer, texture, NULL, &rect);
     
@@ -89,17 +84,14 @@ void Menu::repositionItems() {
     }
 }
 
-void Menu::toggleDisplay() {
-    display = !display;
-}
-
 bool Menu::handleClick(int xpos, int ypos) {
-    if (!display) {
-        // we are hidden
+    SDL_Point pnt = {xpos, ypos};
+
+    // check if the point was within this menu
+    if (!SDL_PointInRect(&pnt, &rect)) {
         return false;
     }
 
-    SDL_Point pnt = {xpos, ypos};
     for (auto item : items) {
         if (SDL_PointInRect(&pnt, &item->box_rect)) {
             item->pressButton();
@@ -107,7 +99,6 @@ bool Menu::handleClick(int xpos, int ypos) {
         }
     }
 
-    // return true if the point was within this menu
-    return SDL_PointInRect(&pnt, &rect);
+    return true;
 }
 

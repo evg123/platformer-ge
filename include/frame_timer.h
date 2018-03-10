@@ -15,6 +15,10 @@
 #include "../lib/osx/SDL2.framework/Headers/SDL.h"
 #endif
 
+// limit maximum time between frames
+// game will slow down past this point
+constexpr int MAX_DELTA = 64;
+
 constexpr float FPS_UPDATE_INTERVAL_MS = 1000.0f;
 
 /**

@@ -81,14 +81,48 @@ void Hopman::registerInputCallbacks() {
 }
 
 void Hopman::createUI() {
+    createStatusBar();
     createPauseMenu();
+}
+
+void Hopman::createStatusBar() {
+    // bar background
+    GuiElement *elem = new GuiElement({0, STATUS_BAR_Y, Graphics::instance().getWindowWidth(), 80},
+                                      ResourceManager::instance().getImageTexture(STATUS_BAR_IMG));
+    Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
+
+    // score display
+    elem = new TextGuiElement<std::string>({10, STATUS_BAR_Y + 5, 0, 0},
+                                           SCORE_STR, STATUS_BAR_TEXT_SIZE);
+    Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
+    elem = new TextGuiElement<int>({50, STATUS_BAR_Y + 5, 0, 0},
+                                           score, STATUS_BAR_TEXT_SIZE);
+    Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
+    
+    // level display
+    elem = new TextGuiElement<std::string>({200, STATUS_BAR_Y + 5, 0, 0},
+                                           LEVEL_STR, STATUS_BAR_TEXT_SIZE);
+    Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
+    elem = new TextGuiElement<int>({250, STATUS_BAR_Y + 5, 0, 0},
+                                   level, STATUS_BAR_TEXT_SIZE);
+    Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
+    
+    // lives display
+    elem = new TextGuiElement<std::string>({500, STATUS_BAR_Y + 5, 0, 0},
+                                           LIVES_STR, STATUS_BAR_TEXT_SIZE);
+    Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
+    elem = new TextGuiElement<int>({550, STATUS_BAR_Y + 5, 0, 0},
+                                   lives, STATUS_BAR_TEXT_SIZE);
+    Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
+
+    // show the status bar
+    Gui::instance().toggleGroupDisplay(GuiGroupId::STATUS_BAR);
 }
 
 void Hopman::createPauseMenu() {
     int menu_x = (Graphics::instance().getWindowWidth() / 2) - (PAUSE_MENU_WIDTH / 2);
     int menu_y = (Graphics::instance().getWindowHeight() / 2) - (PAUSE_MENU_HEIGHT / 2);
-    Menu *menu = new Menu(MenuId::PAUSE,
-                          {menu_x, menu_y, PAUSE_MENU_WIDTH, PAUSE_MENU_HEIGHT},
+    Menu *menu = new Menu({menu_x, menu_y, PAUSE_MENU_WIDTH, PAUSE_MENU_HEIGHT},
                           ResourceManager::instance().getImageTexture(MAIN_MENU_BG_IMG));
     
     menu->addItem("Pause Menu", 50,
@@ -104,7 +138,8 @@ void Hopman::createPauseMenu() {
                   ResourceManager::instance().getImageTexture(BUTTON_IMG),
                   std::bind(&Hopman::exitGame, this));
     
-    Input::instance().addMenu(menu);
+    // add the completed menu to the gui
+    Gui::instance().add(GuiGroupId::PAUSE, menu);
 }
 
 /**
@@ -116,6 +151,8 @@ void Hopman::update(int delta) {
     }
     
     removeDestroyed();
+    
+    Gui::instance().update();
 }
 
 /**
@@ -127,12 +164,12 @@ void Hopman::removeDestroyed() {
 }
 
 void Hopman::pause() {
-    if (game_state == GameState::PAUSED) {
-        game_state = GameState::PLAYING;
+    if (game_state == GameState::PLAYING) {
+        game_state = GameState::PAUSED;
     } else if (game_state == GameState::PAUSED) {
         game_state = GameState::PLAYING;
     }
-    Input::instance().toggleMenuDisplay(MenuId::PAUSE);
+    Gui::instance().toggleGroupDisplay(GuiGroupId::PAUSE);
 }
 
 /**
@@ -162,7 +199,7 @@ void Hopman::render() {
         obj->render();
     }
     
-    renderUI();
+    renderGui();
     
     Graphics::instance().swapFrame();
 }
@@ -170,29 +207,8 @@ void Hopman::render() {
 /**
  Draw the UI on top of everthing
  */
-void Hopman::renderUI() {
-    Input::instance().renderMenus();
-
-    //TODO redo
-    int xpos = 0, ypos = 0;
-    if (display_fps) {
-        renderText(xpos, ypos, UI_FONT_SIZE, std::to_string(fps_display));
-    }
-    renderText(xpos, ypos, UI_FONT_SIZE, "score " + std::to_string(score));
-    renderText(xpos, ypos, UI_FONT_SIZE, "lives " + std::to_string(lives));
-    if (!screen_message.empty()) {
-        renderText(xpos, ypos, UI_FONT_SIZE, screen_message);
-    }
-}
-
-/**
- Draw text at coordinates in a certain size
- */
-void Hopman::renderText(int xpos, int ypos, int font_size, std::string text) {
-    int tw = 0, th = 0;
-    SDL_Texture *fps_text = ResourceManager::instance().getTextTexture(text, font_size);
-    SDL_Rect rect = {xpos, ypos, tw, th};
-    SDL_RenderCopy(Graphics::instance().getRenderer(), fps_text, NULL, &rect);
+void Hopman::renderGui() {
+    Gui::instance().render();
 }
 
 /**
@@ -248,8 +264,8 @@ void Hopman::setupLevel() {
     Audio::instance().setBgTrack(BG_TRACK);
 
     
-    // start out paused
-    game_state = GameState::PAUSED;
+    // start out on the staging screen
+    game_state = GameState::PLAYING;
 }
 
 /**
