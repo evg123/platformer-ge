@@ -18,8 +18,14 @@
 #include <vector>
 #include <tuple>
 #include <algorithm>
+#include <queue>
 #include "evg_rect.h"
 #include "resource_manager.h"
+
+enum class Axis {
+    X,
+    Y,
+};
 
 /**
  Abstract base class for things drawn to the screen.
@@ -36,7 +42,7 @@ protected:
     bool marked_for_removal = false; // will be cleaned up and removed from game if true
     int score_on_destruction = 0; // points earned/lost for the destruction of this object
 
-    std::tuple<int, int> calcVelocityOffset(int delta);
+    std::tuple<float, float> calcVelocityOffset(int delta);
     virtual void applyAcceleration(int delta);
 public:
     Drawable();
@@ -46,8 +52,8 @@ public:
     // update based on delta in ms since last update
     virtual void update(int delta, std::vector<Drawable*> &objects);
     virtual void render() = 0;
-    virtual void doMove(int x_offset, int y_offset, std::vector<Drawable*> &objects);
-    virtual void processCollision(Drawable &other, int x_off, int y_off);
+    virtual void doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects);
+    virtual void processCollision(Drawable &other, float x_off, float y_off);
 
     /** Get the bounding rect of this object */
     virtual EvgRect& getRect() { return rect; }
@@ -63,6 +69,19 @@ public:
     /** true if this object needs to be cleaned up */
     bool needsRemoval() { return marked_for_removal; }
     void destroy();
+};
+
+/**
+ Struct used during collision detection
+ Defines < operator based on time, so it can be stored in priority queue
+ */
+struct CollisionRecord {
+    Axis axis;
+    float time;
+    float diff;
+    Drawable *other;
+
+    bool operator<(const CollisionRecord &rhs) const { return time > rhs.time; }
 };
 
 #endif /* drawable_h */

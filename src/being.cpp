@@ -47,13 +47,13 @@ void Being::render() {
     SDL_RenderCopyEx(renderer, texture, &sprite.getFrameRect(), &rend_rect, 0, NULL, flip_mode);
 }
 
-void Being::doMove(int x_offset, int y_offset, std::vector<Drawable*> &objects) {
+void Being::doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects) {
     //TODO override no longer needed
     // call the superclass doMove
     Drawable::doMove(x_offset, y_offset, objects);
 }
 
-void Being::processCollision(Drawable &other, int x_off, int y_off) {
+void Being::processCollision(Drawable &other, float x_off, float y_off) {
     // do the default
     Drawable::processCollision(other, x_off, y_off);
 
@@ -104,7 +104,7 @@ void Being::applyAcceleration(int delta) {
         // stopping
         // slow to zero unless we are in the air
         if (x_vel > 0) {
-            SDL_Log("slow");
+            //SDL_Log("slow");
             x_vel = std::max(0.0f, x_vel - FRICTION * delta);
         } else if (x_vel < 0) {
             x_vel = std::min(0.0f, x_vel + FRICTION * delta);

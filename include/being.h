@@ -42,11 +42,11 @@ protected:
     float target_x_vel = 0;
 
     void resetJumps();
-    void doMove(int x_offset, int y_offset, std::vector<Drawable*> &objects) override;
+    void doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects) override;
     void update(int delta, std::vector<Drawable*> &objects) override;
     void updateSprite();
     void render() override;
-    void processCollision(Drawable &other, int x_off, int y_off) override;
+    void processCollision(Drawable &other, float x_off, float y_off) override;
     void applyAcceleration(int delta) override;
 public:
     Being();

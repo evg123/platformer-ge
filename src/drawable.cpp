@@ -35,7 +35,7 @@ void Drawable::destroy() {
  */
 void Drawable::update(int delta, std::vector<Drawable*> &objects) {
     applyAcceleration(delta);
-    int x_off, y_off;
+    float x_off, y_off;
     std::tie(x_off, y_off) = calcVelocityOffset(delta);
     doMove(x_off, y_off, objects);
 }
@@ -67,60 +67,83 @@ void Drawable::setPosition(int x_pos, int y_pos) {
  Update the position by offsetting previous position.
  Handle collisions.
  */
-void Drawable::doMove(int x_offset, int y_offset, std::vector<Drawable*> &objects) {
-    SDL_Rect new_rect = {rect.x + x_offset, rect.y + y_offset, rect.w, rect.h};
-    
-    Drawable *collision_other_x = NULL;
-    Drawable *collision_other_y = NULL;
-    int new_x_off = x_offset;
-    int new_y_off = y_offset;
+void Drawable::doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects) {
+    SDL_Rect new_rect = {int(rect.x + x_offset), int(rect.y + y_offset), rect.w, rect.h};
+
+    std::priority_queue<CollisionRecord> collisions;
     for (auto &other : objects) {
         if (SDL_HasIntersection(&new_rect, &other->rect)) {
             if (x_offset > 0) {
                 // find the distance to the other object on this axis
-                int x_diff = other->rect.left() - rect.right();
+                float x_diff = other->rect.left() - rect.right();
                 if (x_diff >= 0) {
-                    // limit x_offset to that distance
-                    if (x_diff < new_x_off) {
-                        new_x_off = x_diff;
-                        collision_other_x = other;
-                    }
+                    // save a record of this collision
+                    float collision_time = x_diff / x_offset;
+                    CollisionRecord record = {Axis::X, collision_time, x_diff, other};
+                    collisions.push(record);
                 } // else: a negative value means we aren't going to intersect in this axis
             } else if (x_offset < 0) {
-                int x_diff = other->rect.right() - rect.left();
+                float x_diff = other->rect.right() - rect.left();
                 if (x_diff <= 0) {
-                    if (x_diff > new_x_off) {
-                        new_x_off = x_diff;
-                        collision_other_x = other;
-                    }
+                    // save a record of this collision
+                    float collision_time = x_diff / x_offset;
+                    CollisionRecord record = {Axis::X, collision_time, x_diff, other};
+                    collisions.push(record);
                 }
             }
             
             // y axis
             if (y_offset > 0) {
-                int y_diff = other->rect.top() - rect.bottom();
+                float y_diff = other->rect.top() - rect.bottom();
                 if (y_diff >= 0) {
-                    if (y_diff < new_y_off) {
-                        new_y_off = y_diff;
-                        collision_other_y = other;
-                    }
+                    // save a record of this collision
+                    float collision_time = y_diff / y_offset;
+                    CollisionRecord record = {Axis::Y, collision_time, y_diff, other};
+                    collisions.push(record);
                 }
             } else if (y_offset < 0) {
-                int y_diff = other->rect.bottom() - rect.top();
+                float y_diff = other->rect.bottom() - rect.top();
                 if (y_diff <= 0) {
-                    if (y_diff > new_y_off) {
-                        new_y_off = y_diff;
-                        collision_other_y = other;
-                    }
+                    // save a record of this collision
+                    float collision_time = y_diff / y_offset;
+                    CollisionRecord record = {Axis::Y, collision_time, y_diff, other};
+                    collisions.push(record);
                 }
             }
-
-            
         }
     }
+
+    // the other drawable that was collided with in each axis
+    Drawable *collision_other_x = NULL;
+    Drawable *collision_other_y = NULL;
     
+    bool have_x = false;
+    bool have_y = false;
+    while (!collisions.empty()) {
+        CollisionRecord record = collisions.top();
+        collisions.pop();
+        if (record.axis == Axis::X) {
+            if (!have_x && SDL_HasIntersection(&new_rect, &record.other->rect)) {
+                new_rect.x = rect.x + record.diff;
+                collision_other_x = record.other;
+                have_x = true;
+            }
+        } else { // y
+            if (!have_y && SDL_HasIntersection(&new_rect, &record.other->rect)) {
+                new_rect.y = rect.y + record.diff;
+                collision_other_y = record.other;
+                have_y = true;
+            }
+        }
+        if (have_x && have_y) {
+            // the earliest collisions have been handled for both x and y
+            // we can stop now
+            break;
+        }
+    }
+
     // update position to as far as we could go
-    setPosition(rect.x + new_x_off, rect.y + new_y_off);
+    setPosition(new_rect.x, new_rect.y);
     
     if (collision_other_x != NULL) {
         // register the collision
@@ -132,7 +155,7 @@ void Drawable::doMove(int x_offset, int y_offset, std::vector<Drawable*> &object
     }
 }
 
-void Drawable::processCollision(Drawable &other, int x_off, int y_off) {
+void Drawable::processCollision(Drawable &other, float x_off, float y_off) {
     // stop our momentum
     if (x_off != 0) {
         x_vel = 0;
@@ -145,10 +168,10 @@ void Drawable::processCollision(Drawable &other, int x_off, int y_off) {
 /**
  Calculate how far in both axis this drawable should move in delta milliseconds
  */
-std::tuple<int, int> Drawable::calcVelocityOffset(int delta) {
+std::tuple<float, float> Drawable::calcVelocityOffset(int delta) {
     // move according to current velocity
-    int x_off = x_vel * delta;
-    int y_off = y_vel * delta;
+    float x_off = x_vel * delta;
+    float y_off = y_vel * delta;
     
     return std::make_tuple(x_off, y_off);
 }
