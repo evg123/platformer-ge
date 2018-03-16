@@ -49,9 +49,9 @@ BeingType& BeingType::redEnemy() {
         this_type.frame_config =
         {
             0, 1, // idle
-            6, 11, // walking
+            5, 9, // walking
             4, 4, // jump
-            6, 6, // braking
+            9, 9, // braking
         };
         this_type.hp = 1;
         this_type.damage = 1;
@@ -62,7 +62,7 @@ BeingType& BeingType::redEnemy() {
         this_type.max_air_jumps = 0;
         this_type.jump_duration = 150;
         
-        this_type.action_type = ActionType::CHARGE_TO_EDGE;
+        this_type.action_type = ActionType::CHARGE;
         this_type.bump_immune = true;
     }
     return this_type;
@@ -78,9 +78,9 @@ BeingType& BeingType::blueEnemy() {
         this_type.frame_config =
         {
             0, 1, // idle
-            6, 11, // walking
+            5, 9, // walking
             4, 4, // jump
-            2, 2, // braking
+            9, 9, // braking
         };
         this_type.hp = 1;
         this_type.damage = 1;

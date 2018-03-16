@@ -80,10 +80,50 @@ void Being::render() {
  Update the being based on its defined action type
  */
 void Being::performAction(int delta) {
-    if (type.action_type == ActionType::CHARGE_TO_EDGE) {
-        
+    int now = SDL_GetTicks();
+    int action_len = now - action_start_ts;
+    if (type.action_type == ActionType::CHARGE) {
+        // run in a direction for 1 second
+        if (action_len > 1000) {
+            int dir = rand() % 3;
+            switch(dir) {
+                case 0:
+                    // stand still
+                    target_x_vel = 0;
+                    break;
+                case 1:
+                    // run right
+                    target_x_vel = top_speed;
+                    break;
+                case 2:
+                    // run right
+                    target_x_vel = -top_speed;
+                    break;
+            }
+            action_start_ts = now;
+        }
     } else if (type.action_type == ActionType::JUMP_AROUND) {
-        
+        // jump in a direction
+        if (isOnGround() && action_len > 500) {
+            int dir = rand() % 3;
+            switch(dir) {
+                case 0:
+                    // stand still
+                    target_x_vel = 0;
+                    break;
+                case 1:
+                    // run right
+                    target_x_vel = top_speed;
+                    jump();
+                    break;
+                case 2:
+                    // run right
+                    target_x_vel = -top_speed;
+                    jump();
+                    break;
+            }
+            action_start_ts = now;
+        }
     }
 }
 

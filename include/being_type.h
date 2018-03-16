@@ -24,7 +24,7 @@
  */
 enum class ActionType {
     NONE,
-    CHARGE_TO_EDGE,
+    CHARGE,
     JUMP_AROUND,
 };
 
