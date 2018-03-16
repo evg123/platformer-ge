@@ -10,13 +10,26 @@
 
 Being::Being() {}
 
-void Being::init() {
-    hp = 1;
+void Being::init(BeingType type) {
     marked_for_removal = false;
     x_vel = 0;
     y_vel = 0;
     x_accel = 0;
     y_accel = 0;
+    
+    // unpack type class
+    this->type = type;
+    hp = type.hp;
+    damage = type.damage;
+    bump_immune = type.bump_immune;
+    score_on_destruction = type.score_on_destruction;
+    rect.w = type.width;
+    rect.h = type.height;
+    texture = ResourceManager::instance().getImageTexture(type.sprite_sheet);
+    sprite.init(type.frame_config);
+    top_speed = type.top_speed;
+    jump_duration = type.jump_duration;
+    max_air_jumps = type.max_air_jumps;
 }
 
 bool Being::isOnGround() {
@@ -43,7 +56,14 @@ bool Being::canJump() {
 }
 
 void Being::update(int delta, std::vector<Drawable*> &objects) {
+    performAction(delta);
+
     Drawable::update(delta, objects);
+
+    if (hp <= 0) {
+        destroy();
+    }
+
     updateSprite();
 }
 
@@ -54,6 +74,17 @@ void Being::render() {
     SDL_Renderer *renderer = Graphics::instance().getRenderer();
     SDL_RendererFlip flip_mode = facing == Facing::RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     SDL_RenderCopyEx(renderer, texture, &sprite.getFrameRect(), &rend_rect, 0, NULL, flip_mode);
+}
+
+/**
+ Update the being based on its defined action type
+ */
+void Being::performAction(int delta) {
+    if (type.action_type == ActionType::CHARGE_TO_EDGE) {
+        
+    } else if (type.action_type == ActionType::JUMP_AROUND) {
+        
+    }
 }
 
 void Being::doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects) {
@@ -72,6 +103,22 @@ void Being::processCollision(Drawable &other, float x_off, float y_off) {
         last_grounded = SDL_GetTicks();
         jump_start_ts = 0; // zero means not jumping
         resetJumps();
+    }
+}
+
+void Being::hitOther(Drawable &other) {
+    if (other.isBouncy()) {
+        y_vel = jump_vel;
+    }
+}
+
+void Being::hitBy(Drawable &other) {
+    hp -= other.getDamage();
+}
+
+void Being::ranInto(Drawable &other) {
+    if (!bump_immune) {
+        hp -= other.getDamage();
     }
 }
 

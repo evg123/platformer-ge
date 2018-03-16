@@ -15,13 +15,6 @@ Drawable::Drawable() {}
  */
 Drawable::~Drawable() {}
 
-void Drawable::init(int x_pos, int y_pos, int width, int height) {
-    rect.x = x_pos;
-    rect.y = y_pos;
-    rect.w = width;
-    rect.h = height;
-}
-
 /**
  Mark the drawable for removal at the next sweep
  */
@@ -163,6 +156,29 @@ void Drawable::processCollision(Drawable &other, float x_off, float y_off) {
     if (y_off != 0) {
         y_vel = 0;
     }
+
+    // run callbacks
+    if (collision_callback) {
+        collision_callback(other);
+    }
+    if (other.collision_callback) {
+        other.collision_callback(*this);
+    }
+
+    if (y_off > 0) {
+        // we jumped on other
+        hitOther(other);
+        other.hitBy(*this);
+    } else if (y_off < 0) {
+        // we jumped into other's feet
+        hitBy(other);
+        other.hitOther(*this);
+    } else if (x_off != 0) {
+        // we ran into each other
+        ranInto(other);
+        other.ranInto(*this);
+    }
+    
 }
 
 /**

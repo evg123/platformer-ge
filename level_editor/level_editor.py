@@ -9,11 +9,11 @@ import argparse
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
-TILE_SIDE_PX = 32
-TILE_TYPE_START = 1
-TILE_TYPE_COUNT = 4
 EMPTY_TILE_NUM = 0
-TILE_IMAGE_PATTERN = '../Assets/images/tiles/tile_{0}.png'
+TILE_SIDE_PX = 32
+SRC_RECT = pygame.Rect(0, 0, TILE_SIDE_PX, TILE_SIDE_PX)
+
+TITLE_FORMAT = '{0} - size:({1}x{2}) - pos:({3},{4}) - {5}'
 DIM_LINE_FORMAT = '{0} {1}\n'
 
 WINDOW_WIDTH_TILES = math.ceil(WINDOW_WIDTH / TILE_SIDE_PX)
@@ -21,6 +21,21 @@ WINDOW_HEIGHT_TILES = math.ceil(WINDOW_HEIGHT / TILE_SIDE_PX)
 
 LMB = 1
 RMB = 3
+
+# maps tile num to image file
+TILE_IMAGE_PREFIX = '../Assets/images/'
+# list contains (file path, scale)
+TILE_IMAGE_PATTERNS = [
+    ('', 0), # empty
+    (TILE_IMAGE_PREFIX + 'tiles/tile_1.png', 1), # dirt
+    (TILE_IMAGE_PREFIX + 'tiles/tile_2.png', 1), # steel
+    (TILE_IMAGE_PREFIX + 'tiles/tile_3.png', 1), # damage
+    (TILE_IMAGE_PREFIX + 'tiles/tile_4.png', 1), # goal
+    (TILE_IMAGE_PREFIX + 'sprites/player.png', 2),
+    (TILE_IMAGE_PREFIX + 'sprites/red_enemy.png', 2),
+    (TILE_IMAGE_PREFIX + 'sprites/blue_enemy.png', 2),
+]
+TILE_TYPE_COUNT = len(TILE_IMAGE_PATTERNS)
 
 class Editor(object):
     
@@ -30,8 +45,9 @@ class Editor(object):
         self.tiles = []
         self.xn_off = 0
         self.yn_off = 0
-        self.image_bank = [0]
+        self.image_bank = []
         self.level_filename = None
+        self.dirty = True
     
     def setup(self, level_file):
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -40,9 +56,16 @@ class Editor(object):
         self.load_level()
     
     def load_image_bank(self):
-        for num in range(TILE_TYPE_START, TILE_TYPE_COUNT):
-            filename = TILE_IMAGE_PATTERN.format(num)
-            img = pygame.image.load(filename)
+        for img_obj in TILE_IMAGE_PATTERNS:
+            img_file = img_obj[0]
+            scale = img_obj[1]
+            img = None
+            if img_file:
+                img = pygame.image.load(img_file)
+                if (scale != 1):
+                    img = pygame.transform.scale(img,
+                                                 (img.get_width() * scale,
+                                                  img.get_height() * scale))
             self.image_bank.append(img)
     
     def load_level(self):
@@ -76,6 +99,7 @@ class Editor(object):
             
             for yn in range(len(self.tiles[0])):
                 lvl_file.write(' '.join(str(col[yn]) for col in self.tiles) + '\n')
+        self.dirty = False
     
     def blank_level(self):
         start_xn = WINDOW_WIDTH_TILES
@@ -85,6 +109,7 @@ class Editor(object):
     def loop(self):
         while self.running:
             self.handle_events()
+            self.set_titlebar()
             self.render()
     
     def handle_events(self):
@@ -140,17 +165,20 @@ class Editor(object):
         while self.xn_off < 0:
             self.tiles.insert(0, [EMPTY_TILE_NUM] * len(self.tiles[0]))
             self.xn_off += 1
+            self.dirty = True
         
         # expand the level as the user shifts downward
         while len(self.tiles[0]) < WINDOW_HEIGHT_TILES + self.yn_off:
             for xn in range(len(self.tiles)):
                 self.tiles[xn].append(EMPTY_TILE_NUM)
+            self.dirty = True
         
         # shift upward
         while self.yn_off < 0:
             for xn in range(len(self.tiles)):
                 self.tiles[xn].insert(0, EMPTY_TILE_NUM)
             self.yn_off += 1
+            self.dirty = True
     
     def cycle_tile(self, xn, yn, increment):
         t_type = self.tiles[xn][yn]
@@ -163,6 +191,15 @@ class Editor(object):
             t_type = TILE_TYPE_COUNT - 1
         
         self.tiles[xn][yn] = t_type
+        self.dirty = True
+    
+    def set_titlebar(self):
+        save_state = '*UNSAVED*' if self.dirty else 'saved'
+        title = TITLE_FORMAT.format(self.level_filename,
+                                    len(self.tiles), len(self.tiles[0]),
+                                    self.xn_off, self.yn_off,
+                                    save_state)
+        pygame.display.set_caption(title)
     
     def render(self):        
         self.clear_screen()
@@ -181,8 +218,8 @@ class Editor(object):
                     # don't draw blank tiles
                     continue
                 img = self.image_bank[t_type]
-                rect = self.rect_from_coord(xn, yn)
-                self.screen.blit(img, rect)
+                dest_rect = self.rect_from_coord(xn, yn)
+                self.screen.blit(img, dest_rect, SRC_RECT)
     
     def rect_from_coord(self, xn, yn):
         # adjust based on screen scroll
@@ -194,9 +231,12 @@ class Editor(object):
     
     def draw_ui(self):
         pass
-        # show total size
-        # show offsets
-        #TODO put offsets in title bar?
+        # controls box
+        # click to cycle tile
+        # s to save
+        # arrows move screen
+        # player missing
+        # goal missing
 
 
 if __name__ == "__main__":

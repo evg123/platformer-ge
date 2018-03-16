@@ -53,6 +53,9 @@ int Hopman::play() {
             update(delta);
         }
 
+        // focus the screen on the player
+        Graphics::instance().focusScreenOffsets(player.getRect());
+
         // update the GUI
         Gui::instance().update();
 
@@ -60,7 +63,7 @@ int Hopman::play() {
         render();
     }
     
-    return OK;
+    return 0;
 }
 
 /**
@@ -74,11 +77,11 @@ void Hopman::registerInputCallbacks() {
     Input::instance().registerCallback(Action::TOGGLE_PAUSE, std::bind(&Hopman::pause, this));
     
     // player movement
-    Input::instance().registerCallback(Action::MOVE_LEFT, std::bind(&Player::moveLeft, &player));
-    Input::instance().registerCallback(Action::STOP_LEFT, std::bind(&Player::stopLeft, &player));
-    Input::instance().registerCallback(Action::MOVE_RIGHT, std::bind(&Player::moveRight, &player));
-    Input::instance().registerCallback(Action::STOP_RIGHT, std::bind(&Player::stopRight, &player));
-    Input::instance().registerCallback(Action::JUMP, std::bind(&Player::jump, &player));
+    Input::instance().registerCallback(Action::MOVE_LEFT, std::bind(&Being::moveLeft, &player));
+    Input::instance().registerCallback(Action::STOP_LEFT, std::bind(&Being::stopLeft, &player));
+    Input::instance().registerCallback(Action::MOVE_RIGHT, std::bind(&Being::moveRight, &player));
+    Input::instance().registerCallback(Action::STOP_RIGHT, std::bind(&Being::stopRight, &player));
+    Input::instance().registerCallback(Action::JUMP, std::bind(&Being::jump, &player));
 }
 
 void Hopman::createUI() {
@@ -89,7 +92,7 @@ void Hopman::createUI() {
 
 void Hopman::createStatusBar() {
     // bar background
-    GuiElement *elem = new GuiElement({0, STATUS_BAR_Y, Graphics::instance().getWindowWidth(), 80},
+    GuiElement *elem = new GuiElement({0, STATUS_BAR_Y, Graphics::instance().getWindowWidth(), 50},
                                       ResourceManager::instance().getImageTexture(STATUS_BAR_IMG));
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
 
@@ -97,7 +100,7 @@ void Hopman::createStatusBar() {
     elem = new TextGuiElement<std::string>({10, STATUS_BAR_Y + 5, 0, 0},
                                            SCORE_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
-    elem = new TextGuiElement<int>({50, STATUS_BAR_Y + 5, 0, 0},
+    elem = new TextGuiElement<int>({10 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
                                            score, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     
@@ -105,7 +108,7 @@ void Hopman::createStatusBar() {
     elem = new TextGuiElement<std::string>({200, STATUS_BAR_Y + 5, 0, 0},
                                            LEVEL_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
-    elem = new TextGuiElement<int>({250, STATUS_BAR_Y + 5, 0, 0},
+    elem = new TextGuiElement<int>({200 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
                                    level, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     
@@ -113,7 +116,7 @@ void Hopman::createStatusBar() {
     elem = new TextGuiElement<std::string>({500, STATUS_BAR_Y + 5, 0, 0},
                                            LIVES_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
-    elem = new TextGuiElement<int>({550, STATUS_BAR_Y + 5, 0, 0},
+    elem = new TextGuiElement<int>({500 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
                                    lives, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
 
@@ -164,16 +167,14 @@ void Hopman::setGameMessage(std::string new_msg) {
 void Hopman::update(int delta) {
     for (auto &obj : objects) {
         obj->update(delta, objects);
+        // check if obj has fallen off the map
         if (obj->getRect().top() > lower_bound) {
             obj->destroy();
         }
     }
-    
+
+    // clean up objects that need to be removed from the game
     removeDestroyed();
-    
-    if (player.getHp() <= 0) {
-        game_state = GameState::LOSS;
-    }
 }
 
 /**
@@ -189,8 +190,12 @@ void Hopman::removeDestroyed() {
     objects.erase(
         std::remove_if(objects.begin(),
                        objects.end(),
-                       [](Drawable *obj) -> bool {
-                           return obj->needsRemoval();
+                       [this](Drawable *obj) -> bool {
+                           if (obj->needsRemoval() && obj != &this->player) {
+                               this->score += obj->getScoreOnDestruction();
+                               return true;
+                           }
+                           return false;
                        }),
                   objects.end());
 }
@@ -202,11 +207,11 @@ void Hopman::tryRespawn() {
     if (lives > 0) {
         // restart the level
         --lives;
-        setupLevel();
+        setGameMessage("You Died!");
+        game_state = GameState::RESPAWN;
     } else {
         setGameMessage("GAME OVER :(");
         game_state = GameState::LOSS;
-        //Audio::instance().setBgTrack("");
         //Audio::instance().playSound("game_over.wav");
     }
 }
@@ -233,6 +238,9 @@ void Hopman::advanceScreen() {
     } else if (game_state == GameState::LEVEL_WON) {
         // move to next level
         ++level;
+        setupLevel();
+    } else if (game_state == GameState::RESPAWN) {
+        // try the level again
         setupLevel();
     } else if (game_state == GameState::LEVEL_START) {
         // start the level
@@ -267,17 +275,33 @@ void Hopman::renderGui() {
  create a tile object at the given tile coordinates
  */
 void Hopman::add_tile(int tile_type, int tx, int ty) {
-    if (tile_type == EMPTY_TILE_NUM) {
+    if (tile_type == TileNum::EMPTY) {
         return;
     }
 
     Drawable *obj;
-    if (tile_type == PLAYER_POS_TILE) {
-        player.init();
+    if (tile_type == TileNum::PLAYER) {
+        player.init(BeingType::player());
         obj = &player;
-        
+
+    } else if (tile_type == TileNum::RED_ENEMY) {
+        Being *enemy = new Being();
+        enemy->init(BeingType::redEnemy());
+        obj = enemy;
+
+    } else if (tile_type == TileNum::BLUE_ENEMY) {
+        Being *enemy = new Being();
+        enemy->init(BeingType::blueEnemy());
+        obj = enemy;
+
     } else {
-        obj = new Tile(tile_type);
+        Tile *tile = new Tile(tile_type);
+        if (tile_type == TileNum::GOAL) {
+            tile->setCollisionCallback(std::bind(&Hopman::hitGoal, this, std::placeholders::_1));
+        } else if (tile_type == TileNum::DAMAGE) {
+            tile->setDamage(1);
+        }
+        obj = tile;
     }
 
     // calculate position based on tile index
@@ -286,6 +310,14 @@ void Hopman::add_tile(int tile_type, int tx, int ty) {
     obj->setPosition(xpos, ypos);
 
     objects.push_back(obj);
+}
+
+void Hopman::hitGoal(Drawable& other) {
+    if (&other == &player) {
+        setGameMessage("YOU WIN!");
+        game_state = GameState::LEVEL_WON;
+        //Audio::instance().playSound("winner.wav");
+    }
 }
 
 /**
@@ -303,7 +335,7 @@ void Hopman::setupLevel() {
     for (int tx = 0; tx < lvl_conf.tiles.size(); ++tx) {
         for (int ty = 0; ty < lvl_conf.tiles[0].size(); ++ty) {
             int tile_num = lvl_conf.tiles[tx][ty];
-            if (tile_num == PLAYER_POS_TILE) {
+            if (tile_num == TileNum::PLAYER) {
                 have_player = true;
             }
             add_tile(tile_num, tx, ty);
@@ -364,7 +396,7 @@ void Hopman::parseLevelConfig(LevelConfig &config) {
         lower_bound = level_height * TILE_SIDE;
 
         // initialize the size of the 2d vector of tiles
-        config.tiles.resize(level_width, std::vector<int>(level_height, EMPTY_TILE_NUM));
+        config.tiles.resize(level_width, std::vector<int>(level_height, TileNum::EMPTY));
 
         // read line by line
         int xt = 0, yt = 0; // tile indicies

@@ -10,6 +10,7 @@
 #define being_h
 
 #include "drawable.h"
+#include "being_type.h"
 #include "sprite.h"
 
 constexpr float GRAVITY = 500 / 1000.0f / 1000.0f;
@@ -19,6 +20,9 @@ constexpr float FRICTION = 800 / 1000.0f / 1000.0f;
 
 constexpr int JUMP_TOLERANCE_MS = 200; // can jump has touched ground in the last X milliseconds
 
+constexpr float MOVE_ACCEL = 500 / 1000.0f / 1000.0f;
+constexpr float JUMP_VELOCITY = 250 / 1000.0f;
+
 // enum for direction being is facing
 enum class Facing {
     RIGHT,
@@ -27,31 +31,36 @@ enum class Facing {
 
 class Being : public Drawable {
 protected:
+    BeingType type;
     Sprite sprite;
     Facing facing = Facing::RIGHT;
 
-    int hp = 1;
-    int max_air_jumps = 1;
-    int air_jumps = max_air_jumps;
-    float jump_vel = 0;
-    float jump_duration = 0;
-    float jump_start_ts = 0; // 0 means not jumping
-    unsigned int last_grounded = 0; // ts of the last time we landed on something
+    // filled in by BeingType
+    int hp;
+    float top_speed;
+    float jump_duration;
+    int max_air_jumps;
+    bool bump_immune; // are we hurt by walking into other beings?
 
-    float movement_accel = 0;
-    float top_speed = 0;
+    int air_jumps = 0;
+    float jump_vel = JUMP_VELOCITY;
+    int jump_start_ts = 0; // 0 means not jumping
+    unsigned int last_grounded = 0; // ts of the last time we landed on something
+    float movement_accel = MOVE_ACCEL;
     float target_x_vel = 0;
+    int action_start_ts = 0;
 
     void resetJumps();
     void doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects) override;
     void update(int delta, std::vector<Drawable*> &objects) override;
+    void performAction(int delta);
     void updateSprite();
     void render() override;
     void processCollision(Drawable &other, float x_off, float y_off) override;
     void applyAcceleration(int delta) override;
 public:
     Being();
-    void init();
+    void init(BeingType type);
     int getHp() { return hp; }
     void jump();
     bool canJump();
@@ -60,6 +69,10 @@ public:
     void stopRight();
     void moveLeft();
     void stopLeft();
+
+    void hitOther(Drawable &other) override;
+    void hitBy(Drawable &other) override;
+    void ranInto(Drawable &other) override;
 };
 
 #endif /* being_h */

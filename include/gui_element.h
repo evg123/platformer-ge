@@ -27,6 +27,8 @@ public:
     GuiElement(SDL_Rect rect, SDL_Texture *texture);
     void render();
     virtual void update() {};
+    int getWidth() { return rect.w; }
+    int getHeight() { return rect.h; }
 };
 
 template<typename T>

@@ -25,11 +25,8 @@
 #include "gui_element.h"
 #include "resource_manager.h"
 #include "drawable.h"
-#include "player.h"
+#include "being.h"
 #include "tile.h"
-
-constexpr int ERROR = 1;
-constexpr int OK = 0;
 
 constexpr int STARTING_LEVEL = 1;
 constexpr auto BG_TRACK = "bg_track.wav";
@@ -43,9 +40,6 @@ constexpr int UI_FONT_SIZE = 24;
 constexpr auto LEVEL_FILE_PREFIX = "./Assets/levels/level_";
 
 constexpr int DEFAULT_EXTRA_LIVES = 2;
-
-constexpr unsigned int EMPTY_TILE_NUM = 0;
-constexpr unsigned int PLAYER_POS_TILE = 1;
 
 constexpr int PAUSE_MENU_WIDTH = 450;
 constexpr int PAUSE_MENU_HEIGHT = 500;
@@ -66,14 +60,27 @@ constexpr int GAME_MSG_TEXT_SIZE = 120;
 // can be made from them,
 // but they should be treated as constants.
 // There's probably a better way to do this...
-static std::string SCORE_STR = "Score:";
-static std::string LIVES_STR = "Lives:";
-static std::string LEVEL_STR = "Level:";
+static std::string SCORE_STR = "Score: ";
+static std::string LIVES_STR = "Lives: ";
+static std::string LEVEL_STR = "Level: ";
+
+// these should be in a config file so they can be shared with the level creator
+enum TileNum {
+    EMPTY = 0,
+    DIRT = 1,
+    STEEL = 2,
+    DAMAGE = 3,
+    GOAL = 4,
+    PLAYER = 5,
+    RED_ENEMY = 6,
+    BLUE_ENEMY = 7,
+};
 
 enum class GameState {
     LEVEL_START,
     PLAYING,
     EXITING,
+    RESPAWN,
     PAUSED,
     LOSS,
     LEVEL_WON,
@@ -98,7 +105,7 @@ private:
     int fps_display = 0;
     std::string game_message;
 
-    Player player;
+    Being player;
     std::vector<Drawable*> objects = {};
     /** player dies if they fall past here */
     int lower_bound;
@@ -127,6 +134,7 @@ private:
     void removeDestroyed();
     void tryRespawn();
     void cleanupLevel();
+    void hitGoal(Drawable &other);
 
     void parseLevelConfig(LevelConfig &config);
     void setupLevel();
