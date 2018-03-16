@@ -10,6 +10,15 @@
 
 Being::Being() {}
 
+void Being::init() {
+    hp = 1;
+    marked_for_removal = false;
+    x_vel = 0;
+    y_vel = 0;
+    x_accel = 0;
+    y_accel = 0;
+}
+
 bool Being::isOnGround() {
     //TODO could calculate this once on update
     unsigned int diff = SDL_GetTicks() - last_grounded;

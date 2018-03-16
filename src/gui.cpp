@@ -61,6 +61,10 @@ void Gui::add(GuiGroupId gid, GuiElement *elem) {
     elements[gid].push_back(elem);
 }
 
+void Gui::setGroupDisplay(GuiGroupId gid, bool display) {
+    groupStates[gid] = display;
+}
+
 void Gui::toggleGroupDisplay(GuiGroupId gid) {
     groupStates[gid] = !groupStates[gid];
 }

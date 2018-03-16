@@ -9,12 +9,15 @@
 #include <stdio.h>
 #include "../include/player.h"
 
-Player::Player() {
+Player::Player() {}
+
+void Player::init() {
+    Being::init();
     texture = ResourceManager::instance().getImageTexture(PLAYER_SPRITE_SHEET);
     sprite.init(PLAYER_FRAME_CONFIG);
     rect.w = PLAYER_WIDTH;
     rect.h = PLAYER_HEIGHT;
-    
+
     movement_accel = PLAYER_MOVE_ACCEL;
     top_speed = PLAYER_TOP_SPEED;
     

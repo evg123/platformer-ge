@@ -58,6 +58,10 @@ constexpr auto STATUS_BAR_IMG = "ui/status_bar.png";
 constexpr int STATUS_BAR_Y = 0;
 constexpr int STATUS_BAR_TEXT_SIZE = 25;
 
+constexpr int GAME_MSG_WIDTH = 400;
+constexpr int GAME_MSG_HEIGHT = 250;
+constexpr int GAME_MSG_TEXT_SIZE = 120;
+
 // These are not const/constexpr so that TextGuiElements
 // can be made from them,
 // but they should be treated as constants.
@@ -67,6 +71,7 @@ static std::string LIVES_STR = "Lives:";
 static std::string LEVEL_STR = "Level:";
 
 enum class GameState {
+    LEVEL_START,
     PLAYING,
     EXITING,
     PAUSED,
@@ -91,10 +96,12 @@ private:
 
     bool display_fps = false;
     int fps_display = 0;
-    std::string screen_message = "";
+    std::string game_message;
 
-    Player *player;
+    Player player;
     std::vector<Drawable*> objects = {};
+    /** player dies if they fall past here */
+    int lower_bound;
 
     /** set game state to start quitting */
     void exitGame() { game_state = GameState::EXITING; }
@@ -113,6 +120,8 @@ private:
     void createUI();
     void createStatusBar();
     void createPauseMenu();
+    void createGameMessage();
+    void setGameMessage(std::string new_msg);
     
     bool checkRemoval(Drawable *obj);
     void removeDestroyed();

@@ -21,9 +21,7 @@ Hopman::Hopman() {
  Tear it down
  */
 Hopman::~Hopman() {
-    for (auto obj : objects) {
-        delete obj;
-    }
+    cleanupLevel();
     SDL_Quit();
 }
 
@@ -55,6 +53,9 @@ int Hopman::play() {
             update(delta);
         }
 
+        // update the GUI
+        Gui::instance().update();
+
         // draw the new frame
         render();
     }
@@ -73,16 +74,17 @@ void Hopman::registerInputCallbacks() {
     Input::instance().registerCallback(Action::TOGGLE_PAUSE, std::bind(&Hopman::pause, this));
     
     // player movement
-    Input::instance().registerCallback(Action::MOVE_LEFT, std::bind(&Player::moveLeft, player));
-    Input::instance().registerCallback(Action::STOP_LEFT, std::bind(&Player::stopLeft, player));
-    Input::instance().registerCallback(Action::MOVE_RIGHT, std::bind(&Player::moveRight, player));
-    Input::instance().registerCallback(Action::STOP_RIGHT, std::bind(&Player::stopRight, player));
-    Input::instance().registerCallback(Action::JUMP, std::bind(&Player::jump, player));
+    Input::instance().registerCallback(Action::MOVE_LEFT, std::bind(&Player::moveLeft, &player));
+    Input::instance().registerCallback(Action::STOP_LEFT, std::bind(&Player::stopLeft, &player));
+    Input::instance().registerCallback(Action::MOVE_RIGHT, std::bind(&Player::moveRight, &player));
+    Input::instance().registerCallback(Action::STOP_RIGHT, std::bind(&Player::stopRight, &player));
+    Input::instance().registerCallback(Action::JUMP, std::bind(&Player::jump, &player));
 }
 
 void Hopman::createUI() {
     createStatusBar();
     createPauseMenu();
+    createGameMessage();
 }
 
 void Hopman::createStatusBar() {
@@ -142,25 +144,71 @@ void Hopman::createPauseMenu() {
     Gui::instance().add(GuiGroupId::PAUSE, menu);
 }
 
+void Hopman::createGameMessage() {
+    int item_x = (Graphics::instance().getWindowWidth() / 2) - (GAME_MSG_WIDTH / 2);
+    int item_y = (Graphics::instance().getWindowHeight() / 2) - (GAME_MSG_HEIGHT / 2);
+    GuiElement *elem = new TextGuiElement<std::string>({item_x, item_y, GAME_MSG_WIDTH, GAME_MSG_HEIGHT},
+                                                       game_message, GAME_MSG_TEXT_SIZE);
+    Gui::instance().add(GuiGroupId::GAME_MESSAGE, elem);
+}
+
+void Hopman::setGameMessage(std::string new_msg) {
+    game_message.reserve(new_msg.size());
+    game_message.assign(new_msg);
+    Gui::instance().setGroupDisplay(GuiGroupId::GAME_MESSAGE, true);
+}
+
 /**
  Update all the game objects
  */
 void Hopman::update(int delta) {
     for (auto &obj : objects) {
         obj->update(delta, objects);
+        if (obj->getRect().top() > lower_bound) {
+            obj->destroy();
+        }
     }
     
     removeDestroyed();
     
-    Gui::instance().update();
+    if (player.getHp() <= 0) {
+        game_state = GameState::LOSS;
+    }
 }
 
 /**
  Remove any objects that have been destroyed
  */
 void Hopman::removeDestroyed() {
+    // check if the player was killed
+    if (player.needsRemoval()) {
+        tryRespawn();
+    }
+
     // remove destroyed objects
-    //TODO
+    objects.erase(
+        std::remove_if(objects.begin(),
+                       objects.end(),
+                       [](Drawable *obj) -> bool {
+                           return obj->needsRemoval();
+                       }),
+                  objects.end());
+}
+
+/**
+ try to respawn after player death
+ */
+void Hopman::tryRespawn() {
+    if (lives > 0) {
+        // restart the level
+        --lives;
+        setupLevel();
+    } else {
+        setGameMessage("GAME OVER :(");
+        game_state = GameState::LOSS;
+        //Audio::instance().setBgTrack("");
+        //Audio::instance().playSound("game_over.wav");
+    }
 }
 
 void Hopman::pause() {
@@ -186,6 +234,10 @@ void Hopman::advanceScreen() {
         // move to next level
         ++level;
         setupLevel();
+    } else if (game_state == GameState::LEVEL_START) {
+        // start the level
+        Gui::instance().setGroupDisplay(GuiGroupId::GAME_MESSAGE, false);
+        game_state = GameState::PLAYING;
     }
 }
 
@@ -221,8 +273,8 @@ void Hopman::add_tile(int tile_type, int tx, int ty) {
 
     Drawable *obj;
     if (tile_type == PLAYER_POS_TILE) {
-        player = new Player();
-        obj = player;
+        player.init();
+        obj = &player;
         
     } else {
         obj = new Tile(tile_type);
@@ -247,15 +299,19 @@ void Hopman::setupLevel() {
     parseLevelConfig(lvl_conf);
 
     // instantiate level objects
+    bool have_player = false;
     for (int tx = 0; tx < lvl_conf.tiles.size(); ++tx) {
         for (int ty = 0; ty < lvl_conf.tiles[0].size(); ++ty) {
             int tile_num = lvl_conf.tiles[tx][ty];
+            if (tile_num == PLAYER_POS_TILE) {
+                have_player = true;
+            }
             add_tile(tile_num, tx, ty);
         }
     }
 
     // make sure we had a player tile in the level
-    if (player == NULL) {
+    if (!have_player) {
         throw std::runtime_error("Invalid level file, no player tile found!");
     }
     
@@ -264,8 +320,9 @@ void Hopman::setupLevel() {
     Audio::instance().setBgTrack(BG_TRACK);
 
     
-    // start out on the staging screen
-    game_state = GameState::PLAYING;
+    // start out on the level start screen
+    setGameMessage("Level " + std::to_string(level));
+    game_state = GameState::LEVEL_START;
 }
 
 /**
@@ -302,6 +359,10 @@ void Hopman::parseLevelConfig(LevelConfig &config) {
         int level_width = std::stoi(tok);
         ss >> tok;
         int level_height = std::stoi(tok);
+        
+        // set lower bound of level
+        lower_bound = level_height * TILE_SIDE;
+
         // initialize the size of the 2d vector of tiles
         config.tiles.resize(level_width, std::vector<int>(level_height, EMPTY_TILE_NUM));
 
@@ -328,10 +389,12 @@ void Hopman::parseLevelConfig(LevelConfig &config) {
 void Hopman::cleanupLevel() {
     // deallocate everything in the drawable list
     for (auto &obj : objects) {
-        delete obj;
+        if (obj != &player) {
+            delete obj;
+        }
     }
     objects.clear();
-    
-    screen_message = "";
+
+    Gui::instance().setGroupDisplay(GuiGroupId::GAME_MESSAGE, false);
 }
 

@@ -159,7 +159,7 @@ SDL_Texture* ResourceManager::getTextTexture(const std::string &text, int font_s
     
     if (map_val == text_map.end()) {
         // not found, need to initialize
-        SDL_Color text_color = {255, 255, 255};
+        SDL_Color text_color = {100, 0, 100};
         TTF_Font *font = getFont(font_size);
         SDL_Surface *surf = TTF_RenderText_Blended(font, text.c_str(), text_color);
         if (surf == NULL) {

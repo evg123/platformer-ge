@@ -43,6 +43,7 @@ class Player : public Being {
 private:
 public:
     Player();
+    void init();
     void setPosition(int xpos, int ypos) override;
 };
 

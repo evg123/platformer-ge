@@ -30,6 +30,7 @@ protected:
     Sprite sprite;
     Facing facing = Facing::RIGHT;
 
+    int hp = 1;
     int max_air_jumps = 1;
     int air_jumps = max_air_jumps;
     float jump_vel = 0;
@@ -50,6 +51,8 @@ protected:
     void applyAcceleration(int delta) override;
 public:
     Being();
+    void init();
+    int getHp() { return hp; }
     void jump();
     bool canJump();
     bool isOnGround();

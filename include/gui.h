@@ -29,6 +29,7 @@ enum GuiGroupId {
     MAIN_MENU,
     PAUSE,
     OPTIONS,
+    GAME_MESSAGE,
     __END__ // do not use, must be last
 };
 
@@ -44,6 +45,7 @@ public:
     void update();
     void add(GuiGroupId gid, Menu *menu);
     void add(GuiGroupId gid, GuiElement *elem);
+    void setGroupDisplay(GuiGroupId gid, bool display);
     void toggleGroupDisplay(GuiGroupId gid);
     bool handleClick(int xpos, int ypos);
 };
