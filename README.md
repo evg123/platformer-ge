@@ -17,18 +17,36 @@ Update your Team member Names here (Up to 4) You will work with this same team t
 
 ## Final Project - Description
 
+The industry is getting positive buzz as Nolan and Shigeru have been talking about your studio. But dynamics change rapidly in the game industry, and your team has once again decided to part ways and form a new studio. Your team during this time has also developed a nice codebase of intellectual property, and has decided forming a 'game making' studio is the best option. Your team has decided it will start building an impressive piece of middleware (i.e. a tool or technology that is not a game) to showcase at the giant tradeshows (PAX East, GDC, E3, etc.) 
 
 ## Options
 
 ### Option 1 - Tech Demo 2D or 3D
 
-Often a game mechanic or graphical technique is later developed into a game. For your final project you can build a high powered tech demo. This should be a short showcase of some feature demo that showcases your technology. 
+Often a game mechanic or graphical technique is later developed into a game. For your final project you can build a high powered tech demo. This should be a short showcase of some feature demo that showcases your technology. The demo can be 2D or 3D.
 
 Some examples of tech demos
+- https://www.youtube.com/watch?v=ni-SmkCY-Sw (2D game demo showing off only 1 feature that is sufficiently complex)
+- https://www.youtube.com/watch?v=4W8zxAV8RRY (2D game engine lighting effects)
+- https://www.youtube.com/watch?v=LseTVMkG7V8 (An even better 2D game engine lighting effects, something like this is final project worthy if incorporated into platformer)
+- https://www.youtube.com/watch?v=gLAYBdHxfjs (Shows a few of the features of a game tool)
+- https://www.youtube.com/watch?v=jVlxmC2qBGU (Unity3D Tech demo showing off one simple but high powered toggable feature in an editor).
+
 
 ### Option 2 - Game Maker
 
-For your final project, you may make a 'game maker'. That is, you will build a tool that someone with no C++ knowledge can use. Our pybind11 lab is a good starting point.
+For your final project, you may make a 'game maker'. That is, you will build a tool that someone with no C++ knowledge can use. Our pybind11 lab is a good starting point. You should document some 2D API for your games.
+
+Some examples for inspiration
+- Look at Gamemakers API for inspiration of what commands are exposed. http://docs2.yoyogames.com/
+- https://www.youtube.com/watch?v=b8RyQSvmrEU (Shows a neat console editor)
+- https://www.youtube.com/watch?v=oU69bjOMTUc (Another platformer, shows off some cool extensions to our project, with transparency, particles, etc.)
+- https://www.youtube.com/watch?v=o59PVYfKlzQ (A little RPG like game. Neat effects, and can benefit from some sort of scripting engine for battle sequences).
+- https://www.youtube.com/watch?v=5ZuQIbMEjLw (Here is GoDot engine. I would look to GoDot and GameMaker as inspiration).
+
+### Constraints on Options 1 and 2
+
+The constraints are that you have to build the majority of your technology. 3rd party libraries for a physics engine are okay, and must be cited. 3rd party game or graphics engines may not be used (e.g. you cannot build a tech demo with Ogre3D or Unity3D).
 
 
 ## Requirements (For either option)
