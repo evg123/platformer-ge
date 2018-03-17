@@ -38,6 +38,7 @@ Some examples of tech demos
 For your final project, you may make a 'game maker'. That is, you will build a tool that someone with no C++ knowledge can use. Our pybind11 lab is a good starting point. You should document some 2D API for your games.
 
 Some examples for inspiration
+- Look on the left panel to see the API for the Love2D engine: https://love2d.org/wiki/Main_Page
 - Look at Gamemakers API for inspiration of what commands are exposed. http://docs2.yoyogames.com/
 - https://www.youtube.com/watch?v=b8RyQSvmrEU (Shows a neat console editor)
 - https://www.youtube.com/watch?v=oU69bjOMTUc (Another platformer, shows off some cool extensions to our project, with transparency, particles, etc.)
@@ -47,7 +48,6 @@ Some examples for inspiration
 ### Constraints on Options 1 and 2
 
 The constraints are that you have to build the majority of your technology. 3rd party libraries for a physics engine are okay, and must be cited. 3rd party game or graphics engines may not be used (e.g. you cannot build a tech demo with Ogre3D or Unity3D).
-
 
 ## Requirements (For either option)
 
