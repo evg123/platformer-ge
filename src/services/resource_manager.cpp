@@ -3,7 +3,7 @@
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
 
-#include "../include/resource_manager.h"
+#include "resource_manager.h"
 
 /**
  Set up

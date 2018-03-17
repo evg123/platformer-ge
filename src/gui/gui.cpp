@@ -6,7 +6,7 @@
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
 
-#include "../include/gui.h"
+#include "gui.h"
 
 /**
  private constructor

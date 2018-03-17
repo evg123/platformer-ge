@@ -6,7 +6,7 @@
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
 
-#include "../include/menu.h"
+#include "menu.h"
 
 // Button definitions
 

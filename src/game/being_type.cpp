@@ -6,7 +6,7 @@
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
 
-#include "../include/being_type.h"
+#include "being_type.h"
 
 // these should be read from a config file instead of statically defined
 

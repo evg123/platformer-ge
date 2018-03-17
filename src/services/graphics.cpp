@@ -3,7 +3,7 @@
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
 
-#include "../include/graphics.h"
+#include "graphics.h"
 
 /**
  Constructor not used, things are set up in init()

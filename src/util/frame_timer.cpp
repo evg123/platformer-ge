@@ -3,7 +3,7 @@
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
 
-#include "../include/frame_timer.h"
+#include "frame_timer.h"
 
 /**
  Create a new timer.

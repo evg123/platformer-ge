@@ -7,7 +7,7 @@
 //
 
 #include <stdio.h>
-#include "../include/tile.h"
+#include "tile.h"
 
 Tile::Tile(int tile_num) {
     // choose texture based on tile_num

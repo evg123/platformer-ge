@@ -3,7 +3,7 @@
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
 
-#include "../include/audio.h"
+#include "audio.h"
 
 /**
  Set up

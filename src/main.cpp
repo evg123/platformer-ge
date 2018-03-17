@@ -14,7 +14,7 @@
  
 */
 
-#include "../include/hopman.h"
+#include "hopman.h"
 
 /**
  It all starts here

@@ -3,7 +3,7 @@
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
 
-#include "../include/drawable.h"
+#include "drawable.h"
 
 /**
  Create a new drawable

@@ -4,7 +4,7 @@
 //
 
 #include <iostream>
-#include "../include/evg_rect.h"
+#include "evg_rect.h"
 
 /**
  Create a new EvgRect
