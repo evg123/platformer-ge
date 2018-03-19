@@ -185,14 +185,23 @@ void Being::applyAcceleration(int delta) {
     // horizonal movement
     if (target_x_vel > 0 && x_vel < top_speed) {
         // moving right
-        //TODO maybe apply additional accel here if we are at negative velocity
-        x_vel += movement_accel * delta;
+        // apply additional accel if we are at negative velocity
+        float accel = movement_accel;
+        if (x_vel < 0) {
+            accel += CORRECTION_ACCEL;
+        }
+        x_vel += accel * delta;
         if (x_vel > top_speed) {
             x_vel = top_speed;
         }
     } else if (target_x_vel < 0 && x_vel > -top_speed) {
         // moving left
-        x_vel -= movement_accel * delta;
+        // apply additional accel if we are at negative velocity
+        float accel = movement_accel;
+        if (x_vel > 0) {
+            accel += CORRECTION_ACCEL;
+        }
+        x_vel -= accel * delta;
         if (x_vel < -top_speed) {
             x_vel = -top_speed;
         }

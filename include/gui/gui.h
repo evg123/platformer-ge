@@ -9,14 +9,9 @@
 #ifndef gui_h
 #define gui_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#endif
-
 #include <map>
 #include <vector>
+#include "SDL2.framework/Headers/SDL.h"
 #include "menu.h"
 #include "gui_element.h"
 
@@ -26,10 +21,10 @@
  */
 enum GuiGroupId {
     STATUS_BAR,
+    GAME_MESSAGE,
     MAIN_MENU,
     PAUSE,
     OPTIONS,
-    GAME_MESSAGE,
     __END__ // do not use, must be last
 };
 

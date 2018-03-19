@@ -326,6 +326,8 @@ void Hopman::createBackground() {
     int sh = Graphics::instance().getWindowHeight();
     background.init(player.getRect().x, player.getRect().y, lower_bound - 200);
     background.setColor(125, 90, 125);
+    
+    // add layers at different distances
     background.addLayer("background/dusk/layer_0.png", sw, sh, 50);
     background.addLayer("background/dusk/layer_1.png", sw, sh, 35);
     background.addLayer("background/dusk/layer_2.png", sw, sh, 15);

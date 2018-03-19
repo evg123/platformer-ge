@@ -9,13 +9,8 @@
 #ifndef tile_h
 #define tile_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#endif
-
 #include <vector>
+#include "SDL2.framework/Headers/SDL.h"
 #include "drawable.h"
 #include "graphics.h"
 

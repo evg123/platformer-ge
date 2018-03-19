@@ -9,17 +9,12 @@
 #ifndef drawable_h
 #define drawable_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#endif
-
 #include <vector>
 #include <tuple>
 #include <algorithm>
 #include <queue>
 #include <functional>
+#include "SDL2.framework/Headers/SDL.h"
 #include "evg_rect.h"
 #include "resource_manager.h"
 

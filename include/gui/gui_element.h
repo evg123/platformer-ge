@@ -9,13 +9,8 @@
 #ifndef gui_element_h
 #define gui_element_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#endif
-
 #include <string>
+#include "SDL2.framework/Headers/SDL.h"
 #include "graphics.h"
 #include "resource_manager.h"
 

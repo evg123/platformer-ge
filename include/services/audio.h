@@ -9,15 +9,9 @@
 #ifndef audio_h
 #define audio_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#include "../lib/linux/SDL2_mixer.framework/Headers/SDL_mixer.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#include "../lib/osx/SDL2_mixer.framework/Headers/SDL_mixer.h"
-#endif
-
 #include <string>
+#include "SDL2.framework/Headers/SDL.h"
+#include "SDL2_mixer.framework/Headers/SDL_mixer.h"
 #include "resource_manager.h"
 
 /**

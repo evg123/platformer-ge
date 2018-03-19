@@ -21,6 +21,7 @@ constexpr float FRICTION = 800 / 1000.0f / 1000.0f;
 constexpr int JUMP_TOLERANCE_MS = 200; // can jump has touched ground in the last X milliseconds
 
 constexpr float MOVE_ACCEL = 500 / 1000.0f / 1000.0f;
+constexpr float CORRECTION_ACCEL = 200 / 1000.0f / 1000.0f;
 constexpr float JUMP_VELOCITY = 250 / 1000.0f;
 
 // enum for direction being is facing

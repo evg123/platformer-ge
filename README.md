@@ -2,7 +2,7 @@
 Website: https://evg-game-engines.herokuapp.com/platformer.html
 
 ### Features:
-* 
+* Parallax scrolling background
 * 
 
 
@@ -14,7 +14,7 @@ Website: https://evg-game-engines.herokuapp.com/platformer.html
 
 
 ### Build Instructions:
-1. From the root directory run "python src/build.py"  
+1. From the root directory run "python src/build_mac.py"
    A Game directory will be created containing the binary and all assets needed.
 1. Run the game with "./Game/Hopman"
 1. Enjoy

@@ -6,15 +6,15 @@ import sys
 
 COMPILER="clang++"
 
-SOURCE="./src/*.cpp"
+SOURCE="./src/*.cpp ./src/*/*.cpp"
 
-ARGUMENTS="-D MAC -std=c++14" 
+ARGUMENTS="-D LINUX -std=c++14" 
 
 # Which directories do we want to include.
-INCLUDE_DIR="-I ./include/game -I ./include/services -I ./include/gui -I ./include/util -I ./lib/SDL2.framework/Headers"
+INCLUDE_DIR="-I ./lib/linux/ -I ./include/game -I ./include/services -I ./include/gui -I ./include/util -I ./lib/SDL2.framework/Headers"
 
 # What libraries do we want to include
-LIBRARIES="-F ./lib/osx/ -framework SDL2 -framework SDL2_image -framework SDL2_ttf -framework SDL2_mixer"
+LIBRARIES="-F ./lib/linux/ -framework SDL2 -framework SDL2_image -framework SDL2_ttf -framework SDL2_mixer"
 
 # The name of our executable
 EXECUTABLE="./Game/Hopman"

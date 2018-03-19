@@ -9,15 +9,10 @@
 #ifndef graphics_h
 #define graphics_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#endif
-
 #include <string>
 #include <exception>
 #include <tuple>
+#include "SDL2.framework/Headers/SDL.h"
 
 /**
  Singleton class for drawing to the screen

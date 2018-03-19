@@ -9,14 +9,9 @@
 #ifndef being_type_h
 #define being_type_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#endif
-
 #include <map>
 #include <string>
+#include "SDL2.framework/Headers/SDL.h"
 #include "sprite.h"
 
 /**

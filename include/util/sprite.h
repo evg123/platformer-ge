@@ -9,11 +9,7 @@
 #ifndef sprite_h
 #define sprite_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#endif
+#include "SDL2.framework/Headers/SDL.h"
 
 constexpr int FRAME_WIDTH = 16;
 constexpr int FRAME_HEIGHT = 16;

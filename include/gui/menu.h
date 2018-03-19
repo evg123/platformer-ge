@@ -9,15 +9,10 @@
 #ifndef menu_h
 #define menu_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#endif
-
 #import <vector>
 #import <string>
 #import <functional>
+#include "SDL2.framework/Headers/SDL.h"
 #import "graphics.h"
 #import "resource_manager.h"
 

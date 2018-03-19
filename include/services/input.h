@@ -9,16 +9,11 @@
 #ifndef input_h
 #define input_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#endif
-
 #include <map>
 #import <functional>
 #import <map>
 #import <string>
+#include "SDL2.framework/Headers/SDL.h"
 #include "gui.h"
 #include "graphics.h"
 #include "menu.h"

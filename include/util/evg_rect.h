@@ -9,13 +9,8 @@
 #ifndef evg_rect_h
 #define evg_rect_h
 
-#ifdef __linux__
-#include "../lib/linux/SDL2.framework/Headers/SDL.h"
-#else // Mac
-#include "../lib/osx/SDL2.framework/Headers/SDL.h"
-#endif
-
 #include <memory>
+#include "SDL2.framework/Headers/SDL.h"
 
 /**
  A slightly enhanced SDL_Rect with some helpful collision detection functions
