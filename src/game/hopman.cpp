@@ -320,6 +320,11 @@ void Hopman::hitGoal(Drawable& other) {
     }
 }
 
+void Hopman::createBackground() {
+    background.init();
+    
+}
+
 /**
  Load the next level from config
  */

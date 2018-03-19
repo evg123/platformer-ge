@@ -27,6 +27,7 @@
 #include "drawable.h"
 #include "being.h"
 #include "tile.h"
+#include "background.h"
 
 constexpr int STARTING_LEVEL = 1;
 constexpr auto BG_TRACK = "bg_track.wav";
@@ -106,6 +107,7 @@ private:
     std::string game_message;
 
     Being player;
+    Background background;
     std::vector<Drawable*> objects = {};
     /** player dies if they fall past here */
     int lower_bound;
@@ -138,6 +140,7 @@ private:
 
     void parseLevelConfig(LevelConfig &config);
     void setupLevel();
+    void createBackground();
     void add_tile(int tile_type, int tx, int ty);
 public:
     Hopman();

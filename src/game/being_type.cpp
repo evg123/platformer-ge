@@ -31,7 +31,7 @@ BeingType& BeingType::player() {
         this_type.height = 32;
         this_type.top_speed = 300 / 1000.0f;
         this_type.max_air_jumps = 1;
-        this_type.jump_duration = 300;
+        this_type.jump_duration = 275;
 
         this_type.action_type = ActionType::NONE;
         this_type.bump_immune = false;
@@ -89,7 +89,7 @@ BeingType& BeingType::blueEnemy() {
         this_type.height = 32;
         this_type.top_speed = 150 / 1000.0f;
         this_type.max_air_jumps = 0;
-        this_type.jump_duration = 150;
+        this_type.jump_duration = 125;
         
         this_type.action_type = ActionType::JUMP_AROUND;
         this_type.bump_immune = true;
