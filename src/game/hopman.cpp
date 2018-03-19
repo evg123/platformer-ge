@@ -55,6 +55,7 @@ int Hopman::play() {
 
         // focus the screen on the player
         Graphics::instance().focusScreenOffsets(player.getRect());
+        background.updateLayerOffsets(player.getRect().x, player.getRect().y);
 
         // update the GUI
         Gui::instance().update();
@@ -253,7 +254,7 @@ void Hopman::advanceScreen() {
  Draw everything to the screen
  */
 void Hopman::render() {
-    Graphics::instance().clear();
+    background.render();
     
     for (auto &obj : objects) {
         obj->render();
@@ -321,8 +322,15 @@ void Hopman::hitGoal(Drawable& other) {
 }
 
 void Hopman::createBackground() {
-    background.init();
-    
+    int sw = Graphics::instance().getWindowWidth();
+    int sh = Graphics::instance().getWindowHeight();
+    background.init(player.getRect().x, player.getRect().y, lower_bound - 200);
+    background.setColor(125, 90, 125);
+    background.addLayer("background/dusk/layer_0.png", sw, sh, 50);
+    background.addLayer("background/dusk/layer_1.png", sw, sh, 35);
+    background.addLayer("background/dusk/layer_2.png", sw, sh, 15);
+    background.addLayer("background/dusk/layer_3.png", sw, sh, 6);
+    background.addLayer("background/dusk/layer_4.png", sw, sh, 2);
 }
 
 /**
@@ -331,7 +339,7 @@ void Hopman::createBackground() {
 void Hopman::setupLevel() {
     // cleanup previous level
     cleanupLevel();
-    
+
     LevelConfig lvl_conf;
     parseLevelConfig(lvl_conf);
 
@@ -351,12 +359,14 @@ void Hopman::setupLevel() {
     if (!have_player) {
         throw std::runtime_error("Invalid level file, no player tile found!");
     }
-    
+
+    // setup background layers
+    createBackground();
+
     // start the background track for the level
     //TODO make custom for each level
     Audio::instance().setBgTrack(BG_TRACK);
 
-    
     // start out on the level start screen
     setGameMessage("Level " + std::to_string(level));
     game_state = GameState::LEVEL_START;

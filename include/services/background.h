@@ -27,25 +27,33 @@ private:
     int distance;
     SDL_Rect rect;
     int screen_w;
-    int screen_h;
 public:
-    BgLayer(SDL_Texture *texture, int distance, int screen_w, int screen_h);
+    BgLayer(SDL_Texture *texture, int width, int height, int distance,
+            int screen_w, int screen_h, int lower_bound);
     void update(int screen_off_x, int screen_off_y);
     void render();
-    /** comparison operator to sort layers descending by distance */
-    bool operator<(const BgLayer &rhs) const { return distance > rhs.distance; }
+    int getDistance() { return distance; }
 };
+
+/** comparison operator to sort layers descending by distance */
+bool bgLayerComparator(BgLayer *lhs, BgLayer *rhs);
 
 class Background {
 private:
     std::vector<BgLayer*> layers;
     int start_x;
     int start_y;
+    int lower_bound;
+    int bg_red;
+    int bg_green;
+    int bg_blue;
 public:
-    void init(int start_x, int start_y);
-    void addLayer(std::string img_file, int distance);
-    void update(int center_x, int center_y);
+    void init(int start_x, int start_y, int lower_bound);
+    void setColor(int red, int green, int blue);
+    void addLayer(std::string img_file, int width, int height, int distance);
+    void updateLayerOffsets(int center_x, int center_y);
     void render();
+    void clearLayers();
 };
 
 #endif /* background_h */

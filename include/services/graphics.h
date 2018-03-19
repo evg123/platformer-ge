@@ -49,6 +49,7 @@ public:
     int getWindowHeight() { return window_height; }
     
     void clear();
+    void clearColor(int red, int green, int blue);
     void swapFrame();
     void updateWindowTitle(std::string window_title);
     

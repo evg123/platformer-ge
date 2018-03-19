@@ -61,6 +61,15 @@ void Graphics::clear() {
 }
 
 /**
+ Wipe the frame so we can start drawing the next one
+ */
+void Graphics::clearColor(int red, int green, int blue) {
+    SDL_SetRenderDrawColor(renderer, red, green, blue, 0xFF);
+    SDL_RenderClear(renderer);
+}
+
+
+/**
  Replace the screen with the frame that has just been drawn
  */
 void Graphics::swapFrame() {
@@ -80,5 +89,6 @@ void Graphics::updateWindowTitle(std::string window_title) {
 /** set the world offset that the screen is showing */
 void Graphics::focusScreenOffsets(SDL_Rect &rect) {
     screen_off_x = rect.x + (rect.w / 2) - (window_width / 2);
-    screen_off_y = rect.y + (rect.h / 2) - (window_height / 2);
+    // keep the player towards the bottom of the screen
+    screen_off_y = rect.y + (rect.h / 2) - ((3 * window_height) / 4);
 }

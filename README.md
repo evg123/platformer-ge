@@ -9,6 +9,7 @@ Website: https://evg-game-engines.herokuapp.com/platformer.html
 ### Controls:
 * Use the arrow keys or A and D to move left and right
 * Press Spacebar to jump
+* Esc opens the pause menu
 * The F key toggles an FPS display
 
 
@@ -19,6 +20,10 @@ Website: https://evg-game-engines.herokuapp.com/platformer.html
 1. Enjoy
 
 Only tested on OSX 10.12
+
+Attributions:
+Background images from https://opengameart.org/content/mountain-at-dusk-background
+Dusk Tileset from https://opengameart.org/content/cavern-tile-set
 
 ******************
 Original README
@@ -47,12 +52,12 @@ Requirements will be pushed to your repository once you form teams. I'll make an
 
 ## Team
 
-Team Name: (Something cool here)
+Team Name: EVG
 
 *TODO*:
 Update your Team member Names here (Up to 4) You will work with this same team through parts 1, 2, and 3.
 
--
+- Eric VandeGriek
 -
 -
 -
