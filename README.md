@@ -1,4 +1,4 @@
-# FinalProjct
+# FinalProject
 
 Note: There is only 1 part to the final project. This is it--the grand finale!
 
@@ -48,6 +48,21 @@ Some examples for inspiration
 ### Constraints on Options 1 and 2
 
 The constraints are that you have to build the majority of your technology. 3rd party libraries for a physics engine are okay, and must be cited. 3rd party game or graphics engines may not be used (e.g. you cannot build a tech demo with Ogre3D or Unity3D).
+
+## Minimum Viable Product
+
+A Minimum Viable Product (MVP) is the smallest subset of features that you consider a project to be a success. Make a list below of the features you consider to be in your MVP. Then make a list of features that are 'stretch goals' that you think you can achieve.
+
+(TODO: Edit these)
+MVP
+- feature 1
+- feature 2
+- etc.
+
+Strecth Goals
+- features 1
+- feature 2
+- etc
 
 ## Requirements (For either option)
 
