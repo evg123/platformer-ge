@@ -29,6 +29,7 @@ private:
     int screen_off_y = 0;
 public:
     void init(int window_width, int window_height);
+    void shutdown();
     static Graphics& instance();
     
     /** return the SDL_Window object */

@@ -36,6 +36,8 @@ public:
     int damage;
     int score_on_destruction;
     bool bump_immune;
+    bool bouncy;
+    bool hit_back_when_hopped_on;
 
     // phsical
     int width;

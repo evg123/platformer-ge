@@ -29,7 +29,7 @@
 #include "tile.h"
 #include "background.h"
 
-constexpr int STARTING_LEVEL = 3;
+constexpr int STARTING_LEVEL = 1;
 constexpr auto BG_TRACK = "bg_track.wav";
 
 constexpr int DEFAULT_FPS_LIMIT = 60;
@@ -53,6 +53,7 @@ constexpr auto STATUS_BAR_IMG = "ui/status_bar.png";
 constexpr int STATUS_BAR_Y = 0;
 constexpr int STATUS_BAR_TEXT_SIZE = 25;
 
+constexpr int GAME_MESSAGE_MAX_LEN = 25;
 constexpr int GAME_MSG_WIDTH = 400;
 constexpr int GAME_MSG_HEIGHT = 250;
 constexpr int GAME_MSG_TEXT_SIZE = 120;
@@ -64,18 +65,6 @@ constexpr int GAME_MSG_TEXT_SIZE = 120;
 static std::string SCORE_STR = "Score: ";
 static std::string LIVES_STR = "Lives: ";
 static std::string LEVEL_STR = "Level: ";
-
-// these should be in a config file so they can be shared with the level creator
-enum TileNum {
-    EMPTY = 0,
-    DIRT = 1,
-    STEEL = 2,
-    DAMAGE = 3,
-    GOAL = 4,
-    PLAYER = 5,
-    RED_ENEMY = 6,
-    BLUE_ENEMY = 7,
-};
 
 enum class GameState {
     LEVEL_START,
@@ -143,8 +132,8 @@ private:
     void createBackground();
     void add_tile(int tile_type, int tx, int ty);
 public:
-    Hopman();
-    ~Hopman();
+    void init();
+    void shutdown();
     int play();
 };
 

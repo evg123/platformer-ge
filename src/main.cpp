@@ -10,6 +10,7 @@
  - Use the arrow keys or A and D to move left and right
  - Press Space to jump
  - Press Q to quit
+ - Esc opens pause menu
  - The F key toggles an FPS display
  
 */
@@ -20,9 +21,11 @@
  It all starts here
  */
 int main() {
-    
     Hopman hpm = Hopman();
+
+    hpm.init();
     int ret = hpm.play();
-    
+    hpm.shutdown();
+
     return ret;
 }

@@ -44,6 +44,7 @@ private:
     int bg_blue;
 public:
     void init(int start_x, int start_y, int lower_bound);
+    void shutdown();
     void setColor(int red, int green, int blue);
     void addLayer(std::string img_file, int width, int height, int distance);
     void updateLayerOffsets(int center_x, int center_y);

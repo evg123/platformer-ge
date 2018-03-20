@@ -31,11 +31,15 @@ enum GuiGroupId {
 class Gui {
 private:
     Gui();
+    ~Gui();
     std::vector<bool> groupStates;
     std::map<int, std::vector<Menu*>> menus;
     std::map<int, std::vector<GuiElement*>> elements;
 public:
     static Gui& instance();
+    void init();
+    void shutdown();
+    void clearGui();
     void render();
     void update();
     void add(GuiGroupId gid, Menu *menu);

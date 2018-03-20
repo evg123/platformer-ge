@@ -11,14 +11,9 @@
 Graphics::Graphics() {}
 
 /**
- free the resources used for rendering
+ Private destructor
  */
-Graphics::~Graphics() {
-    SDL_DestroyRenderer(renderer);
-    renderer = NULL;
-    SDL_DestroyWindow(window);
-    window = NULL;
-}
+Graphics::~Graphics() {}
 
 /**
  Get the instance of the Graphics class
@@ -50,6 +45,16 @@ void Graphics::init(int window_width, int window_height) {
     if (renderer == NULL) {
         throw std::runtime_error("Failed to create SDL renderer");
     }
+}
+
+/**
+ free the resources used for rendering
+ */
+void Graphics::shutdown() {
+    SDL_DestroyRenderer(renderer);
+    renderer = NULL;
+    SDL_DestroyWindow(window);
+    window = NULL;
 }
 
 /**

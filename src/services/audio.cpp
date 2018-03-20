@@ -6,9 +6,27 @@
 #include "audio.h"
 
 /**
+ Constructor not used, things are set up in init()
+ */
+Audio::Audio() {}
+
+/**
+ Private destructor
+ */
+Audio::~Audio() {}
+
+/**
+ Get the singleton instance
+ */
+Audio& Audio::instance() {
+    static Audio *instance = new Audio();
+    return *instance;
+}
+
+/**
  Set up
  */
-Audio::Audio() {
+void Audio::init() {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         SDL_Log("%s\n", Mix_GetError());
         throw std::runtime_error("Failed to init audio");
@@ -18,16 +36,8 @@ Audio::Audio() {
 /**
  Tear down
  */
-Audio::~Audio() {
+void Audio::shutdown() {
     Mix_Quit();
-}
-
-/**
- Get the singleton instance
- */
-Audio& Audio::instance() {
-    static Audio *instance = new Audio();
-    return *instance;
 }
 
 /**

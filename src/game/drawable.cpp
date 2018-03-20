@@ -167,8 +167,15 @@ void Drawable::processCollision(Drawable &other, float x_off, float y_off) {
 
     if (y_off > 0) {
         // we jumped on other
-        hitOther(other);
-        other.hitBy(*this);
+        if (other.hit_back_when_hopped_on) {
+            // other damages us (spikes, etc)
+            hitBy(other);
+            other.hitOther(*this);
+        } else {
+            // we damage the other
+            hitOther(other);
+            other.hitBy(*this);
+        }
     } else if (y_off < 0) {
         // we jumped into other's feet
         hitBy(other);

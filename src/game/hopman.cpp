@@ -8,20 +8,31 @@
 /**
  Set up the game
  */
-Hopman::Hopman() {
-    // init SDL
+void Hopman::init() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         throw std::runtime_error("Failed to initialize SDL");
     }
-    
+
+    // init services
+    ResourceManager::instance().init();
     Graphics::instance().init(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+    Audio::instance().init();
+    Input::instance().init();
+    Gui::instance().init();
 }
 
 /**
  Tear it down
  */
-Hopman::~Hopman() {
+void Hopman::shutdown() {
     cleanupLevel();
+
+    // shutdown services
+    Gui::instance().shutdown();
+    Input::instance().shutdown();
+    Audio::instance().shutdown();
+    Graphics::instance().shutdown();
+    ResourceManager::instance().shutdown();
     SDL_Quit();
 }
 
@@ -102,7 +113,7 @@ void Hopman::createStatusBar() {
                                            SCORE_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     elem = new TextGuiElement<int>({10 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
-                                           score, STATUS_BAR_TEXT_SIZE);
+                                           score, STATUS_BAR_TEXT_SIZE, true);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     
     // level display
@@ -110,7 +121,7 @@ void Hopman::createStatusBar() {
                                            LEVEL_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     elem = new TextGuiElement<int>({200 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
-                                   level, STATUS_BAR_TEXT_SIZE);
+                                   level, STATUS_BAR_TEXT_SIZE, true);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     
     // lives display
@@ -118,7 +129,7 @@ void Hopman::createStatusBar() {
                                            LIVES_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     elem = new TextGuiElement<int>({500 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
-                                   lives, STATUS_BAR_TEXT_SIZE);
+                                   lives, STATUS_BAR_TEXT_SIZE, true);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
 
     // show the status bar
@@ -149,16 +160,31 @@ void Hopman::createPauseMenu() {
 }
 
 void Hopman::createGameMessage() {
-    int item_x = (Graphics::instance().getWindowWidth() / 2) - (GAME_MSG_WIDTH / 2);
-    int item_y = (Graphics::instance().getWindowHeight() / 2) - (GAME_MSG_HEIGHT / 2);
-    GuiElement *elem = new TextGuiElement<std::string>({item_x, item_y, GAME_MSG_WIDTH, GAME_MSG_HEIGHT},
-                                                       game_message, GAME_MSG_TEXT_SIZE);
+    // render a message of max length and get its size in order to center the message
+    int msg_w, msg_h;
+    std::string max_msg_str(GAME_MESSAGE_MAX_LEN, ' ');
+    SDL_Texture *max_msg_texture = ResourceManager::instance().getTextTexture(max_msg_str, GAME_MSG_TEXT_SIZE);
+    SDL_QueryTexture(max_msg_texture, NULL, NULL, &msg_w, &msg_h);
+
+    // create a gui element for the message
+    int item_x = (Graphics::instance().getWindowWidth() / 2) - (msg_w / 2);
+    int item_y = (Graphics::instance().getWindowHeight() / 2) - (msg_h / 2);
+    GuiElement *elem = new TextGuiElement<std::string>({item_x, item_y, msg_w, msg_h},
+                                                       game_message, GAME_MSG_TEXT_SIZE, true);
     Gui::instance().add(GuiGroupId::GAME_MESSAGE, elem);
+    game_message.reserve(GAME_MESSAGE_MAX_LEN);
 }
 
 void Hopman::setGameMessage(std::string new_msg) {
-    game_message.reserve(new_msg.size());
-    game_message.assign(new_msg);
+    if (new_msg.length() > GAME_MESSAGE_MAX_LEN) {
+        throw std::runtime_error("Game message is too long: " + new_msg);
+    }
+
+    // get padding at front and end of new msg
+    // round down to long
+    long padding = (GAME_MESSAGE_MAX_LEN - new_msg.length()) / 2;
+    std::string pad_str(padding, ' ');
+    game_message.assign(pad_str + new_msg);
     Gui::instance().setGroupDisplay(GuiGroupId::GAME_MESSAGE, true);
 }
 
@@ -299,8 +325,6 @@ void Hopman::add_tile(int tile_type, int tx, int ty) {
         Tile *tile = new Tile(tile_type);
         if (tile_type == TileNum::GOAL) {
             tile->setCollisionCallback(std::bind(&Hopman::hitGoal, this, std::placeholders::_1));
-        } else if (tile_type == TileNum::DAMAGE) {
-            tile->setDamage(1);
         }
         obj = tile;
     }
@@ -445,5 +469,7 @@ void Hopman::cleanupLevel() {
     objects.clear();
 
     Gui::instance().setGroupDisplay(GuiGroupId::GAME_MESSAGE, false);
+
+    background.shutdown();
 }
 

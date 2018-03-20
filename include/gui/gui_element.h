@@ -32,10 +32,12 @@ private:
     T &value;
     T rendered_value;
     int font_size;
+    bool dynamic;
     
     std::string getValueString();
 public:
     TextGuiElement(SDL_Rect rect, T &value, int font_size);
+    TextGuiElement(SDL_Rect rect, T &value, int font_size, bool dynamic);
     void update() override;
     void renderText();
 };

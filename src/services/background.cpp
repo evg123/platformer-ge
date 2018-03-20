@@ -50,6 +50,10 @@ void Background::init(int start_x, int start_y, int lower_bound) {
     this->start_y = start_y;
 }
 
+void Background::shutdown() {
+    clearLayers();
+}
+
 void Background::setColor(int red, int green, int blue) {
     bg_red = red;
     bg_green = green;

@@ -24,6 +24,8 @@ private:
     Mix_Music *bg_track = NULL;
 public:
     static Audio& instance();
+    void init();
+    void shutdown();
     void setBgTrack(const std::string &track_name);
     void playSound(const std::string &sound_name);
 };

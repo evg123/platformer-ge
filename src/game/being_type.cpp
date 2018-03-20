@@ -35,6 +35,8 @@ BeingType& BeingType::player() {
 
         this_type.action_type = ActionType::NONE;
         this_type.bump_immune = false;
+        this_type.bouncy = true;
+        this_type.hit_back_when_hopped_on = false;
     }
     return this_type;
 }
@@ -50,7 +52,7 @@ BeingType& BeingType::redEnemy() {
         {
             0, 1, // idle
             5, 9, // walking
-            4, 4, // jump
+            3, 3, // jump
             9, 9, // braking
         };
         this_type.hp = 1;
@@ -64,6 +66,8 @@ BeingType& BeingType::redEnemy() {
         
         this_type.action_type = ActionType::CHARGE;
         this_type.bump_immune = true;
+        this_type.bouncy = true;
+        this_type.hit_back_when_hopped_on = false;
     }
     return this_type;
 }
@@ -93,6 +97,8 @@ BeingType& BeingType::blueEnemy() {
         
         this_type.action_type = ActionType::JUMP_AROUND;
         this_type.bump_immune = true;
+        this_type.bouncy = true;
+        this_type.hit_back_when_hopped_on = true;
     }
     return this_type;
 }

@@ -13,9 +13,16 @@ Tile::Tile(int tile_num) {
     // choose texture based on tile_num
     std::string tile_texture = TEXTURE_PREFIX + std::to_string(tile_num) + TEXTURE_SUFFIX;
     texture = ResourceManager::instance().getImageTexture(tile_texture);
-    
+
     rect.w = TILE_SIDE;
     rect.h = TILE_SIDE;
+
+    // do things based on tile type
+    if (tile_num == TileNum::DAMAGE) {
+        damage = DAMAGE_TILE_DAMAGE;
+        hit_back_when_hopped_on = true;
+        bouncy = true;
+    }
 }
 
 /**

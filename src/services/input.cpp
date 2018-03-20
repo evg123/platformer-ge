@@ -6,18 +6,14 @@
 #include "input.h"
 
 /**
- Setup
+ Constructor not used, things are set up in init()
  */
-Input::Input() {
-    SDL_StartTextInput();
-}
+Input::Input() {}
 
 /**
- Teardown
+ Private destructor
  */
-Input::~Input() {
-    SDL_StopTextInput();
-}
+Input::~Input() {}
 
 /**
  Get the singleton instance
@@ -25,6 +21,20 @@ Input::~Input() {
 Input& Input::instance() {
     static Input *instance = new Input();
     return *instance;
+}
+
+/**
+ Setup
+ */
+void Input::init() {
+    SDL_StartTextInput();
+}
+
+/**
+ Teardown
+ */
+void Input::shutdown() {
+    SDL_StopTextInput();
 }
 
 /**

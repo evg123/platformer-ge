@@ -27,7 +27,7 @@ int FrameTimer::newFrame() {
 
     // limit delta
     if (delta > MAX_DELTA) {
-        SDL_Log("WARNING: limiting frame delta of %d ms to %d ms", delta, MAX_DELTA);
+        //SDL_Log("WARNING: limiting frame delta of %d ms to %d ms", delta, MAX_DELTA);
         delta = MAX_DELTA;
     }
 

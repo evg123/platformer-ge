@@ -9,16 +9,14 @@
 #include "gui.h"
 
 /**
- private constructor
+ Constructor not used, things are set up in init()
  */
-Gui::Gui()
-: groupStates(GuiGroupId::__END__, false) // this is probably a bad idea...
-{
-    for (int gid = 0; gid < groupStates.size(); ++gid) {
-        menus[gid] = std::vector<Menu*>();
-        elements[gid] = std::vector<GuiElement*>();
-    }
-}
+Gui::Gui() {}
+
+/**
+ Private destructor
+ */
+Gui::~Gui() {}
 
 /**
  Get the singleton instance
@@ -26,6 +24,33 @@ Gui::Gui()
 Gui& Gui::instance() {
     static Gui *instance = new Gui();
     return *instance;
+}
+
+void Gui::init() {
+    // init group state vector using end value from group id enum
+    // this is probably a bad idea...
+    groupStates.assign(GuiGroupId::__END__, false);
+
+    // create empty vectors for each group
+    for (int gid = 0; gid < groupStates.size(); ++gid) {
+        menus[gid] = std::vector<Menu*>();
+        elements[gid] = std::vector<GuiElement*>();
+    }
+}
+
+void Gui::shutdown() {
+    clearGui();
+}
+
+void Gui::clearGui() {
+    for (int gid = 0; gid < groupStates.size(); ++gid) {
+        for (auto item : menus[gid]) {
+            delete item;
+        }
+        for (auto item : elements[gid]) {
+            delete item;
+        }
+    }
 }
 
 void Gui::render() {

@@ -23,6 +23,8 @@ constexpr auto IMAGE_DIR = "./Assets/images/";
 constexpr auto MUSIC_DIR = "./Assets/music/";
 constexpr auto SOUNDS_DIR = "./Assets/sounds/";
 
+constexpr auto FONT_FILE = "./Assets/fonts/space-mono/SpaceMono-Bold.ttf";
+
 /**
  Singleton that manages images, rendered text, sound effects and music data.
  Remembers what has been loaded already so that it can be re-used
@@ -46,6 +48,8 @@ private:
     void free_sounds();
 public:
     static ResourceManager& instance();
+    void init();
+    void shutdown();
     SDL_Texture* getImageTexture(const std::string &filename);
     SDL_Texture* getTextTexture(const std::string &text, int font_size);
     Mix_Music* getMusic(const std::string &track_name);

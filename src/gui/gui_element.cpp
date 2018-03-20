@@ -23,7 +23,11 @@ void GuiElement::render() {
 
 template<typename T>
 TextGuiElement<T>::TextGuiElement(SDL_Rect rect, T &value, int font_size)
-: GuiElement(rect, NULL), value(value), font_size(font_size) {
+: TextGuiElement(rect, value, font_size, false) {}
+
+template<typename T>
+TextGuiElement<T>::TextGuiElement(SDL_Rect rect, T &value, int font_size, bool dynamic)
+: GuiElement(rect, NULL), value(value), font_size(font_size), dynamic(dynamic) {
     renderText();
 }
 
@@ -38,10 +42,9 @@ std::string TextGuiElement<std::string>::getValueString() {
     return value;
 }
 
-
 template<typename T>
 void TextGuiElement<T>::update() {
-    if (value != rendered_value) {
+    if (dynamic && value != rendered_value) {
         renderText();
     }
 }

@@ -6,9 +6,27 @@
 #include "resource_manager.h"
 
 /**
+ Constructor not used, things are set up in init()
+ */
+ResourceManager::ResourceManager() {}
+
+/**
+ Private destructor
+ */
+ResourceManager::~ResourceManager() {}
+
+/**
+ Get singleton instance
+ */
+ResourceManager& ResourceManager::instance() {
+    static ResourceManager *instance = new ResourceManager();
+    return *instance;
+}
+
+/**
  Set up
  */
-ResourceManager::ResourceManager() {
+void ResourceManager::init() {
     if (TTF_Init() != 0) {
         SDL_Log("%s\n", TTF_GetError());
         throw std::runtime_error("Failed to init TTF");
@@ -18,7 +36,7 @@ ResourceManager::ResourceManager() {
 /**
  Tear down
  */
-ResourceManager::~ResourceManager() {
+void ResourceManager::shutdown() {
     free_images();
     free_text();
     free_music();
@@ -89,14 +107,6 @@ void ResourceManager::free_sounds() {
 }
 
 /**
- Get singleton instance
- */
-ResourceManager& ResourceManager::instance() {
-    static ResourceManager *instance = new ResourceManager();
-    return *instance;
-}
-
-/**
  Load or retrieve the texture for an image
  */
 SDL_Texture* ResourceManager::getImageTexture(const std::string &name) {
@@ -135,7 +145,7 @@ TTF_Font* ResourceManager::getFont(int font_size) {
     auto map_val = font_map.find(font_size);
     
     if (map_val == font_map.end()) {
-        font = TTF_OpenFont("./Assets/fonts/open-sans/OpenSans-ExtraBold.ttf", font_size);
+        font = TTF_OpenFont(FONT_FILE, font_size);
         if (font == NULL) {
             SDL_Log("%s\n", TTF_GetError());
             throw std::runtime_error("Failed to load font");

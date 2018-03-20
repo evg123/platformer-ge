@@ -22,6 +22,8 @@ void Being::init(BeingType type) {
     hp = type.hp;
     damage = type.damage;
     bump_immune = type.bump_immune;
+    bouncy = type.bouncy;
+    hit_back_when_hopped_on = type.hit_back_when_hopped_on;
     score_on_destruction = type.score_on_destruction;
     rect.w = type.width;
     rect.h = type.height;
@@ -148,7 +150,7 @@ void Being::processCollision(Drawable &other, float x_off, float y_off) {
 
 void Being::hitOther(Drawable &other) {
     if (other.isBouncy()) {
-        y_vel = jump_vel;
+        y_vel = -jump_vel;
     }
 }
 

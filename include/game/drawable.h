@@ -39,6 +39,7 @@ protected:
     int score_on_destruction = 0; // points earned/lost for the destruction of this object
     int damage = 0; // damage done on collision
     bool bouncy = false; // beings will bounce off of this
+    bool hit_back_when_hopped_on = false;
 
     // fired on collision
     std::function<void(Drawable&)> collision_callback;

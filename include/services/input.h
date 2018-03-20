@@ -57,6 +57,8 @@ private:
     void handleClick(int xpos, int ypos);
 public:
     static Input& instance();
+    void init();
+    void shutdown();
     void handleEvents();
     void registerCallback(Action action, std::function<void()> callback);
     
