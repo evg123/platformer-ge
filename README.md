@@ -4,12 +4,9 @@ Note: There is only 1 part to the final project. This is it--the grand finale!
 
 ## Team
 
-Team Name: (Something cool here)
+Team Name: EVG
 
-*TODO*:
-Update your Team member Names here (Up to 4) You will work with this same team through parts 1, 2, and 3.
-
--
+- Eric VandeGriek
 -
 -
 -
@@ -53,16 +50,32 @@ The constraints are that you have to build the majority of your technology. 3rd 
 
 A Minimum Viable Product (MVP) is the smallest subset of features that you consider a project to be a success. Make a list below of the features you consider to be in your MVP. Then make a list of features that are 'stretch goals' that you think you can achieve.
 
-(TODO: Edit these)
+#### Proposal
+For my final project I propose to create a tech demo of networked multiplayer in a 2d platformer. I would use my platformer from assignment 2 as the starting point for this project.
+
+Writing a multiplayer game is something that I've wanted to try my hand at, and I think I'll learn a lot about game engine design by implementing it myself.
+
+I plan to spend some time reading up on modern techniques and best practices for game networking so that my design is relevant to what modern games are doing, even though my platformer is very simple.
+
+I should be able to use this http://nshipster.com/network-link-conditioner/ to simulate high-latency connections when testing that my network code handles imperfect network conditions satisfactorily. 
+
 MVP
-- feature 1
-- feature 2
-- etc.
+* Simultaneous multiplayer in a 2D platformer over a local network
+  * Support an arbitrary number of players
+  * See and interact with other player characters
+  * Display info on the state of the other players on the server
+* A server process that can be connected to by each player's game process
+  * Server can be running next to the game process on one player's machine
+* Configured with config files and/or command line arguments
 
 Strecth Goals
-- features 1
-- feature 2
-- etc
+* Replace config file / command-line args with a GUI to specify the server to join
+* A server browser that finds and displays available multiplayer servers that can be connected to
+* Player name/sprite customization
+* More advanced netcode features:
+  * Client-side prediction
+* Get it working over the internet
+
 
 ## Requirements (For either option)
 
