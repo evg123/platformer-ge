@@ -50,6 +50,13 @@ public:
     float jump_duration;
     int max_air_jumps;
     
+    // sounds
+    std::string walk_sound;
+    std::string jump_sound;
+    std::string landed_sound;
+    std::string damaged_sound;
+    std::string death_sound;
+    
     // callbacks
     ActionType action_type;
 };

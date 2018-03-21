@@ -38,6 +38,12 @@ BeingType& BeingType::player() {
         this_type.bump_immune = false;
         this_type.bouncy = true;
         this_type.hit_back_when_hopped_on = false;
+
+        this_type.walk_sound = "player_walk";
+        this_type.jump_sound = "player_jump";
+        this_type.landed_sound = "player_landed";
+        this_type.damaged_sound = "player_damaged";
+        this_type.death_sound = "player_death";
     }
     return this_type;
 }
@@ -70,6 +76,12 @@ BeingType& BeingType::redEnemy() {
         this_type.bump_immune = true;
         this_type.bouncy = true;
         this_type.hit_back_when_hopped_on = false;
+
+        this_type.walk_sound = "";
+        this_type.jump_sound = "";
+        this_type.landed_sound = "";
+        this_type.damaged_sound = "";
+        this_type.death_sound = "";
     }
     return this_type;
 }
@@ -102,6 +114,12 @@ BeingType& BeingType::blueEnemy() {
         this_type.bump_immune = true;
         this_type.bouncy = true;
         this_type.hit_back_when_hopped_on = true;
+
+        this_type.walk_sound = "";
+        this_type.jump_sound = "";
+        this_type.landed_sound = "";
+        this_type.damaged_sound = "";
+        this_type.death_sound = "";
     }
     return this_type;
 }

@@ -234,7 +234,7 @@ void Hopman::tryRespawn() {
     } else {
         setGameMessage("GAME OVER :(");
         game_state = GameState::LOSS;
-        //Audio::instance().playSound("game_over.wav");
+        Audio::instance().playSound("game_over.wav");
     }
 }
 
@@ -346,7 +346,7 @@ void Hopman::hitGoal(Drawable& other) {
     if (&other == &player) {
         setGameMessage("YOU WIN!");
         game_state = GameState::LEVEL_WON;
-        //Audio::instance().playSound("winner.wav");
+        Audio::instance().playSound("you_win.wav");
     }
 }
 

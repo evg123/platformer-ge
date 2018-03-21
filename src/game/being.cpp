@@ -50,6 +50,7 @@ void Being::jump() {
         if (!isOnGround()) {
             --air_jumps;
         }
+        Audio::instance().playSound(type.jump_sound);
     }
 }
 
@@ -155,23 +156,30 @@ void Being::processCollision(Drawable &other, float x_off, float y_off) {
         last_grounded = SDL_GetTicks();
         jump_start_ts = 0; // zero means not jumping
         resetJumps();
+        Audio::instance().playSound(type.landed_sound);
     }
 }
 
 void Being::hitOther(Drawable &other) {
     if (other.isBouncy()) {
         y_vel = -jump_vel;
+        Audio::instance().playSound(type.jump_sound);
     }
 }
 
 void Being::hitBy(Drawable &other) {
-    hp -= other.getDamage();
+    takeDamage(other.getDamage());
 }
 
 void Being::ranInto(Drawable &other) {
     if (!bump_immune) {
-        hp -= other.getDamage();
+        takeDamage(other.getDamage());
     }
+}
+
+void Being::takeDamage(int damage) {
+    hp -= damage;
+    Audio::instance().playSound(type.damaged_sound);
 }
 
 /**
@@ -206,6 +214,12 @@ void Being::applyAcceleration(int delta) {
         if (x_vel > top_speed) {
             x_vel = top_speed;
         }
+        if (isOnGround()) {
+            int played_ago = SDL_GetTicks() - Audio::instance().getLastPlayed(type.walk_sound);
+            if (played_ago > WALK_SOUND_INTERVAL_MS) {
+                Audio::instance().playSound(type.walk_sound);
+            }
+        }
     } else if (target_x_vel < 0 && x_vel > -top_speed) {
         // moving left
         // apply additional accel if we are at negative velocity
@@ -216,6 +230,12 @@ void Being::applyAcceleration(int delta) {
         x_vel -= accel * delta;
         if (x_vel < -top_speed) {
             x_vel = -top_speed;
+        }
+        if (isOnGround()) {
+            int played_ago = SDL_GetTicks() - Audio::instance().getLastPlayed(type.walk_sound);
+            if (played_ago > WALK_SOUND_INTERVAL_MS) {
+                Audio::instance().playSound(type.walk_sound);
+            }
         }
     } else if (target_x_vel == 0.0f && isOnGround()) {
         // stopping

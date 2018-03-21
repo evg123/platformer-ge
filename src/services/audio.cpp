@@ -31,6 +31,7 @@ void Audio::init() {
         SDL_Log("%s\n", Mix_GetError());
         throw std::runtime_error("Failed to init audio");
     }
+    bg_track = NULL;
 }
 
 /**
@@ -38,6 +39,21 @@ void Audio::init() {
  */
 void Audio::shutdown() {
     Mix_Quit();
+}
+
+/**
+ Record the time that this sound was played
+ */
+void Audio::setPlayed(const std::string &track_name) {
+    last_played_map[track_name] = SDL_GetTicks();
+}
+
+Uint8 Audio::getLastPlayed(const std::string &sound_name) {
+    auto item = last_played_map.find(sound_name);
+    if (item == last_played_map.end()) {
+        return 0;
+    }
+    return item->second;
 }
 
 /**
@@ -59,6 +75,7 @@ void Audio::setBgTrack(const std::string &track_name) {
     }
 
     Mix_PlayMusic(track, -1);
+    setPlayed(track_name);
 }
 
 /**
@@ -66,6 +83,11 @@ void Audio::setBgTrack(const std::string &track_name) {
  sound_name should be the name of a file in the sounds directory.
  */
 void Audio::playSound(const std::string &sound_name) {
+    if (sound_name.empty()) {
+        // don't play anything
+        return;
+    }
     Mix_Chunk *sound = ResourceManager::instance().getSound(sound_name);
     Mix_PlayChannel(-1, sound, 0);
+    setPlayed(sound_name);
 }

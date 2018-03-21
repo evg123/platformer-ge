@@ -61,6 +61,7 @@ void Drawable::setPosition(int x_pos, int y_pos) {
  Handle collisions.
  */
 void Drawable::doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects) {
+    //TODO adjust collision rect here?
     SDL_Rect new_rect = {int(rect.x + x_offset), int(rect.y + y_offset), rect.w, rect.h};
 
     std::priority_queue<CollisionRecord> collisions;

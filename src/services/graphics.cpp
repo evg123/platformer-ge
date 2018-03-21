@@ -28,6 +28,8 @@ Graphics& Graphics::instance() {
  Must be called before use.
  */
 void Graphics::init(int window_width, int window_height) {
+    screen_off_x = 0;
+    screen_off_y = 0;
     this->window_width = window_width;
     this->window_height = window_height;
     

@@ -21,12 +21,12 @@ class Graphics {
 private:
     Graphics();
     ~Graphics();
-    SDL_Window *window = NULL;
-    SDL_Renderer *renderer = NULL;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
     int window_width;
     int window_height;
-    int screen_off_x = 0;
-    int screen_off_y = 0;
+    int screen_off_x;
+    int screen_off_y;
 public:
     void init(int window_width, int window_height);
     void shutdown();
