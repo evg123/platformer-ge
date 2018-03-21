@@ -94,15 +94,17 @@ void Gui::toggleGroupDisplay(GuiGroupId gid) {
     groupStates[gid] = !groupStates[gid];
 }
 
-bool Gui::handleClick(int xpos, int ypos) {
+bool Gui::handleClick(int xpos, int ypos, bool released) {
     for (int gid = 0; gid < groupStates.size(); ++gid) {
         if (!groupStates[gid]) {
             continue;
         }
+
+        bool handled = false;
         for (auto &menu : menus[gid]) {
-            bool handled = menu->handleClick(xpos, ypos);
-            if (handled) {
-                return true;
+            menu->releaseAll();
+            if (!handled) {
+                handled = menu->handleClick(xpos, ypos, released);
             }
         }
     }

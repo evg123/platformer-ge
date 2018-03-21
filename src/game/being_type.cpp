@@ -25,11 +25,16 @@ BeingType& BeingType::player() {
             9, 9, // braking
             4, 4, // dead
         };
+        this_type.pad_top = 4;
+        this_type.pad_right = 6;
+        this_type.pad_bot = 0;
+        this_type.pad_left = 6;
+
         this_type.hp = 1;
         this_type.damage = 1;
         this_type.score_on_destruction = 0;
-        this_type.width = 32;
-        this_type.height = 32;
+        this_type.width = 32 - this_type.pad_left - this_type.pad_right;
+        this_type.height = 32 - this_type.pad_top - this_type.pad_bot;
         this_type.top_speed = 300 / 1000.0f;
         this_type.max_air_jumps = 1;
         this_type.jump_duration = 275;
@@ -39,11 +44,11 @@ BeingType& BeingType::player() {
         this_type.bouncy = true;
         this_type.hit_back_when_hopped_on = false;
 
-        this_type.walk_sound = "player_walk";
-        this_type.jump_sound = "player_jump";
-        this_type.landed_sound = "player_landed";
-        this_type.damaged_sound = "player_damaged";
-        this_type.death_sound = "player_death";
+        this_type.walk_sound = "player_walk.wav";
+        this_type.jump_sound = "player_jump.wav";
+        this_type.landed_sound = "player_landed.wav";
+        this_type.damaged_sound = "player_damaged.wav";
+        this_type.death_sound = "player_death.wav";
     }
     return this_type;
 }
@@ -63,11 +68,16 @@ BeingType& BeingType::redEnemy() {
             9, 9, // braking
             2, 2, // dead
         };
+        this_type.pad_top = 4;
+        this_type.pad_right = 3;
+        this_type.pad_bot = 0;
+        this_type.pad_left = 3;
+
         this_type.hp = 1;
         this_type.damage = 1;
         this_type.score_on_destruction = 100;
-        this_type.width = 32;
-        this_type.height = 32;
+        this_type.width = 32 - this_type.pad_left - this_type.pad_right;
+        this_type.height = 32 - this_type.pad_top - this_type.pad_bot;
         this_type.top_speed = 200 / 1000.0f;
         this_type.max_air_jumps = 0;
         this_type.jump_duration = 150;
@@ -101,11 +111,16 @@ BeingType& BeingType::blueEnemy() {
             9, 9, // braking
             3, 3, // dead
         };
+        this_type.pad_top = 4;
+        this_type.pad_right = 3;
+        this_type.pad_bot = 0;
+        this_type.pad_left = 3;
+
         this_type.hp = 1;
         this_type.damage = 1;
         this_type.score_on_destruction = 500;
-        this_type.width = 32;
-        this_type.height = 32;
+        this_type.width = 32 - this_type.pad_left - this_type.pad_right;
+        this_type.height = 32 - this_type.pad_top - this_type.pad_bot;
         this_type.top_speed = 150 / 1000.0f;
         this_type.max_air_jumps = 0;
         this_type.jump_duration = 125;

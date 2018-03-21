@@ -19,16 +19,16 @@ void Being::init(BeingType type) {
     
     // unpack type class
     this->type = type;
+    rect.setColliderSize(type.width, type.height);
+    rect.setRenderPadding(type.pad_top, type.pad_right, type.pad_bot, type.pad_left);
+    texture = ResourceManager::instance().getImageTexture(type.sprite_sheet);
+    sprite.init(type.frame_config);
     hp = type.hp;
     damage = type.damage;
     bump_immune = type.bump_immune;
     bouncy = type.bouncy;
     hit_back_when_hopped_on = type.hit_back_when_hopped_on;
     score_on_destruction = type.score_on_destruction;
-    rect.w = type.width;
-    rect.h = type.height;
-    texture = ResourceManager::instance().getImageTexture(type.sprite_sheet);
-    sprite.init(type.frame_config);
     top_speed = type.top_speed;
     jump_duration = type.jump_duration;
     max_air_jumps = type.max_air_jumps;
@@ -83,7 +83,8 @@ void Being::update(int delta, std::vector<Drawable*> &objects) {
 void Being::render() {
     int screen_off_x, screen_off_y;
     std::tie(screen_off_x, screen_off_y) = Graphics::instance().getScreenOffsets();
-    SDL_Rect rend_rect = {rect.x - screen_off_x, rect.y - screen_off_y, rect.w, rect.h};
+    SDL_Rect rend_rect;
+    rect.fillRenderRect(rend_rect, screen_off_x, screen_off_y);
     SDL_Renderer *renderer = Graphics::instance().getRenderer();
     SDL_RendererFlip flip_mode = facing == Facing::RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     SDL_RenderCopyEx(renderer, texture, &sprite.getFrameRect(), &rend_rect, 0, NULL, flip_mode);

@@ -54,7 +54,7 @@ private:
     void callAction(Action action);
     
     void handleKey(SDL_Scancode key, bool pressed);
-    void handleClick(int xpos, int ypos);
+    void handleClick(int xpos, int ypos, bool released);
 public:
     static Input& instance();
     void init();

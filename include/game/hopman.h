@@ -29,7 +29,7 @@
 #include "tile.h"
 #include "background.h"
 
-constexpr int STARTING_LEVEL = 1;
+constexpr int STARTING_LEVEL = 3;
 constexpr auto BG_TRACK = "bg_track.wav";
 
 constexpr int DEFAULT_FPS_LIMIT = 60;
@@ -88,6 +88,7 @@ class Hopman {
 private:
     int level = STARTING_LEVEL;
     GameState game_state = GameState::PAUSED;
+    bool paused;
     int fps_limit = DEFAULT_FPS_LIMIT;
     int score = 0;
     int lives = DEFAULT_EXTRA_LIVES;

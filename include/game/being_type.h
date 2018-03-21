@@ -44,6 +44,10 @@ public:
     int height;
     std::string sprite_sheet;
     FrameConfig frame_config;
+    int pad_top;
+    int pad_right;
+    int pad_bot;
+    int pad_left;
 
     // movement
     float top_speed;

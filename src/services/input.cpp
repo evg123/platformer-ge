@@ -54,8 +54,11 @@ void Input::handleEvents() {
             case SDL_KEYUP:
                 handleKey(event.key.keysym.scancode, false);
                 break;
+            case SDL_MOUSEBUTTONDOWN:
+                handleClick(event.button.x, event.button.y, false);
+                break;
             case SDL_MOUSEBUTTONUP:
-                handleClick(event.button.x, event.button.y);
+                handleClick(event.button.x, event.button.y, true);
                 break;
             default:
                 break;
@@ -104,8 +107,8 @@ void Input::handleKey(SDL_Scancode key, bool pressed) {
     }
 }
 
-void Input::handleClick(int xpos, int ypos) {
-    bool handled = Gui::instance().handleClick(xpos, ypos);
+void Input::handleClick(int xpos, int ypos, bool released) {
+    bool handled = Gui::instance().handleClick(xpos, ypos, released);
     if (!handled) {
         // nothing was clicked on, interperet as an advance action
         callAction(Action::ADVACNE);

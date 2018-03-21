@@ -9,22 +9,40 @@
 /**
  Create a new EvgRect
  */
-EvgRect::EvgRect() {}
+EvgRect::EvgRect()
+: pad_top(0), pad_right(0), pad_bot(0), pad_left(0) {
+}
 
 /**
  Set position to absolute values.
- Remember the previous position.
  */
 void EvgRect::setPosition(int x_pos, int y_pos) {
-    x = x_pos;
-    y = y_pos;
+    collider.x = x_pos;
+    collider.y = y_pos;
 }
 
 /**
  Move based on offsets from the current position.
- Remember the previous position.
  */
 void EvgRect::move(int x_offset, int y_offset) {
-    x += x_offset;
-    y += y_offset;
+    setPosition(collider.x + x_offset, collider.y + y_offset);
+}
+
+void EvgRect::setRenderPadding(int top, int right, int bot, int left) {
+    pad_top = top;
+    pad_right = right;
+    pad_bot = bot;
+    pad_left = left;
+}
+
+void EvgRect::setColliderSize(int width, int height) {
+    collider.w = width;
+    collider.h = height;
+}
+
+void EvgRect::fillRenderRect(SDL_Rect &render_rect, int screen_off_x, int screen_off_y) {
+    render_rect.x = collider.x - screen_off_x - pad_left;
+    render_rect.y = collider.y - screen_off_y - pad_top;
+    render_rect.w = collider.w + pad_left + pad_right;
+    render_rect.h = collider.h + pad_top + pad_bot;
 }

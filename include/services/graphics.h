@@ -51,7 +51,7 @@ public:
     
     /** return the current world offset that the screen is showing */
     std::tuple<int, int> getScreenOffsets() { return std::make_tuple(screen_off_x, screen_off_y); }
-    void focusScreenOffsets(SDL_Rect &rect);
+    void focusScreenOffsets(const SDL_Rect &rect);
 };
 
 #endif /* graphics_h */

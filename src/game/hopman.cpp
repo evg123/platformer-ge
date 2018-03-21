@@ -19,6 +19,8 @@ void Hopman::init() {
     Audio::instance().init();
     Input::instance().init();
     Gui::instance().init();
+    
+    paused = false;
 }
 
 /**
@@ -60,13 +62,13 @@ int Hopman::play() {
         int delta = timer.newFrame();
         
         // update game objects
-        if (game_state == GameState::PLAYING) {
+        if (game_state == GameState::PLAYING && !paused) {
             update(delta);
         }
 
         // focus the screen on the player
-        Graphics::instance().focusScreenOffsets(player.getRect());
-        background.updateLayerOffsets(player.getRect().x, player.getRect().y);
+        Graphics::instance().focusScreenOffsets(player.getRect().getCollider());
+        background.updateLayerOffsets(player.getRect().xPos(), player.getRect().yPos());
 
         // update the GUI
         Gui::instance().update();
@@ -143,12 +145,13 @@ void Hopman::createPauseMenu() {
                           ResourceManager::instance().getImageTexture(MAIN_MENU_BG_IMG),
                           PAUSE_MENU_TOP_PAD, PAUSE_MENU_BOT_PAD);
     
-    menu->addItem("Pause Menu", 50, ResourceManager::instance().getImageTexture(MENU_TITLE_IMG), NULL);
+    menu->addItem("Pause Menu", 50, ResourceManager::instance().getImageTexture(MENU_TITLE_IMG),
+                  NULL, false);
     menu->addItem("Restart", 42, ResourceManager::instance().getImageTexture(BUTTON_IMG),
-                  std::bind(&Hopman::restartGame, this));
+                  std::bind(&Hopman::restartGame, this), true);
     menu->addItem("Quit", 42,
                   ResourceManager::instance().getImageTexture(BUTTON_IMG),
-                  std::bind(&Hopman::exitGame, this));
+                  std::bind(&Hopman::exitGame, this), true);
     
     // add the completed menu to the gui
     Gui::instance().add(GuiGroupId::PAUSE, menu);
@@ -239,11 +242,7 @@ void Hopman::tryRespawn() {
 }
 
 void Hopman::pause() {
-    if (game_state == GameState::PLAYING) {
-        game_state = GameState::PAUSED;
-    } else if (game_state == GameState::PAUSED) {
-        game_state = GameState::PLAYING;
-    }
+    paused = !paused;
     Gui::instance().toggleGroupDisplay(GuiGroupId::PAUSE);
 }
 
@@ -265,6 +264,11 @@ void Hopman::restartGame() {
  Check if the user is ready to move on from the end of a level / loss
  */
 void Hopman::advanceScreen() {
+    if (paused) {
+        // don't advance if we are paused
+        return;
+    }
+    
     if (game_state == GameState::LOSS) {
         restartGame();
     } else if (game_state == GameState::LEVEL_WON) {
@@ -353,7 +357,7 @@ void Hopman::hitGoal(Drawable& other) {
 void Hopman::createBackground() {
     int sw = Graphics::instance().getWindowWidth();
     int sh = Graphics::instance().getWindowHeight();
-    background.init(player.getRect().x, player.getRect().y, lower_bound - 200);
+    background.init(player.getRect().xPos(), player.getRect().yPos(), lower_bound - 200);
     background.setColor(125, 90, 125);
     
     // add layers at different distances

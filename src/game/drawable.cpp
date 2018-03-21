@@ -62,11 +62,16 @@ void Drawable::setPosition(int x_pos, int y_pos) {
  */
 void Drawable::doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects) {
     //TODO adjust collision rect here?
-    SDL_Rect new_rect = {int(rect.x + x_offset), int(rect.y + y_offset), rect.w, rect.h};
+    SDL_Rect new_rect = {
+        int(rect.getCollider().x + x_offset),
+        int(rect.getCollider().y + y_offset),
+        rect.getCollider().w,
+        rect.getCollider().h
+    };
 
     std::priority_queue<CollisionRecord> collisions;
     for (auto &other : objects) {
-        if (SDL_HasIntersection(&new_rect, &other->rect)) {
+        if (SDL_HasIntersection(&new_rect, &other->rect.getCollider())) {
             if (x_offset > 0) {
                 // find the distance to the other object on this axis
                 float x_diff = other->rect.left() - rect.right();
@@ -117,14 +122,14 @@ void Drawable::doMove(float x_offset, float y_offset, std::vector<Drawable*> &ob
         CollisionRecord record = collisions.top();
         collisions.pop();
         if (record.axis == Axis::X) {
-            if (!have_x && SDL_HasIntersection(&new_rect, &record.other->rect)) {
-                new_rect.x = rect.x + record.diff;
+            if (!have_x && SDL_HasIntersection(&new_rect, &record.other->rect.getCollider())) {
+                new_rect.x = rect.getCollider().x + record.diff;
                 collision_other_x = record.other;
                 have_x = true;
             }
         } else { // y
-            if (!have_y && SDL_HasIntersection(&new_rect, &record.other->rect)) {
-                new_rect.y = rect.y + record.diff;
+            if (!have_y && SDL_HasIntersection(&new_rect, &record.other->rect.getCollider())) {
+                new_rect.y = rect.getCollider().y + record.diff;
                 collision_other_y = record.other;
                 have_y = true;
             }

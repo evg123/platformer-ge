@@ -46,7 +46,7 @@ public:
     void add(GuiGroupId gid, GuiElement *elem);
     void setGroupDisplay(GuiGroupId gid, bool display);
     void toggleGroupDisplay(GuiGroupId gid);
-    bool handleClick(int xpos, int ypos);
+    bool handleClick(int xpos, int ypos, bool released);
 };
 
 #endif /* gui_h */

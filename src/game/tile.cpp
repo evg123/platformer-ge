@@ -14,8 +14,7 @@ Tile::Tile(int tile_num) {
     std::string tile_texture = TEXTURE_PREFIX + std::to_string(tile_num) + TEXTURE_SUFFIX;
     texture = ResourceManager::instance().getImageTexture(tile_texture);
 
-    rect.w = TILE_SIDE;
-    rect.h = TILE_SIDE;
+    rect.setColliderSize(TILE_SIDE, TILE_SIDE);
 
     // do things based on tile type
     if (tile_num == TileNum::DAMAGE) {
@@ -36,7 +35,8 @@ void Tile::update(int delta, std::vector<Drawable*> &objects) {
 void Tile::render() {
     int screen_off_x, screen_off_y;
     std::tie(screen_off_x, screen_off_y) = Graphics::instance().getScreenOffsets();
-    SDL_Rect rend_rect = {rect.x - screen_off_x, rect.y - screen_off_y, rect.w, rect.h};
+    SDL_Rect rend_rect;
+    rect.fillRenderRect(rend_rect, screen_off_x, screen_off_y);
     SDL_Renderer *renderer = Graphics::instance().getRenderer();
     SDL_RenderCopy(renderer, texture, NULL, &rend_rect);
 }

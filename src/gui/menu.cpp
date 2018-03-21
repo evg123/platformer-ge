@@ -10,8 +10,9 @@
 
 // Button definitions
 
-MenuItem::MenuItem(std::string name, int font_size, SDL_Texture *texture, std::function<void()> callback)
-: box_texture(texture), callback(callback) {
+MenuItem::MenuItem(std::string name, int font_size, SDL_Texture *texture,
+                   std::function<void()> callback, bool interactive)
+: box_texture(texture), callback(callback), interactive(interactive) {
     // get button size
     int text_w, text_h;
     SDL_QueryTexture(texture, NULL, NULL, &text_w, &text_h);
@@ -21,21 +22,39 @@ MenuItem::MenuItem(std::string name, int font_size, SDL_Texture *texture, std::f
     text_texture = ResourceManager::instance().getTextTexture(name, font_size);
     SDL_QueryTexture(text_texture, NULL, NULL, &text_w, &text_h);
     text_rect = {0, 0, text_w, text_h};
+    pressed = false;
 }
 
 void MenuItem::render() {
     SDL_Renderer *renderer = Graphics::instance().getRenderer();
     // background can be transparent
     if (box_texture != NULL) {
+        if (pressed) {
+            SDL_SetTextureColorMod(box_texture,
+                                   PRESSED_RED_MOD,
+                                   PRESSED_GREEN_MOD,
+                                   PRESSED_BLUE_MOD);
+        }
         SDL_RenderCopy(renderer, box_texture, NULL, &box_rect);
+        if (pressed) {
+            SDL_SetTextureColorMod(box_texture, 255, 255, 255);
+        }
     }
     SDL_RenderCopy(renderer, text_texture, NULL, &text_rect);
 }
 
-void MenuItem::pressButton() {
+void MenuItem::activateButton() {
     if (callback != NULL) {
         callback();
     }
+}
+
+void MenuItem::pressButton() {
+    pressed = true;
+}
+
+void MenuItem::releaseButton() {
+    pressed = false;
 }
 
 // Menu definitions
@@ -57,8 +76,9 @@ void Menu::render() {
     }
 }
 
-void Menu::addItem(std::string text, int font_size, SDL_Texture *texture, std::function<void()> callback) {
-    MenuItem *item = new MenuItem(text, font_size, texture, callback);
+void Menu::addItem(std::string text, int font_size, SDL_Texture *texture,
+                   std::function<void()> callback, bool interactive) {
+    MenuItem *item = new MenuItem(text, font_size, texture, callback, interactive);
     items.push_back(item);
     
     // if we wanted to be really efficient we would just call this once after adding all the items
@@ -93,7 +113,7 @@ void Menu::repositionItems() {
     }
 }
 
-bool Menu::handleClick(int xpos, int ypos) {
+bool Menu::handleClick(int xpos, int ypos, bool released) {
     SDL_Point pnt = {xpos, ypos};
 
     // check if the point was within this menu
@@ -102,12 +122,27 @@ bool Menu::handleClick(int xpos, int ypos) {
     }
 
     for (auto item : items) {
-        if (SDL_PointInRect(&pnt, &item->box_rect)) {
-            item->pressButton();
-            break;
+        if (item->interactive && SDL_PointInRect(&pnt, &item->box_rect)) {
+            if (released) {
+                // this button was clicked
+                item->activateButton();
+                break;
+            } else {
+                // this button was depressed
+                item->pressButton();
+                break;
+            }
         }
     }
 
     return true;
+}
+
+void Menu::releaseAll() {
+    for (auto item : items) {
+        if (item->interactive) {
+            item->releaseButton();
+        }
+    }
 }
 

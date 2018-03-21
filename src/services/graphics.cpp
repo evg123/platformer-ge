@@ -94,7 +94,7 @@ void Graphics::updateWindowTitle(std::string window_title) {
 }
 
 /** set the world offset that the screen is showing */
-void Graphics::focusScreenOffsets(SDL_Rect &rect) {
+void Graphics::focusScreenOffsets(const SDL_Rect &rect) {
     screen_off_x = rect.x + (rect.w / 2) - (window_width / 2);
     // keep the player towards the bottom of the screen
     screen_off_y = rect.y + (rect.h / 2) - ((3 * window_height) / 4);
