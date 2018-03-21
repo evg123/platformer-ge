@@ -23,6 +23,7 @@ enum class SpriteState {
     WALKING,
     JUMPING,
     BRAKING,
+    DEAD,
 };
 
 struct FrameConfig {
@@ -34,6 +35,8 @@ struct FrameConfig {
     int jumping_frame_final;
     int braking_frame_start;
     int braking_frame_final;
+    int dead_frame_start;
+    int dead_frame_final;
 };
 
 class Sprite {
@@ -52,11 +55,12 @@ public:
     SDL_Rect& getFrameRect() { return frame_rect; }
     void setState(SpriteState state);
     void update();
-    
+
     void setWalking() { setState(SpriteState::WALKING); }
     void setIdle() { setState(SpriteState::IDLE); }
     void setJumping() { setState(SpriteState::JUMPING); }
     void setBraking() { setState(SpriteState::BRAKING); }
+    void setDead() { setState(SpriteState::DEAD); }
 };
 
 #endif /* sprite_h */

@@ -10,10 +10,15 @@
 
 // Button definitions
 
-MenuItem::MenuItem(std::string name, int font_size, SDL_Rect rect, SDL_Texture *texture, std::function<void()> callback)
-: box_rect(rect), box_texture(texture), callback(callback) {
-    text_texture = ResourceManager::instance().getTextTexture(name, font_size);
+MenuItem::MenuItem(std::string name, int font_size, SDL_Texture *texture, std::function<void()> callback)
+: box_texture(texture), callback(callback) {
+    // get button size
     int text_w, text_h;
+    SDL_QueryTexture(texture, NULL, NULL, &text_w, &text_h);
+    box_rect = {0, 0, text_w, text_h};
+    
+    // text inside the button
+    text_texture = ResourceManager::instance().getTextTexture(name, font_size);
     SDL_QueryTexture(text_texture, NULL, NULL, &text_w, &text_h);
     text_rect = {0, 0, text_w, text_h};
 }
@@ -35,8 +40,12 @@ void MenuItem::pressButton() {
 
 // Menu definitions
 
+Menu::Menu(SDL_Rect rect, SDL_Texture *texture, int top_padding, int bottom_padding)
+: rect(rect), texture(texture), top_padding(top_padding), bottom_padding(bottom_padding) {
+}
+
 Menu::Menu(SDL_Rect rect, SDL_Texture *texture)
-: rect(rect), texture(texture) {
+: Menu(rect, texture, 0, 0) {
 }
 
 void Menu::render() {
@@ -48,8 +57,8 @@ void Menu::render() {
     }
 }
 
-void Menu::addItem(std::string text, int font_size, SDL_Rect btn_size, SDL_Texture *texture, std::function<void()> callback) {
-    MenuItem *item = new MenuItem(text, font_size, btn_size, texture, callback);
+void Menu::addItem(std::string text, int font_size, SDL_Texture *texture, std::function<void()> callback) {
+    MenuItem *item = new MenuItem(text, font_size, texture, callback);
     items.push_back(item);
     
     // if we wanted to be really efficient we would just call this once after adding all the items
@@ -62,14 +71,14 @@ void Menu::addItem(std::string text, int font_size, SDL_Rect btn_size, SDL_Textu
  */
 void Menu::repositionItems() {
     // first we need to calculate padding
-    int total_item_height = 0;
+    int total_item_height = top_padding + bottom_padding;
     for (auto &item : items) {
         total_item_height += item->box_rect.h;
     }
     int padding = (rect.h - total_item_height) / (items.size() + 1);
     
     // place each item
-    int cur_height = 0;
+    int cur_height = top_padding;
     for (int num = 0; num < items.size(); ++num) {
         MenuItem *item = items[num];
 

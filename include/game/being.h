@@ -24,6 +24,8 @@ constexpr float MOVE_ACCEL = 500 / 1000.0f / 1000.0f;
 constexpr float CORRECTION_ACCEL = 200 / 1000.0f / 1000.0f;
 constexpr float JUMP_VELOCITY = 250 / 1000.0f;
 
+constexpr float BEING_DEATH_DELAY_MS = 1500;
+
 // enum for direction being is facing
 enum class Facing {
     RIGHT,
@@ -50,6 +52,7 @@ protected:
     float movement_accel = MOVE_ACCEL;
     float target_x_vel = 0;
     int action_start_ts = 0;
+    int destroy_at_ts = 0;
 
     void resetJumps();
     void doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects) override;
@@ -62,7 +65,7 @@ protected:
 public:
     Being();
     void init(BeingType type);
-    int getHp() { return hp; }
+    bool dead();
     void jump();
     bool canJump();
     bool isOnGround();

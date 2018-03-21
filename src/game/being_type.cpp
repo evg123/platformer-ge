@@ -23,6 +23,7 @@ BeingType& BeingType::player() {
             5, 7, // walking
             8, 8, // jump
             9, 9, // braking
+            4, 4, // dead
         };
         this_type.hp = 1;
         this_type.damage = 1;
@@ -54,6 +55,7 @@ BeingType& BeingType::redEnemy() {
             5, 9, // walking
             3, 3, // jump
             9, 9, // braking
+            2, 2, // dead
         };
         this_type.hp = 1;
         this_type.damage = 1;
@@ -85,6 +87,7 @@ BeingType& BeingType::blueEnemy() {
             5, 9, // walking
             4, 4, // jump
             9, 9, // braking
+            3, 3, // dead
         };
         this_type.hp = 1;
         this_type.damage = 1;

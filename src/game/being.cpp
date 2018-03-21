@@ -57,13 +57,23 @@ bool Being::canJump() {
     return isOnGround() || air_jumps > 0;
 }
 
+bool Being::dead() {
+    return hp <= 0;
+}
+
 void Being::update(int delta, std::vector<Drawable*> &objects) {
-    performAction(delta);
+    if (!dead()) {
+        performAction(delta);
+        Drawable::update(delta, objects);
+    }
 
-    Drawable::update(delta, objects);
-
-    if (hp <= 0) {
-        destroy();
+    if (dead()) {
+        int now = SDL_GetTicks();
+        if (destroy_at_ts == 0) {
+            destroy_at_ts = now + BEING_DEATH_DELAY_MS;
+        } else if (now >= destroy_at_ts) {
+            destroy();
+        }
     }
 
     updateSprite();
@@ -239,7 +249,9 @@ void Being::stopLeft() {
 
 void Being::updateSprite() {
     //SDL_Log("%d", isOnGround());
-    if (!isOnGround()) {
+    if (dead()) {
+        sprite.setDead();
+    } else if (!isOnGround()) {
         sprite.setJumping();
     } else if (x_vel == 0.0f) {
         sprite.setIdle();

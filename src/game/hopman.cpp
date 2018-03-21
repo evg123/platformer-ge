@@ -140,18 +140,13 @@ void Hopman::createPauseMenu() {
     int menu_x = (Graphics::instance().getWindowWidth() / 2) - (PAUSE_MENU_WIDTH / 2);
     int menu_y = (Graphics::instance().getWindowHeight() / 2) - (PAUSE_MENU_HEIGHT / 2);
     Menu *menu = new Menu({menu_x, menu_y, PAUSE_MENU_WIDTH, PAUSE_MENU_HEIGHT},
-                          ResourceManager::instance().getImageTexture(MAIN_MENU_BG_IMG));
+                          ResourceManager::instance().getImageTexture(MAIN_MENU_BG_IMG),
+                          PAUSE_MENU_TOP_PAD, PAUSE_MENU_BOT_PAD);
     
-    menu->addItem("Pause Menu", 50,
-                  {0, 0, PAUSE_MENU_WIDTH - (MENU_SIDE_PADDING * 2), PAUSE_MENU_BTN_HEIGHT},
-                  NULL,
-                  NULL);
-    menu->addItem("Restart", 42,
-                  {0, 0, PAUSE_MENU_WIDTH - (MENU_SIDE_PADDING * 2), PAUSE_MENU_BTN_HEIGHT},
-                  ResourceManager::instance().getImageTexture(BUTTON_IMG),
-                  NULL);
+    menu->addItem("Pause Menu", 50, ResourceManager::instance().getImageTexture(MENU_TITLE_IMG), NULL);
+    menu->addItem("Restart", 42, ResourceManager::instance().getImageTexture(BUTTON_IMG),
+                  std::bind(&Hopman::restartGame, this));
     menu->addItem("Quit", 42,
-                  {0, 0, PAUSE_MENU_WIDTH - (MENU_SIDE_PADDING * 2), PAUSE_MENU_BTN_HEIGHT},
                   ResourceManager::instance().getImageTexture(BUTTON_IMG),
                   std::bind(&Hopman::exitGame, this));
     
@@ -209,7 +204,7 @@ void Hopman::update(int delta) {
  */
 void Hopman::removeDestroyed() {
     // check if the player was killed
-    if (player.needsRemoval()) {
+    if (player.dead() || player.needsRemoval()) {
         tryRespawn();
     }
 
@@ -253,15 +248,25 @@ void Hopman::pause() {
 }
 
 /**
+ Restart the game from the starting level
+ */
+void Hopman::restartGame() {
+    // restart game
+    level = STARTING_LEVEL;
+    score = 0;
+    lives = DEFAULT_EXTRA_LIVES;
+    setupLevel();
+
+    // unpause in case we restarted from the menu
+    Gui::instance().setGroupDisplay(GuiGroupId::PAUSE, false);
+}
+
+/**
  Check if the user is ready to move on from the end of a level / loss
  */
 void Hopman::advanceScreen() {
     if (game_state == GameState::LOSS) {
-        // restart game
-        level = STARTING_LEVEL;
-        score = 0;
-        lives = DEFAULT_EXTRA_LIVES;
-        setupLevel();
+        restartGame();
     } else if (game_state == GameState::LEVEL_WON) {
         // move to next level
         ++level;
@@ -371,19 +376,26 @@ void Hopman::setupLevel() {
 
     // instantiate level objects
     bool have_player = false;
+    bool have_goal = false;
     for (int tx = 0; tx < lvl_conf.tiles.size(); ++tx) {
         for (int ty = 0; ty < lvl_conf.tiles[0].size(); ++ty) {
             int tile_num = lvl_conf.tiles[tx][ty];
             if (tile_num == TileNum::PLAYER) {
                 have_player = true;
+            } else if (tile_num == TileNum::GOAL) {
+                have_goal = true;
             }
             add_tile(tile_num, tx, ty);
         }
     }
 
-    // make sure we had a player tile in the level
+    // make sure we have a player tile in the level
     if (!have_player) {
         throw std::runtime_error("Invalid level file, no player tile found!");
+    }
+    // make sure we have a goal tile in the level
+    if (!have_goal) {
+        throw std::runtime_error("Invalid level file, no goal tile found!");
     }
 
     // setup background layers

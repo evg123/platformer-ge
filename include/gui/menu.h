@@ -25,7 +25,7 @@ public:
     SDL_Rect text_rect;
     SDL_Rect box_rect;
     
-    MenuItem(std::string name, int font_size, SDL_Rect rect, SDL_Texture *texture, std::function<void()> callback);
+    MenuItem(std::string name, int font_size, SDL_Texture *texture, std::function<void()> callback);
     void render();
     void pressButton();
 };
@@ -35,12 +35,15 @@ private:
     std::vector<MenuItem*> items;
     SDL_Rect rect;
     SDL_Texture *texture;
+    int top_padding;
+    int bottom_padding;
 
     void repositionItems();
 public:
     Menu(SDL_Rect rect, SDL_Texture *texture);
+    Menu(SDL_Rect rect, SDL_Texture *texture, int top_padding, int bottom_padding);
     void render();
-    void addItem(std::string text, int font_size, SDL_Rect btn_size, SDL_Texture *texture, std::function<void()> callback);
+    void addItem(std::string text, int font_size, SDL_Texture *texture, std::function<void()> callback);
     bool handleClick(int xpos, int ypos);
 };
 

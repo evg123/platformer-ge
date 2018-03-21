@@ -33,6 +33,9 @@ void Sprite::setState(SpriteState state) {
     } else if (state == SpriteState::BRAKING) {
         frame_start = frame_config.braking_frame_start;
         frame_count = frame_config.braking_frame_final - frame_config.braking_frame_start + 1;
+    } else if (state == SpriteState::DEAD) {
+        frame_start = frame_config.dead_frame_start;
+        frame_count = frame_config.dead_frame_final - frame_config.dead_frame_start + 1;
     }
     setFrame(frame_start);
     start_time = SDL_GetTicks();

@@ -42,11 +42,12 @@ constexpr auto LEVEL_FILE_PREFIX = "./Assets/levels/level_";
 
 constexpr int DEFAULT_EXTRA_LIVES = 2;
 
-constexpr int PAUSE_MENU_WIDTH = 450;
+constexpr int PAUSE_MENU_WIDTH = 500;
 constexpr int PAUSE_MENU_HEIGHT = 500;
-constexpr int MENU_SIDE_PADDING = 20;
+constexpr int PAUSE_MENU_TOP_PAD = 50;
+constexpr int PAUSE_MENU_BOT_PAD = 100;
 constexpr auto MAIN_MENU_BG_IMG = "ui/pause_menu.png";
-constexpr int PAUSE_MENU_BTN_HEIGHT = 120;
+constexpr auto MENU_TITLE_IMG = "ui/button_blank.png";
 constexpr auto BUTTON_IMG = "ui/button.png";
 
 constexpr auto STATUS_BAR_IMG = "ui/status_bar.png";
@@ -124,6 +125,7 @@ private:
     bool checkRemoval(Drawable *obj);
     void removeDestroyed();
     void tryRespawn();
+    void restartGame();
     void cleanupLevel();
     void hitGoal(Drawable &other);
 
