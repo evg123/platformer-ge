@@ -66,10 +66,16 @@ void Input::handleEvents() {
     }
 }
 
+/**
+ Add a callback to be called when action occurs
+ */
 void Input::registerCallback(Action action, std::function<void()> callback) {
     callbacks[action] = callback;
 }
 
+/**
+ Do the callback associated with action
+ */
 void Input::callAction(Action action) {
     callbacks[action]();
 }
@@ -107,6 +113,9 @@ void Input::handleKey(SDL_Scancode key, bool pressed) {
     }
 }
 
+/**
+ Pass a click to the GUI
+ */
 void Input::handleClick(int xpos, int ypos, bool released) {
     bool handled = Gui::instance().handleClick(xpos, ypos, released);
     if (!handled) {

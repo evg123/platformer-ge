@@ -13,7 +13,8 @@
 #include "SDL2.framework/Headers/SDL.h"
 
 /**
- Holds collision and rendering size info and moves them as one
+ Holds a collision rect.
+ Also has padding for drawing the rect larger than its collision rect
  */
 class EvgRect {
 private:

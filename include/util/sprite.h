@@ -1,6 +1,6 @@
 //
 //  sprite.h
-//  platformer
+//  Code related to sprites
 //
 //  Created by Vande Griek, Eric on 3/6/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
@@ -17,6 +17,9 @@ constexpr int FRAMES_PER_LINE = 5;
 
 constexpr int TICKS_PER_FRAME = 150;
 
+/**
+ The list of states that a sprite can be in
+ */
 enum class SpriteState {
     NONE,
     IDLE,
@@ -26,6 +29,9 @@ enum class SpriteState {
     DEAD,
 };
 
+/**
+ Struct that holds indexes for mapping sprite states onto a sprite sheet
+ */
 struct FrameConfig {
     int idle_frame_start;
     int idle_frame_final;
@@ -39,6 +45,9 @@ struct FrameConfig {
     int dead_frame_final;
 };
 
+/**
+ Represents a sprite and manages its transition between states
+ */
 class Sprite {
 private:
     SpriteState current_state = SpriteState::NONE;
@@ -52,14 +61,20 @@ private:
     void setFrame(int frame);
 public:
     void init(FrameConfig frame_config);
+    /** Get the current source rect from the sprite sheet */
     SDL_Rect& getFrameRect() { return frame_rect; }
     void setState(SpriteState state);
     void update();
 
+    /** set the sprite to the walking state */
     void setWalking() { setState(SpriteState::WALKING); }
+    /** set the sprite to the idle state */
     void setIdle() { setState(SpriteState::IDLE); }
+    /** set the sprite to the jumping state */
     void setJumping() { setState(SpriteState::JUMPING); }
+    /** set the sprite to the braking state */
     void setBraking() { setState(SpriteState::BRAKING); }
+    /** set the sprite to the dead state */
     void setDead() { setState(SpriteState::DEAD); }
 };
 

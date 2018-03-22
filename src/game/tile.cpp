@@ -1,7 +1,4 @@
 //
-//  tile.cpp
-//  platformer
-//
 //  Created by Vande Griek, Eric on 3/1/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
@@ -9,6 +6,9 @@
 #include <stdio.h>
 #include "tile.h"
 
+/**
+ Create a new tile that corresponds to tile_num
+ */
 Tile::Tile(int tile_num) {
     // choose texture based on tile_num
     std::string tile_texture = TEXTURE_PREFIX + std::to_string(tile_num) + TEXTURE_SUFFIX;
@@ -32,6 +32,9 @@ void Tile::update(int delta, std::vector<Drawable*> &objects) {
     // tiles don't do anything
 }
 
+/**
+ Draw the tile onto the screen
+ */
 void Tile::render() {
     int screen_off_x, screen_off_y;
     std::tie(screen_off_x, screen_off_y) = Graphics::instance().getScreenOffsets();

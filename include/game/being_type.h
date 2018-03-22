@@ -65,6 +65,4 @@ public:
     ActionType action_type;
 };
 
-extern BeingType PLAYER_TYPE;
-
 #endif /* player_h */

@@ -1,7 +1,4 @@
 //
-//  menu.cpp
-//  platformer
-//
 //  Created by Vande Griek, Eric on 3/8/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
@@ -10,6 +7,9 @@
 
 // Button definitions
 
+/**
+ Create a new title or button for a Menu
+ */
 MenuItem::MenuItem(std::string name, int font_size, SDL_Texture *texture,
                    std::function<void()> callback, bool interactive)
 : box_texture(texture), callback(callback), interactive(interactive) {
@@ -25,6 +25,9 @@ MenuItem::MenuItem(std::string name, int font_size, SDL_Texture *texture,
     pressed = false;
 }
 
+/**
+ Draw the item
+ */
 void MenuItem::render() {
     SDL_Renderer *renderer = Graphics::instance().getRenderer();
     // background can be transparent
@@ -43,30 +46,51 @@ void MenuItem::render() {
     SDL_RenderCopy(renderer, text_texture, NULL, &text_rect);
 }
 
+/**
+ Call the callback for a button
+ */
 void MenuItem::activateButton() {
     if (callback != NULL) {
         callback();
     }
 }
 
+/**
+ Show the button as depressed
+ */
 void MenuItem::pressButton() {
     pressed = true;
 }
 
+/**
+ Show the button as released
+ */
 void MenuItem::releaseButton() {
     pressed = false;
 }
 
 // Menu definitions
 
+/**
+ Create a new Menu.
+ It will not have any buttons until they are added with addItem().
+ This constructor allows you to add padding to the top and/or bottom of the menu
+ */
 Menu::Menu(SDL_Rect rect, SDL_Texture *texture, int top_padding, int bottom_padding)
 : rect(rect), texture(texture), top_padding(top_padding), bottom_padding(bottom_padding) {
 }
 
+/**
+ Create a new Menu.
+ It will not have any buttons until they are added with addItem().
+ */
 Menu::Menu(SDL_Rect rect, SDL_Texture *texture)
 : Menu(rect, texture, 0, 0) {
 }
 
+/**
+ Draw the Menu
+ */
 void Menu::render() {
     SDL_Renderer *renderer = Graphics::instance().getRenderer();
     SDL_RenderCopy(renderer, texture, NULL, &rect);
@@ -76,6 +100,12 @@ void Menu::render() {
     }
 }
 
+/**
+ Add a new item or title to the menu.
+ It will be added to the end of the menu and spaced based on how many
+ other items are already in the menu.
+ This will also re-position the other items in the menu.
+ */
 void Menu::addItem(std::string text, int font_size, SDL_Texture *texture,
                    std::function<void()> callback, bool interactive) {
     MenuItem *item = new MenuItem(text, font_size, texture, callback, interactive);
@@ -113,6 +143,9 @@ void Menu::repositionItems() {
     }
 }
 
+/**
+ Handle a click and activate a button if it is pressed
+ */
 bool Menu::handleClick(int xpos, int ypos, bool released) {
     SDL_Point pnt = {xpos, ypos};
 
@@ -138,6 +171,9 @@ bool Menu::handleClick(int xpos, int ypos, bool released) {
     return true;
 }
 
+/**
+ Release all buttons
+ */
 void Menu::releaseAll() {
     for (auto item : items) {
         if (item->interactive) {

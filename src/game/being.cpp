@@ -1,17 +1,23 @@
 //
-//  being.cpp
-//  platformer
-//
 //  Created by Vande Griek, Eric on 3/5/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
 
 #include "being.h"
 
-Being::Being() {}
-
+/**
+ Set up the being using the passed in type
+ */
 void Being::init(BeingType type) {
     marked_for_removal = false;
+    air_jumps = 0;
+    jump_vel = JUMP_VELOCITY;
+    jump_start_ts = 0;
+    last_grounded = 0;
+    movement_accel = MOVE_ACCEL;
+    target_x_vel = 0;
+    action_start_ts = 0;
+    destroy_at_ts = 0;
     x_vel = 0;
     y_vel = 0;
     x_accel = 0;
@@ -34,16 +40,25 @@ void Being::init(BeingType type) {
     max_air_jumps = type.max_air_jumps;
 }
 
+/**
+ Return true if the being is currently considered on the ground
+ */
 bool Being::isOnGround() {
     //TODO could calculate this once on update
     unsigned int diff = SDL_GetTicks() - last_grounded;
     return diff <= JUMP_TOLERANCE_MS;
 }
 
+/**
+ Reset the being's jumps, such as when they land
+ */
 void Being::resetJumps() {
     air_jumps = max_air_jumps;
 }
 
+/**
+ Initiate a jump
+ */
 void Being::jump() {
     if (canJump()) {
         jump_start_ts = SDL_GetTicks();
@@ -54,10 +69,16 @@ void Being::jump() {
     }
 }
 
+/**
+ True if the being is allowed to jump currently
+ */
 bool Being::canJump() {
     return isOnGround() || air_jumps > 0;
 }
 
+/**
+ True if the being has died
+ */
 bool Being::dead() {
     return hp <= 0;
 }
@@ -80,6 +101,9 @@ void Being::update(int delta, std::vector<Drawable*> &objects) {
     updateSprite();
 }
 
+/**
+ Draw the being to the screen
+ */
 void Being::render() {
     int screen_off_x, screen_off_y;
     std::tie(screen_off_x, screen_off_y) = Graphics::instance().getScreenOffsets();
@@ -141,12 +165,19 @@ void Being::performAction(int delta) {
     }
 }
 
+/**
+ Try to move the being up to x_offset and y_offset
+ */
 void Being::doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects) {
     //TODO override no longer needed
     // call the superclass doMove
     Drawable::doMove(x_offset, y_offset, objects);
 }
 
+/**
+ Update the being based on it colliding with other.
+ One of x_off or y_off will be set to indicate the direction the being collided with other
+ */
 void Being::processCollision(Drawable &other, float x_off, float y_off) {
     // do the default
     Drawable::processCollision(other, x_off, y_off);
@@ -161,6 +192,9 @@ void Being::processCollision(Drawable &other, float x_off, float y_off) {
     }
 }
 
+/**
+ Called when this being hits a drawable
+ */
 void Being::hitOther(Drawable &other) {
     if (other.isBouncy()) {
         y_vel = -jump_vel;
@@ -168,16 +202,25 @@ void Being::hitOther(Drawable &other) {
     }
 }
 
+/**
+ Called when this being is hit by other
+ */
 void Being::hitBy(Drawable &other) {
     takeDamage(other.getDamage());
 }
 
+/**
+ Called when this being bumps into other
+ */
 void Being::ranInto(Drawable &other) {
     if (!bump_immune) {
         takeDamage(other.getDamage());
     }
 }
 
+/**
+ Apply damage to this being
+ */
 void Being::takeDamage(int damage) {
     hp -= damage;
     Audio::instance().playSound(type.damaged_sound);
@@ -250,24 +293,41 @@ void Being::applyAcceleration(int delta) {
     }
 }
 
+/**
+ Set this being to try to move to the right.
+ Goes until stopRight is called.
+ */
 void Being::moveRight() {
     target_x_vel += top_speed;
     facing = Facing::RIGHT;
 }
 
+/**
+ Begin to stop moving to the right
+ */
 void Being::stopRight() {
     target_x_vel = std::max(0.0f, target_x_vel - top_speed);
 }
 
+/**
+ Set this being to try to move to the left.
+ Goes until stopLeft is called.
+ */
 void Being::moveLeft() {
     target_x_vel -= top_speed;
     facing = Facing::LEFT;
 }
 
+/**
+ Begin to stop moving to the left
+ */
 void Being::stopLeft() {
     target_x_vel = std::min(0.0f, target_x_vel + top_speed);
 }
 
+/**
+ Update the state of this being's sprite based on what the being is doing
+ */
 void Being::updateSprite() {
     //SDL_Log("%d", isOnGround());
     if (dead()) {

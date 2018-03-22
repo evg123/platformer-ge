@@ -28,6 +28,9 @@ void EvgRect::move(int x_offset, int y_offset) {
     setPosition(collider.x + x_offset, collider.y + y_offset);
 }
 
+/**
+ Set the padding around the collition rect to use when rendering
+ */
 void EvgRect::setRenderPadding(int top, int right, int bot, int left) {
     pad_top = top;
     pad_right = right;
@@ -35,11 +38,17 @@ void EvgRect::setRenderPadding(int top, int right, int bot, int left) {
     pad_left = left;
 }
 
+/**
+ Set the size of the collision rect
+ */
 void EvgRect::setColliderSize(int width, int height) {
     collider.w = width;
     collider.h = height;
 }
 
+/**
+ Fill in the passed in rect based on how this EvgRect should be rendered
+ */
 void EvgRect::fillRenderRect(SDL_Rect &render_rect, int screen_off_x, int screen_off_y) {
     render_rect.x = collider.x - screen_off_x - pad_left;
     render_rect.y = collider.y - screen_off_y - pad_top;

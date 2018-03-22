@@ -1,6 +1,6 @@
 //
 //  menu.h
-//  platformer
+//  A menu that is part of the GUI
 //
 //  Created by Vande Griek, Eric on 3/8/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
@@ -20,6 +20,10 @@ constexpr Uint8 PRESSED_RED_MOD = 200;
 constexpr Uint8 PRESSED_GREEN_MOD = 200;
 constexpr Uint8 PRESSED_BLUE_MOD = 200;
 
+/**
+ One element of a menu.
+ Can be a button or just a static title
+ */
 class MenuItem {
 private:
     SDL_Texture *text_texture;
@@ -39,6 +43,9 @@ public:
     void releaseButton();
 };
 
+/**
+ Holds draws and updates menu items.
+ */
 class Menu {
 private:
     std::vector<MenuItem*> items;

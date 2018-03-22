@@ -1,6 +1,6 @@
 //
 //  tile.h
-//  platformer
+//  Tile that makes up the structure of a level
 //
 //  Created by Vande Griek, Eric on 3/1/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
@@ -22,6 +22,10 @@ constexpr auto TEXTURE_SUFFIX = ".png";
 constexpr int DAMAGE_TILE_DAMAGE = 1;
 
 // these should be in a config file so they can be shared with the level creator
+/**
+ Mapping of tile type to tile number.
+ Used by the level creator as well.
+ */
 enum TileNum {
     EMPTY = 0,
     DIRT = 1,
@@ -33,6 +37,9 @@ enum TileNum {
     BLUE_ENEMY = 7,
 };
 
+/**
+ Class representing one tile in the grid of tiles that makes up a level
+ */
 class Tile : public Drawable {
 private:
     int tile_num;

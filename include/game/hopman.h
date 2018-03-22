@@ -84,22 +84,26 @@ struct LevelConfig {
     std::vector<std::vector<int>> tiles;
 };
 
+/**
+ Main class for the Hopman platformer
+ Most of the game logic is handled by this class.
+ */
 class Hopman {
 private:
-    int level = STARTING_LEVEL;
-    GameState game_state = GameState::PAUSED;
+    int level;
+    GameState game_state;
     bool paused;
-    int fps_limit = DEFAULT_FPS_LIMIT;
-    int score = 0;
-    int lives = DEFAULT_EXTRA_LIVES;
+    int fps_limit;
+    int score;
+    int lives;
 
-    bool display_fps = false;
-    int fps_display = 0;
+    bool display_fps;
+    int fps_display;
     std::string game_message;
 
     Being player;
     Background background;
-    std::vector<Drawable*> objects = {};
+    std::vector<Drawable*> objects;
     /** player dies if they fall past here */
     int lower_bound;
 

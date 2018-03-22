@@ -6,16 +6,6 @@
 #include "drawable.h"
 
 /**
- Create a new drawable
- */
-Drawable::Drawable() {}
-
-/**
- Deallocate
- */
-Drawable::~Drawable() {}
-
-/**
  Mark the drawable for removal at the next sweep
  */
 void Drawable::destroy() {
@@ -154,6 +144,10 @@ void Drawable::doMove(float x_offset, float y_offset, std::vector<Drawable*> &ob
     }
 }
 
+/**
+ Take action based on a collision with other.
+ Only one of x_off or y_off will be filled in.
+ */
 void Drawable::processCollision(Drawable &other, float x_off, float y_off) {
     // stop our momentum
     if (x_off != 0) {
@@ -198,7 +192,6 @@ void Drawable::processCollision(Drawable &other, float x_off, float y_off) {
         ranInto(other);
         other.ranInto(*this);
     }
-    
 }
 
 /**

@@ -1,6 +1,6 @@
 //
 //  gui.h
-//  platformer
+//  Classes related to the graphical user interface of the game
 //
 //  Created by Vande Griek, Eric on 3/9/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
@@ -28,6 +28,9 @@ enum GuiGroupId {
     __END__ // do not use, must be last
 };
 
+/**
+ Draws and handles interaction with the graphical user interface
+ */
 class Gui {
 private:
     Gui();

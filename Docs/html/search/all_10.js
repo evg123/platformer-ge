@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['setacceleration',['setAcceleration',['../class_drawable.html#a307a6ce1237bfdc520556100e167d6a2',1,'Drawable']]],
+  ['setbgtrack',['setBgTrack',['../class_audio.html#af8459bbc0d2ac95b3069f54baf9e47cf',1,'Audio']]],
+  ['setbraking',['setBraking',['../class_sprite.html#acd75b1e8367d618a3db2d0f556a04782',1,'Sprite']]],
+  ['setcollidersize',['setColliderSize',['../class_evg_rect.html#a71538383cc5862e3f6fb6626c0cc7eba',1,'EvgRect']]],
+  ['setcollisioncallback',['setCollisionCallback',['../class_drawable.html#aabf82e3bdd6c059dc244291c8029e253',1,'Drawable']]],
+  ['setcolor',['setColor',['../class_background.html#a13409fea7d9f99b81b6668b642bf87f2',1,'Background']]],
+  ['setdamage',['setDamage',['../class_drawable.html#abb81c04995e27f5003e43d976a65f23f',1,'Drawable']]],
+  ['setdead',['setDead',['../class_sprite.html#a35416c3ff41643e187a87fb110534901',1,'Sprite']]],
+  ['setgroupdisplay',['setGroupDisplay',['../class_gui.html#aacd26b65bca85ac3daa80076fd27b442',1,'Gui']]],
+  ['setidle',['setIdle',['../class_sprite.html#ade21b994ed58aca679e354a3c071d231',1,'Sprite']]],
+  ['setjumping',['setJumping',['../class_sprite.html#aad49ce9ce0283e8885c8fd0db27acdbd',1,'Sprite']]],
+  ['setposition',['setPosition',['../class_drawable.html#a64d13472bc980bf4190d4ef32b76958a',1,'Drawable::setPosition()'],['../class_evg_rect.html#ae57c1bf2968d7ed58f319c56fa3992f1',1,'EvgRect::setPosition()']]],
+  ['setrenderpadding',['setRenderPadding',['../class_evg_rect.html#a12d06fbc475721795ca5861a22413c16',1,'EvgRect']]],
+  ['setstate',['setState',['../class_sprite.html#ab2da0a879632892d8065a6db4b2c3893',1,'Sprite']]],
+  ['setvelocity',['setVelocity',['../class_drawable.html#a6a69578dc11aa87f945b865f31bacf8c',1,'Drawable']]],
+  ['setwalking',['setWalking',['../class_sprite.html#ab6bd533ec9fca264c6f24e9fa305f0ca',1,'Sprite']]],
+  ['shutdown',['shutdown',['../class_hopman.html#aca8607b0dd55539225de275d89eaf513',1,'Hopman::shutdown()'],['../class_gui.html#ada58feae70f01eb9cacc012d4b2f7d56',1,'Gui::shutdown()'],['../class_audio.html#a12e01b689e10895737b1a2e98c937d24',1,'Audio::shutdown()'],['../class_background.html#a77cc92d39b484c957c3a4815198e0428',1,'Background::shutdown()'],['../class_graphics.html#a7d5b0e2f900f864820c9e1c2bcf5f309',1,'Graphics::shutdown()'],['../class_input.html#a38019b2111c789cfc6fff651b6ecfe19',1,'Input::shutdown()'],['../class_resource_manager.html#a4f37986f5f3ee7927477a002a17466f5',1,'ResourceManager::shutdown()']]],
+  ['sprite',['Sprite',['../class_sprite.html',1,'']]],
+  ['stopleft',['stopLeft',['../class_being.html#a61e8507d90c33ec56eb3a3c73f2c218c',1,'Being']]],
+  ['stopright',['stopRight',['../class_being.html#ad8d8c6a5f3720d035322f6af91555507',1,'Being']]],
+  ['swapframe',['swapFrame',['../class_graphics.html#a2936dd5cc157daddc4ca9e42c76c44b6',1,'Graphics']]]
+];

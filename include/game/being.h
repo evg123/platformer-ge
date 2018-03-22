@@ -26,12 +26,18 @@ constexpr float MOVE_ACCEL = 500 / 1000.0f / 1000.0f;
 constexpr float CORRECTION_ACCEL = 200 / 1000.0f / 1000.0f;
 constexpr float JUMP_VELOCITY = 250 / 1000.0f;
 
-// enum for direction being is facing
+/**
+ enum for direction being is facing
+ */
 enum class Facing {
     RIGHT,
     LEFT,
 };
 
+/**
+ A Being represents a character in the game world.
+ Can be a player or an enemy depending on its BeingType.
+ */
 class Being : public Drawable {
 protected:
     BeingType type;
@@ -45,14 +51,14 @@ protected:
     int max_air_jumps;
     bool bump_immune; // are we hurt by walking into other beings?
 
-    int air_jumps = 0;
-    float jump_vel = JUMP_VELOCITY;
-    int jump_start_ts = 0; // 0 means not jumping
-    unsigned int last_grounded = 0; // ts of the last time we landed on something
-    float movement_accel = MOVE_ACCEL;
-    float target_x_vel = 0;
-    int action_start_ts = 0;
-    int destroy_at_ts = 0;
+    int air_jumps;
+    float jump_vel;
+    int jump_start_ts; // 0 means not jumping
+    unsigned int last_grounded; // ts of the last time we landed on something
+    float movement_accel;
+    float target_x_vel;
+    int action_start_ts;
+    int destroy_at_ts;
 
     void resetJumps();
     void doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects) override;
@@ -64,7 +70,6 @@ protected:
     void applyAcceleration(int delta) override;
     void takeDamage(int damage);
 public:
-    Being();
     void init(BeingType type);
     bool dead();
     void jump();

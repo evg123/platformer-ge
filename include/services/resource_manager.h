@@ -1,6 +1,6 @@
 //
 //  resource_manager.h
-//  loads and saves game assets
+//  Singleton that loads and saves game assets
 //
 //  Created by Vande Griek, Eric on 2/22/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
@@ -22,7 +22,6 @@
 constexpr auto IMAGE_DIR = "./Assets/images/";
 constexpr auto MUSIC_DIR = "./Assets/music/";
 constexpr auto SOUNDS_DIR = "./Assets/sounds/";
-
 constexpr auto FONT_FILE = "./Assets/fonts/space-mono/SpaceMono-Bold.ttf";
 
 /**

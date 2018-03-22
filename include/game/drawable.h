@@ -49,8 +49,8 @@ protected:
     virtual void doMove(float x_offset, float y_offset, std::vector<Drawable*> &objects);
     virtual void processCollision(Drawable &other, float x_off, float y_off);
 public:
-    Drawable();
-    virtual ~Drawable();
+    /** Destructor */
+    virtual ~Drawable() {};
     // update based on delta in ms since last update
     virtual void update(int delta, std::vector<Drawable*> &objects);
     virtual void render() = 0;
@@ -58,19 +58,26 @@ public:
     virtual EvgRect& getRect() { return rect; }
     /** Get the number of points earned for destroying this object */
     int getScoreOnDestruction() { return score_on_destruction; }
+    /** Return the amount of damage this drawable does when it hits something */
     int getDamage() { return damage; }
+    /** Return true if things will bounce off of this drawable */
     bool isBouncy() { return bouncy; }
     void setColor(int color_r, int color_g, int color_b, int alpha);
     void setVelocity(float x_vel, float y_vel);
     void setAcceleration(float x_acceleration, float y_acceleration);
     virtual void setPosition(int x_pos, int y_pos);
+    /** Set the amount of damage this drawable does when it hits something */
     void setDamage(int damage) { this->damage = damage; }
+    /** Set the callback that gets called on collision */
     void setCollisionCallback(std::function<void(Drawable&)> callback) { collision_callback = callback; }
     /** true if this object needs to be cleaned up */
     bool needsRemoval() { return marked_for_removal; }
     void destroy();
+    /** Called when this drawable hits another. Default does nothing */
     virtual void hitOther(Drawable &other) {};
+    /** Called when this drawable is hit by another. Default does nothing */
     virtual void hitBy(Drawable &other) {};
+    /** Called when this drawable bumps into another. Default does nothing */
     virtual void ranInto(Drawable &other) {};
 };
 
@@ -84,6 +91,7 @@ struct CollisionRecord {
     float diff;
     Drawable *other;
 
+    /** Comparison operator so records can be sorted by the time they occurred */
     bool operator<(const CollisionRecord &rhs) const { return time > rhs.time; }
 };
 

@@ -1,7 +1,4 @@
 //
-//  player.cpp
-//  platformer
-//
 //  Created by Vande Griek, Eric on 3/1/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
@@ -10,6 +7,9 @@
 
 // these should be read from a config file instead of statically defined
 
+/**
+ Get the BeingType for a player
+ */
 BeingType& BeingType::player() {
     static BeingType this_type;
     static bool init_done = false;
@@ -53,6 +53,9 @@ BeingType& BeingType::player() {
     return this_type;
 }
 
+/**
+ Get the BeingType for a red enemey
+ */
 BeingType& BeingType::redEnemy() {
     static BeingType this_type;
     static bool init_done = false;
@@ -96,6 +99,9 @@ BeingType& BeingType::redEnemy() {
     return this_type;
 }
 
+/**
+ Get the BeingType for a blue enemy
+ */
 BeingType& BeingType::blueEnemy() {
     static BeingType this_type;
     static bool init_done = false;

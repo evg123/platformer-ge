@@ -1,6 +1,6 @@
 //
 //  input.h
-//  handles player input
+//  Singleton that handles player input
 //
 //  Created by Vande Griek, Eric on 2/22/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
@@ -28,6 +28,9 @@ constexpr SDL_Scancode KEY_LEFT_1 = SDL_SCANCODE_A;
 constexpr SDL_Scancode KEY_LEFT_2 = SDL_SCANCODE_LEFT;
 constexpr SDL_Scancode KEY_JUMP = SDL_SCANCODE_SPACE;
 
+/**
+ Actions that correspond to inputs from the player
+ */
 enum class Action {
     EXIT_GAME,
     ADVACNE,
@@ -61,7 +64,6 @@ public:
     void shutdown();
     void handleEvents();
     void registerCallback(Action action, std::function<void()> callback);
-    
 };
 
 #endif /* input_h */

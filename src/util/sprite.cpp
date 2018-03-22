@@ -1,18 +1,23 @@
 //
-//  sprite.cpp
-//  platformer
-//
 //  Created by Vande Griek, Eric on 3/6/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
 
 #include "sprite.h"
 
+/**
+ Set up this sprite based on the frame_config struct that defines
+ the parts of the sprite sheet to use for each sprite state
+ */
 void Sprite::init(FrameConfig frame_config) {
     this->frame_config = frame_config;
     setState(SpriteState::IDLE);
 }
 
+/**
+ Set the sprite to be in the given state.
+ Start out on the first frame of the state, unless we are already in that state
+ */
 void Sprite::setState(SpriteState state) {
     if (state == current_state) {
         // nothing to do
@@ -41,6 +46,9 @@ void Sprite::setState(SpriteState state) {
     start_time = SDL_GetTicks();
 }
 
+/**
+ Update the sprite to be in its next frame if enough time has passed
+ */
 void Sprite::update() {
     unsigned int diff = SDL_GetTicks() - start_time;
     int new_frame = frame_start + (diff / TICKS_PER_FRAME) % frame_count;
@@ -50,6 +58,9 @@ void Sprite::update() {
     }
 }
 
+/**
+ Update the current frame to be drawn for this sprite
+ */
 void Sprite::setFrame(int frame) {
     current_frame = frame;
     int xpos = (frame % FRAMES_PER_LINE) * FRAME_WIDTH;

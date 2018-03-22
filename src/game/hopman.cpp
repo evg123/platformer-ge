@@ -19,8 +19,16 @@ void Hopman::init() {
     Audio::instance().init();
     Input::instance().init();
     Gui::instance().init();
-    
+
+    objects = {};
+    display_fps = false;
+    fps_display = 0;
     paused = false;
+    level = STARTING_LEVEL;
+    game_state = GameState::PAUSED;
+    fps_limit = DEFAULT_FPS_LIMIT;
+    score = 0;
+    lives = DEFAULT_EXTRA_LIVES;
 }
 
 /**
@@ -98,12 +106,18 @@ void Hopman::registerInputCallbacks() {
     Input::instance().registerCallback(Action::JUMP, std::bind(&Being::jump, &player));
 }
 
+/**
+ Set up the UI for the game
+ */
 void Hopman::createUI() {
     createStatusBar();
     createPauseMenu();
     createGameMessage();
 }
 
+/**
+ Set up the status bar displayed at the top of the screen
+ */
 void Hopman::createStatusBar() {
     // bar background
     GuiElement *elem = new GuiElement({0, STATUS_BAR_Y, Graphics::instance().getWindowWidth(), 50},
@@ -157,6 +171,9 @@ void Hopman::createPauseMenu() {
     Gui::instance().add(GuiGroupId::PAUSE, menu);
 }
 
+/**
+ Set up the message occasionally displayed across the center of the screen
+ */
 void Hopman::createGameMessage() {
     // render a message of max length and get its size in order to center the message
     int msg_w, msg_h;
@@ -173,6 +190,9 @@ void Hopman::createGameMessage() {
     game_message.reserve(GAME_MESSAGE_MAX_LEN);
 }
 
+/**
+ Set the message displayed at the center of the screen
+ */
 void Hopman::setGameMessage(std::string new_msg) {
     if (new_msg.length() > GAME_MESSAGE_MAX_LEN) {
         throw std::runtime_error("Game message is too long: " + new_msg);
@@ -346,6 +366,10 @@ void Hopman::add_tile(int tile_type, int tx, int ty) {
     objects.push_back(obj);
 }
 
+/**
+ Called when something hits a goal tile.
+ If its the player then they beat the level
+ */
 void Hopman::hitGoal(Drawable& other) {
     if (&other == &player) {
         setGameMessage("YOU WIN!");
@@ -354,6 +378,9 @@ void Hopman::hitGoal(Drawable& other) {
     }
 }
 
+/**
+ Set up a parallax background
+ */
 void Hopman::createBackground() {
     int sw = Graphics::instance().getWindowWidth();
     int sh = Graphics::instance().getWindowHeight();

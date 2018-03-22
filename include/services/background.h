@@ -1,6 +1,6 @@
 //
 //  background.h
-//  platformer
+//  Classes related to the background of the game
 //
 //  Created by Vande Griek, Eric on 3/19/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
@@ -16,6 +16,9 @@
 #include "graphics.h"
 #include "resource_manager.h"
 
+/**
+ One layer of a parallax background
+ */
 class BgLayer {
 private:
     SDL_Texture *texture;
@@ -27,12 +30,16 @@ public:
             int screen_w, int screen_h, int lower_bound);
     void update(int screen_off_x, int screen_off_y);
     void render();
+    /** Get the distance away from the foreground */
     int getDistance() { return distance; }
 };
 
 /** comparison operator to sort layers descending by distance */
 bool bgLayerComparator(BgLayer *lhs, BgLayer *rhs);
 
+/**
+ Draws the background in independently moving layers
+ */
 class Background {
 private:
     std::vector<BgLayer*> layers;
