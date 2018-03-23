@@ -51,7 +51,8 @@ constexpr auto MENU_TITLE_IMG = "ui/button_blank.png";
 constexpr auto BUTTON_IMG = "ui/button.png";
 
 constexpr auto STATUS_BAR_IMG = "ui/status_bar.png";
-constexpr int STATUS_BAR_Y = -4;
+constexpr int STATUS_BAR_Y = 0;
+constexpr int STATUS_BAR_THICKNESS = 55;
 constexpr int STATUS_BAR_TEXT_SIZE = 25;
 
 constexpr int GAME_MESSAGE_MAX_LEN = 25;
@@ -66,6 +67,7 @@ constexpr int GAME_MSG_TEXT_SIZE = 120;
 static std::string SCORE_STR = "Score: ";
 static std::string LIVES_STR = "Lives: ";
 static std::string LEVEL_STR = "Level: ";
+static std::string FPS_STR = "FPS: ";
 
 enum class GameState {
     LEVEL_START,
@@ -97,7 +99,6 @@ private:
     int score;
     int lives;
 
-    bool display_fps;
     int fps_display;
     std::string game_message;
 
@@ -109,8 +110,7 @@ private:
 
     /** set game state to start quitting */
     void exitGame() { game_state = GameState::EXITING; }
-    /** toggle the fps display UI */
-    void toggleFps() { display_fps = !display_fps; }
+    void toggleFps();
     void pause();
     
     void handleInput();

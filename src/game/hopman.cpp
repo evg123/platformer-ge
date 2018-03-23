@@ -21,7 +21,6 @@ void Hopman::init() {
     Gui::instance().init();
 
     objects = {};
-    display_fps = false;
     fps_display = 0;
     paused = false;
     level = STARTING_LEVEL;
@@ -107,6 +106,13 @@ void Hopman::registerInputCallbacks() {
 }
 
 /**
+ toggle the fps display UI
+ */
+void Hopman::toggleFps() {
+    Gui::instance().toggleGroupDisplay(GuiGroupId::FPS_DISPLAY);
+}
+
+/**
  Set up the UI for the game
  */
 void Hopman::createUI() {
@@ -119,8 +125,10 @@ void Hopman::createUI() {
  Set up the status bar displayed at the top of the screen
  */
 void Hopman::createStatusBar() {
+    int screen_w = Graphics::instance().getWindowWidth();
+
     // bar background
-    GuiElement *elem = new GuiElement({-300, STATUS_BAR_Y, Graphics::instance().getWindowWidth()+600, 60},
+    GuiElement *elem = new GuiElement({0, STATUS_BAR_Y, screen_w, STATUS_BAR_THICKNESS},
                                       ResourceManager::instance().getImageTexture(STATUS_BAR_IMG));
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
 
@@ -141,15 +149,24 @@ void Hopman::createStatusBar() {
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     
     // lives display
-    elem = new TextGuiElement<std::string>({500, STATUS_BAR_Y + 5, 0, 0},
+    elem = new TextGuiElement<std::string>({screen_w - 100, STATUS_BAR_Y + 5, 0, 0},
                                            LIVES_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
-    elem = new TextGuiElement<int>({500 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
+    elem = new TextGuiElement<int>({screen_w - 100 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
                                    lives, STATUS_BAR_TEXT_SIZE, true);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
 
+    // fps display
+    // in a different group so it can be hidden independently
+    elem = new TextGuiElement<std::string>({screen_w - 200, STATUS_BAR_Y + 5, 0, 0},
+                                           FPS_STR, STATUS_BAR_TEXT_SIZE);
+    Gui::instance().add(GuiGroupId::FPS_DISPLAY, elem);
+    elem = new TextGuiElement<int>({screen_w - 200 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
+                                   fps_display, STATUS_BAR_TEXT_SIZE, true);
+    Gui::instance().add(GuiGroupId::FPS_DISPLAY, elem);
+
     // show the status bar
-    Gui::instance().toggleGroupDisplay(GuiGroupId::STATUS_BAR);
+    Gui::instance().setGroupDisplay(GuiGroupId::STATUS_BAR, true);
 }
 
 void Hopman::createPauseMenu() {

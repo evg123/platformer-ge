@@ -21,6 +21,7 @@
  */
 enum GuiGroupId {
     STATUS_BAR,
+    FPS_DISPLAY,
     GAME_MESSAGE,
     MAIN_MENU,
     PAUSE,
