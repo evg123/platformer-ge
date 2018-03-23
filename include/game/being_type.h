@@ -11,7 +11,7 @@
 
 #include <map>
 #include <string>
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 #include "sprite.h"
 
 /**

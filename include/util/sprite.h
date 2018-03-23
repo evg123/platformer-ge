@@ -9,7 +9,7 @@
 #ifndef sprite_h
 #define sprite_h
 
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 
 constexpr int FRAME_WIDTH = 16;
 constexpr int FRAME_HEIGHT = 16;

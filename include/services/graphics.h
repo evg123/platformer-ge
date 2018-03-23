@@ -12,7 +12,7 @@
 #include <string>
 #include <exception>
 #include <tuple>
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 
 /**
  Singleton class for drawing to the screen

@@ -10,13 +10,12 @@
 #define resource_manager_h
 
 #include <string>
-#include <string_view>
 #include <map>
 #include <utility>
-#include "SDL2.framework/Headers/SDL.h"
-#include "SDL2_image.framework/Headers/SDL_image.h"
-#include "SDL2_mixer.framework/Headers/SDL_mixer.h"
-#include "SDL2_ttf.framework/Headers/SDL_ttf.h"
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_mixer.h"
+#include "SDL_ttf.h"
 #include "graphics.h"
 
 constexpr auto IMAGE_DIR = "./Assets/images/";

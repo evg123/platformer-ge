@@ -10,7 +10,7 @@
 #define tile_h
 
 #include <vector>
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 #include "drawable.h"
 #include "graphics.h"
 

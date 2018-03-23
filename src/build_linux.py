@@ -11,10 +11,10 @@ SOURCE="./src/*.cpp ./src/*/*.cpp"
 ARGUMENTS="-D LINUX -std=c++14" 
 
 # Which directories do we want to include.
-INCLUDE_DIR="-I ./lib/linux/ -I ./include/game -I ./include/services -I ./include/gui -I ./include/util -I ./lib/SDL2.framework/Headers"
+INCLUDE_DIR="-I ./include/game -I ./include/services -I ./include/gui -I ./include/util -I/usr/include/SDL2 -D_REENTRANT"
 
 # What libraries do we want to include
-LIBRARIES="-F ./lib/linux/ -framework SDL2 -framework SDL2_image -framework SDL2_ttf -framework SDL2_mixer"
+LIBRARIES="-L/usr/lib/x86_64-linux-gnu -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_ttf"
 
 # The name of our executable
 EXECUTABLE="./Game/Hopman"

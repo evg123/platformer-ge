@@ -12,7 +12,7 @@
 #import <vector>
 #import <string>
 #import <functional>
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 #import "graphics.h"
 #import "resource_manager.h"
 

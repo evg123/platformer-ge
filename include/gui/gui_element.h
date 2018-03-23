@@ -10,7 +10,7 @@
 #define gui_element_h
 
 #include <string>
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 #include "graphics.h"
 #include "resource_manager.h"
 

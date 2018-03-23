@@ -12,7 +12,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 #include "graphics.h"
 #include "resource_manager.h"
 

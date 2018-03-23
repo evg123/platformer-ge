@@ -13,7 +13,7 @@
 #import <functional>
 #import <map>
 #import <string>
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 #include "gui.h"
 #include "graphics.h"
 #include "menu.h"

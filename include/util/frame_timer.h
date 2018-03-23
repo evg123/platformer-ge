@@ -9,7 +9,7 @@
 #ifndef frame_timer_h
 #define frame_timer_h
 
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 
 // limit maximum time between frames
 // game will slow down past this point

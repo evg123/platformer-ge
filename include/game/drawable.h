@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <queue>
 #include <functional>
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 #include "evg_rect.h"
 #include "resource_manager.h"
 

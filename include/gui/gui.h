@@ -11,7 +11,7 @@
 
 #include <map>
 #include <vector>
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 #include "menu.h"
 #include "gui_element.h"
 

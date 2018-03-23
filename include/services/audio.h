@@ -11,8 +11,8 @@
 
 #include <string>
 #include <map>
-#include "SDL2.framework/Headers/SDL.h"
-#include "SDL2_mixer.framework/Headers/SDL_mixer.h"
+#include "SDL.h"
+#include "SDL_mixer.h"
 #include "resource_manager.h"
 
 /**

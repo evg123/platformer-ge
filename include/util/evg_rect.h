@@ -10,7 +10,7 @@
 #define evg_rect_h
 
 #include <memory>
-#include "SDL2.framework/Headers/SDL.h"
+#include "SDL.h"
 
 /**
  Holds a collision rect.
