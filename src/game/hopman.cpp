@@ -120,7 +120,7 @@ void Hopman::createUI() {
  */
 void Hopman::createStatusBar() {
     // bar background
-    GuiElement *elem = new GuiElement({0, STATUS_BAR_Y, Graphics::instance().getWindowWidth(), 50},
+    GuiElement *elem = new GuiElement({-300, STATUS_BAR_Y, Graphics::instance().getWindowWidth()+600, 60},
                                       ResourceManager::instance().getImageTexture(STATUS_BAR_IMG));
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
 

@@ -29,7 +29,7 @@
 #include "tile.h"
 #include "background.h"
 
-constexpr int STARTING_LEVEL = 3;
+constexpr int STARTING_LEVEL = 1;
 constexpr auto BG_TRACK = "bg_track.wav";
 
 constexpr int DEFAULT_FPS_LIMIT = 60;
@@ -51,7 +51,7 @@ constexpr auto MENU_TITLE_IMG = "ui/button_blank.png";
 constexpr auto BUTTON_IMG = "ui/button.png";
 
 constexpr auto STATUS_BAR_IMG = "ui/status_bar.png";
-constexpr int STATUS_BAR_Y = 0;
+constexpr int STATUS_BAR_Y = -4;
 constexpr int STATUS_BAR_TEXT_SIZE = 25;
 
 constexpr int GAME_MESSAGE_MAX_LEN = 25;

@@ -22,8 +22,11 @@ Website: https://evg-game-engines.herokuapp.com/platformer.html
 Only tested on OSX 10.12
 
 Attributions:
+Player sprite from https://opengameart.org/content/classic-hero
+Enemy sprites from https://opengameart.org/content/classic-hero-and-baddies-pack
 Background images from https://opengameart.org/content/mountain-at-dusk-background
 Dusk Tileset from https://opengameart.org/content/cavern-tile-set
+Fire and chest images from https://0x72.itch.io/16x16-dungeon-tileset
 
 ******************
 Original README
