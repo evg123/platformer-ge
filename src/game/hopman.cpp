@@ -469,7 +469,7 @@ void Hopman::parseLevelConfig(LevelConfig &config) {
     // have support for std::filesystem
     std::ifstream cfg_stream("");
     int effective_lvl = level;
-    while (effective_lvl > 0 && !cfg_stream.good()) {
+    while (effective_lvl >= 0 && !cfg_stream.good()) {
         // see if we can load this level file
         std::string lvl_file = LEVEL_FILE_PREFIX + std::to_string(effective_lvl);
         cfg_stream.open(lvl_file);

@@ -20,7 +20,7 @@ constexpr float FRICTION = 800 / 1000.0f / 1000.0f;
 
 constexpr float BEING_DEATH_DELAY_MS = 1500; // keep dead enemies on the screen for this long
 constexpr int JUMP_TOLERANCE_MS = 200; // can jump has touched ground in the last X milliseconds
-constexpr int WALK_SOUND_INTERVAL_MS = 100; // play the walk sound every x ms while walking
+constexpr int WALK_SOUND_INTERVAL_MS = 300; // play the walk sound every x ms while walking
 
 constexpr float MOVE_ACCEL = 500 / 1000.0f / 1000.0f;
 constexpr float CORRECTION_ACCEL = 200 / 1000.0f / 1000.0f;
@@ -71,6 +71,7 @@ protected:
     void takeDamage(int damage);
 public:
     void init(BeingType type);
+    void destroy() override;
     bool dead();
     void jump();
     bool canJump();

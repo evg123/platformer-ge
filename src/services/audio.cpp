@@ -78,6 +78,7 @@ void Audio::setBgTrack(const std::string &track_name) {
         return;
     }
 
+    bg_track = track;
     Mix_PlayMusic(track, -1);
     setPlayed(track_name);
 }

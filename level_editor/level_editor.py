@@ -28,9 +28,9 @@ TILE_IMAGE_PREFIX = '../Assets/images/'
 TILE_IMAGE_PATTERNS = [
     ('', 0), # empty
     (TILE_IMAGE_PREFIX + 'tiles/tile_1.png', 1), # dirt
-    (TILE_IMAGE_PREFIX + 'tiles/tile_2.png', 1), # steel
-    (TILE_IMAGE_PREFIX + 'tiles/tile_3.png', 1), # damage
-    (TILE_IMAGE_PREFIX + 'tiles/tile_4.png', 1), # goal
+    (TILE_IMAGE_PREFIX + 'tiles/tile_2.png', 2), # rock
+    (TILE_IMAGE_PREFIX + 'tiles/tile_3.png', 2), # fire
+    (TILE_IMAGE_PREFIX + 'tiles/tile_4.png', 2), # goal
     (TILE_IMAGE_PREFIX + 'sprites/player.png', 2),
     (TILE_IMAGE_PREFIX + 'sprites/red_enemy.png', 2),
     (TILE_IMAGE_PREFIX + 'sprites/blue_enemy.png', 2),

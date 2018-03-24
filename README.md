@@ -27,6 +27,8 @@ Enemy sprites from https://opengameart.org/content/classic-hero-and-baddies-pack
 Background images from https://opengameart.org/content/mountain-at-dusk-background
 Dusk Tileset from https://opengameart.org/content/cavern-tile-set
 Fire and chest images from https://0x72.itch.io/16x16-dungeon-tileset
+Sound effects from https://opengameart.org/content/sfx-the-ultimate-2017-16-bit-mini-pack
+Background track by HitCtrl downloaded from https://opengameart.org/content/the-swarm
 
 ******************
 Original README

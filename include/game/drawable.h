@@ -72,7 +72,7 @@ public:
     void setCollisionCallback(std::function<void(Drawable&)> callback) { collision_callback = callback; }
     /** true if this object needs to be cleaned up */
     bool needsRemoval() { return marked_for_removal; }
-    void destroy();
+    virtual void destroy();
     /** Called when this drawable hits another. Default does nothing */
     virtual void hitOther(Drawable &other) {};
     /** Called when this drawable is hit by another. Default does nothing */

@@ -41,6 +41,14 @@ void Being::init(BeingType type) {
 }
 
 /**
+ Mark for destruction and play death sound
+ */
+void Being::destroy() {
+    Drawable::destroy();
+    Audio::instance().playSound(type.damaged_sound);
+}
+
+/**
  Return true if the being is currently considered on the ground
  */
 bool Being::isOnGround() {
@@ -185,10 +193,12 @@ void Being::processCollision(Drawable &other, float x_off, float y_off) {
     if (y_off > 0) {
         // we have collided while moving down,
         // so we have landed on something
+        if (!isOnGround()) {
+            Audio::instance().playSound(type.landed_sound);
+        }
         last_grounded = SDL_GetTicks();
         jump_start_ts = 0; // zero means not jumping
         resetJumps();
-        Audio::instance().playSound(type.landed_sound);
     }
 }
 
@@ -298,7 +308,7 @@ void Being::applyAcceleration(int delta) {
  Goes until stopRight is called.
  */
 void Being::moveRight() {
-    target_x_vel += top_speed;
+    target_x_vel = std::min(top_speed, target_x_vel + top_speed);
     facing = Facing::RIGHT;
 }
 
@@ -314,7 +324,7 @@ void Being::stopRight() {
  Goes until stopLeft is called.
  */
 void Being::moveLeft() {
-    target_x_vel -= top_speed;
+    target_x_vel = std::max(-top_speed, target_x_vel - top_speed);
     facing = Facing::LEFT;
 }
 

@@ -30,7 +30,7 @@
 #include "background.h"
 
 constexpr int STARTING_LEVEL = 1;
-constexpr auto BG_TRACK = "bg_track.wav";
+constexpr auto BG_TRACK = "bg_track.mp3";
 
 constexpr int DEFAULT_FPS_LIMIT = 60;
 constexpr int DEFAULT_WINDOW_WIDTH = 1280;
