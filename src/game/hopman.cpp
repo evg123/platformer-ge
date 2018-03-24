@@ -299,6 +299,7 @@ void Hopman::restartGame() {
 
     // unpause in case we restarted from the menu
     Gui::instance().setGroupDisplay(GuiGroupId::PAUSE, false);
+    paused = false;
 }
 
 /**
@@ -459,6 +460,7 @@ void Hopman::setupLevel() {
 
     // start out on the level start screen
     setGameMessage("Level " + std::to_string(level));
+
     game_state = GameState::LEVEL_START;
 }
 
