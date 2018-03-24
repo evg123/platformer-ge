@@ -133,35 +133,39 @@ void Hopman::createStatusBar() {
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
 
     // score display
-    elem = new TextGuiElement<std::string>({10, STATUS_BAR_Y + 5, 0, 0},
+    int elem_pos = 10;
+    elem = new TextGuiElement<std::string>({elem_pos, STATUS_BAR_Y + 5, 0, 0},
                                            SCORE_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
-    elem = new TextGuiElement<int>({10 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
+    elem = new TextGuiElement<int>({elem_pos + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
                                            score, STATUS_BAR_TEXT_SIZE, true);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     
     // level display
-    elem = new TextGuiElement<std::string>({200, STATUS_BAR_Y + 5, 0, 0},
+    elem_pos = 250;
+    elem = new TextGuiElement<std::string>({elem_pos, STATUS_BAR_Y + 5, 0, 0},
                                            LEVEL_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
-    elem = new TextGuiElement<int>({200 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
+    elem = new TextGuiElement<int>({elem_pos + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
                                    level, STATUS_BAR_TEXT_SIZE, true);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     
     // lives display
-    elem = new TextGuiElement<std::string>({screen_w - 100, STATUS_BAR_Y + 5, 0, 0},
+    elem_pos = screen_w - 150;
+    elem = new TextGuiElement<std::string>({elem_pos, STATUS_BAR_Y + 5, 0, 0},
                                            LIVES_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
-    elem = new TextGuiElement<int>({screen_w - 100 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
+    elem = new TextGuiElement<int>({elem_pos + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
                                    lives, STATUS_BAR_TEXT_SIZE, true);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
 
     // fps display
     // in a different group so it can be hidden independently
-    elem = new TextGuiElement<std::string>({screen_w - 200, STATUS_BAR_Y + 5, 0, 0},
+    elem_pos = screen_w - 300;
+    elem = new TextGuiElement<std::string>({elem_pos, STATUS_BAR_Y + 5, 0, 0},
                                            FPS_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::FPS_DISPLAY, elem);
-    elem = new TextGuiElement<int>({screen_w - 200 + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
+    elem = new TextGuiElement<int>({elem_pos + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
                                    fps_display, STATUS_BAR_TEXT_SIZE, true);
     Gui::instance().add(GuiGroupId::FPS_DISPLAY, elem);
 

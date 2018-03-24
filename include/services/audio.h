@@ -23,7 +23,7 @@ private:
     Audio();
     ~Audio();
     Mix_Music *bg_track;
-    std::map<std::string, Uint8> last_played_map;
+    std::map<std::string, Uint32> last_played_map;
 
     void setPlayed(const std::string &track_name);
 public:
@@ -32,7 +32,7 @@ public:
     void shutdown();
     void setBgTrack(const std::string &track_name);
     void playSound(const std::string &sound_name);
-    Uint8 getLastPlayed(const std::string &sound_name);
+    Uint32 getLastPlayed(const std::string &sound_name);
 };
 
 #endif /* audio_h */

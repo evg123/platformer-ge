@@ -52,7 +52,7 @@ void Audio::setPlayed(const std::string &track_name) {
  Get the timestamp for the last time the passed in sound was played.
  Returns 0 if this is the first time it was played.
  */
-Uint8 Audio::getLastPlayed(const std::string &sound_name) {
+Uint32 Audio::getLastPlayed(const std::string &sound_name) {
     auto item = last_played_map.find(sound_name);
     if (item == last_played_map.end()) {
         return 0;

@@ -15,7 +15,7 @@ constexpr int FRAME_WIDTH = 16;
 constexpr int FRAME_HEIGHT = 16;
 constexpr int FRAMES_PER_LINE = 5;
 
-constexpr int TICKS_PER_FRAME = 150;
+constexpr int TICKS_PER_FRAME = 120;
 
 /**
  The list of states that a sprite can be in

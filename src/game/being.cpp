@@ -232,8 +232,10 @@ void Being::ranInto(Drawable &other) {
  Apply damage to this being
  */
 void Being::takeDamage(int damage) {
-    hp -= damage;
-    Audio::instance().playSound(type.damaged_sound);
+    if (damage > 0) {
+        hp -= damage;
+        Audio::instance().playSound(type.damaged_sound);
+    }
 }
 
 /**
@@ -268,12 +270,6 @@ void Being::applyAcceleration(int delta) {
         if (x_vel > top_speed) {
             x_vel = top_speed;
         }
-        if (isOnGround()) {
-            int played_ago = SDL_GetTicks() - Audio::instance().getLastPlayed(type.walk_sound);
-            if (played_ago > WALK_SOUND_INTERVAL_MS) {
-                Audio::instance().playSound(type.walk_sound);
-            }
-        }
     } else if (target_x_vel < 0 && x_vel > -top_speed) {
         // moving left
         // apply additional accel if we are at negative velocity
@@ -285,12 +281,6 @@ void Being::applyAcceleration(int delta) {
         if (x_vel < -top_speed) {
             x_vel = -top_speed;
         }
-        if (isOnGround()) {
-            int played_ago = SDL_GetTicks() - Audio::instance().getLastPlayed(type.walk_sound);
-            if (played_ago > WALK_SOUND_INTERVAL_MS) {
-                Audio::instance().playSound(type.walk_sound);
-            }
-        }
     } else if (target_x_vel == 0.0f && isOnGround()) {
         // stopping
         // slow to zero unless we are in the air
@@ -299,6 +289,14 @@ void Being::applyAcceleration(int delta) {
             x_vel = std::max(0.0f, x_vel - FRICTION * delta);
         } else if (x_vel < 0) {
             x_vel = std::min(0.0f, x_vel + FRICTION * delta);
+        }
+    }
+
+    // play sounds
+    if (target_x_vel != 0 and isOnGround()) {
+        Uint32 played_ago = SDL_GetTicks() - Audio::instance().getLastPlayed(type.walk_sound);
+        if (played_ago > WALK_SOUND_INTERVAL_MS) {
+            Audio::instance().playSound(type.walk_sound);
         }
     }
 }
