@@ -9,6 +9,7 @@ WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
 
 TICKS_PER_FRAME = 250
+SCALE = 6
 
 class SpriteTool(object):
     
@@ -19,8 +20,8 @@ class SpriteTool(object):
     def setup(self, sprite_file, sprite_w, sprite_h, frame_start, frame_end):
         pygame.init()
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-        self.sprite_w = sprite_w
-        self.sprite_h = sprite_h
+        self.sprite_w = sprite_w * SCALE
+        self.sprite_h = sprite_h * SCALE
         self.frame_start = frame_start
         self.frame_end = frame_end
         self.sprite_frame = self.frame_start
@@ -35,6 +36,9 @@ class SpriteTool(object):
             sys.exit(1)
         
         self.sprite_sheet = pygame.image.load(sprite_file)
+        self.sprite_sheet = pygame.transform.scale(self.sprite_sheet,
+                                                   (self.sprite_sheet.get_width() * SCALE,
+                                                   self.sprite_sheet.get_height() * SCALE))
         sheet_rect = self.sprite_sheet.get_rect()
         self.frames_per_line = sheet_rect.w // self.sprite_w
         
