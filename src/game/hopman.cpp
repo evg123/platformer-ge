@@ -410,11 +410,12 @@ void Hopman::createBackground() {
     background.setColor(125, 90, 125);
     
     // add layers at different distances
-    background.addLayer("background/dusk/layer_0.png", sw, sh, 50);
-    background.addLayer("background/dusk/layer_1.png", sw, sh, 35);
-    background.addLayer("background/dusk/layer_2.png", sw, sh, 15);
-    background.addLayer("background/dusk/layer_3.png", sw, sh, 6);
-    background.addLayer("background/dusk/layer_4.png", sw, sh, 2);
+    background.addLayer("background/dusk/layer_0.png", sw, sh, 60);
+    background.addLayer("background/dusk/layer_1.png", sw, sh, 30);
+    background.addLayer("background/dusk/layer_2.png", sw, sh, 20);
+    background.addLayer("background/dusk/layer_3.png", sw, sh, 16);
+    background.addLayer("background/dusk/layer_4.png", sw, sh, 6);
+    background.addLayer("background/dusk/layer_5.png", sw, sh, 2);
 }
 
 /**

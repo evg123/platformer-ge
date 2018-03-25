@@ -129,7 +129,7 @@ BeingType& BeingType::blueEnemy() {
         this_type.height = 32 - this_type.pad_top - this_type.pad_bot;
         this_type.top_speed = 150 / 1000.0f;
         this_type.max_air_jumps = 0;
-        this_type.jump_duration = 125;
+        this_type.jump_duration = 25;
         
         this_type.action_type = ActionType::JUMP_AROUND;
         this_type.bump_immune = true;
