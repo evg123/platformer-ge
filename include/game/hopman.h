@@ -74,7 +74,6 @@ enum class GameState {
     PLAYING,
     EXITING,
     RESPAWN,
-    PAUSED,
     LOSS,
     LEVEL_WON,
 };

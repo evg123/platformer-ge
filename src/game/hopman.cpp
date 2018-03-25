@@ -24,7 +24,7 @@ void Hopman::init() {
     fps_display = 0;
     paused = false;
     level = STARTING_LEVEL;
-    game_state = GameState::PAUSED;
+    game_state = GameState::LEVEL_START;
     fps_limit = DEFAULT_FPS_LIMIT;
     score = 0;
     lives = DEFAULT_EXTRA_LIVES;

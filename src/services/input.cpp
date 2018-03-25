@@ -118,7 +118,7 @@ void Input::handleKey(SDL_Scancode key, bool pressed) {
  */
 void Input::handleClick(int xpos, int ypos, bool released) {
     bool handled = Gui::instance().handleClick(xpos, ypos, released);
-    if (!handled) {
+    if (released && !handled) {
         // nothing was clicked on, interperet as an advance action
         callAction(Action::ADVACNE);
     }

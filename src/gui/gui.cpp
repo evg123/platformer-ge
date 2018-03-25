@@ -123,12 +123,12 @@ void Gui::toggleGroupDisplay(GuiGroupId gid) {
  Take a click and pass it to all menus and elements
  */
 bool Gui::handleClick(int xpos, int ypos, bool released) {
+    bool handled = false;
     for (int gid = 0; gid < groupStates.size(); ++gid) {
         if (!groupStates[gid]) {
             continue;
         }
 
-        bool handled = false;
         for (auto &menu : menus[gid]) {
             menu->releaseAll();
             if (!handled) {
@@ -136,5 +136,5 @@ bool Gui::handleClick(int xpos, int ypos, bool released) {
             }
         }
     }
-    return false;
+    return handled;
 }
