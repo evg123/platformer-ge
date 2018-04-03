@@ -20,15 +20,47 @@
  The main game class is Hopman
 */
 
+#include <string>
 #include "hopman.h"
+
+#define SERVER_MODE_FLAG  "--server-mode"
+#define HOST_OPT  "--host"
+
+bool getCmdLineFlag(char **start, char **end, std::string flag) {
+    char** opt_start = std::find(start, end, flag);
+    if (opt_start != end) {
+        return true;
+    }
+    return false;
+}
+
+char* getCmdLineOption(char **start, char **end, std::string option) {
+    char** opt_start = std::find(start, end, option);
+    if (opt_start == end) {
+        // option not specified
+        return NULL;
+    }
+    opt_start++;
+    if (opt_start == end) {
+        // option has no value
+        //TODO print usage
+        return NULL;
+    }
+    return *opt_start;
+}
 
 /**
  It all starts here
  */
-int main() {
+int main(int argc, char *argv[]) {
+    // parse arguments
+    bool server_mode = getCmdLineFlag(argv, argv + argc, SERVER_MODE_FLAG);
+    std::string host = getCmdLineOption(argv, argv + argc, HOST_OPT);
+
+    // start the game
     Hopman hpm = Hopman();
 
-    hpm.init();
+    hpm.init(server_mode, host);
     int ret = hpm.play();
     hpm.shutdown();
 
