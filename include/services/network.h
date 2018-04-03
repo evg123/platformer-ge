@@ -9,12 +9,17 @@
 #ifndef network_h
 #define network_h
 
+#include <string>
 #include <map>
+#include <arpa/inet.h>
 #include "socket.h"
 #include "drawable.h"
 #include "being.h"
 
-struct Input {
+constexpr int CLIENT_PORT = 2552;
+constexpr int SERVER_PORT = 2553;
+
+struct ClientInput {
     int ts;
     float target_x_vel;
     bool jumping;
@@ -30,10 +35,10 @@ struct State {
     int air_jumps;
 };
 
-class ClientRecord {
-private:
+struct ClientRecord {
     int player_id;
     unsigned int client_addr;
+    unsigned short client_port;
 public:
     
 };
@@ -43,9 +48,9 @@ private:
     Socket sock;
     unsigned int server_addr;
 public:
-    void init();
+    void init(std::string server_addr);
     void shutdown();
-    void sendInput(Input &input);
+    void sendInput(ClientInput &input);
     bool getMessage(State &state);
 };
 
@@ -56,8 +61,8 @@ private:
 public:
     void init();
     void shutdown();
-    bool sendStateUpdate(State &state);
-    bool getInput(int &player_id, Input &input);
+    void sendStateUpdate(State &state);
+    bool getInput(int &player_id, ClientInput &input);
 };
 
 #endif /* network_h */

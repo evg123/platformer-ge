@@ -34,17 +34,17 @@ bool getCmdLineFlag(char **start, char **end, std::string flag) {
     return false;
 }
 
-char* getCmdLineOption(char **start, char **end, std::string option) {
+std::string getCmdLineOption(char **start, char **end, std::string option) {
     char** opt_start = std::find(start, end, option);
     if (opt_start == end) {
         // option not specified
-        return NULL;
+        return "";
     }
     opt_start++;
     if (opt_start == end) {
         // option has no value
         //TODO print usage
-        return NULL;
+        return "";
     }
     return *opt_start;
 }

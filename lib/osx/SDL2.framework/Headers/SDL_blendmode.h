@@ -90,12 +90,12 @@ typedef enum
 /**
  *  \brief Create a custom blend mode, which may or may not be supported by a given renderer
  *
- *  \param srcColorFactor
- *  \param dstColorFactor
- *  \param colorOperation
- *  \param srcAlphaFactor
- *  \param dstAlphaFactor
- *  \param alphaOperation
+ *  \param srcColorFactor null
+ *  \param dstColorFactor null
+ *  \param colorOperation null
+ *  \param srcAlphaFactor null
+ *  \param dstAlphaFactor null
+ *  \param alphaOperation null
  *
  *  The result of the blend mode operation will be:
  *      dstRGB = dstRGB * dstColorFactor colorOperation srcRGB * srcColorFactor
