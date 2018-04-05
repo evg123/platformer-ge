@@ -58,11 +58,16 @@ int main(int argc, char *argv[]) {
     std::string host = getCmdLineOption(argv, argv + argc, HOST_OPT);
 
     // start the game
-    Hopman hpm = Hopman();
+    Hopman *hpm;
+    if (server_mode) {
+        hpm = new HopmanServer();
+    } else {
+        hpm = new HopmanClient();
+    }
 
-    hpm.init(server_mode, host);
-    int ret = hpm.play();
-    hpm.shutdown();
+    hpm->init(server_mode, host);
+    int ret = hpm->play();
+    hpm->shutdown();
 
     return ret;
 }

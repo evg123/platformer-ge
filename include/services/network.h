@@ -13,8 +13,6 @@
 #include <map>
 #include <arpa/inet.h>
 #include "socket.h"
-#include "drawable.h"
-#include "being.h"
 
 constexpr int CLIENT_PORT = 2552;
 constexpr int SERVER_PORT = 2553;
@@ -27,6 +25,7 @@ struct ClientInput {
 
 struct State {
     int id;
+    int type;
     bool active;
     int xpos, ypos;
     int xvel, yvel;
