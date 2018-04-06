@@ -20,6 +20,9 @@ constexpr int SERVER_PORT = 2553;
 
 typedef std::chrono::time_point<std::chrono::steady_clock> timestamp;
 
+//TODO lots of info sent in these messages that doesn't update very often
+//     should split more static info into new, less frequent msg types
+
 enum MSG_TYPE {
     // server -> client
     GAME_STATE,
@@ -33,8 +36,7 @@ enum MSG_TYPE {
 struct ClientRegisterMsg {
     int msg_type;
     timestamp ts;
-    float target_x_vel;
-    bool jumping;
+    size_t obj_count;
 };
 
 struct ClientInputMsg {
@@ -47,8 +49,12 @@ struct ClientInputMsg {
 struct GameStateMsg {
     int msg_type;
     timestamp ts;
-    int state;
     int player_id;
+    bool you;
+    int state;
+    int lives;
+    int score;
+    int level;
 };
 
 struct ObjectStateMsg {

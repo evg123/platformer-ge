@@ -62,10 +62,10 @@ int main(int argc, char *argv[]) {
     if (server_mode) {
         hpm = new HopmanServer();
     } else {
-        hpm = new HopmanClient();
+        hpm = new HopmanClient(host);
     }
 
-    hpm->init(server_mode, host);
+    hpm->init();
     int ret = hpm->play();
     hpm->shutdown();
 

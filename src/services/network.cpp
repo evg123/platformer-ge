@@ -61,6 +61,9 @@ void Server::sendGameStateUpdate(GameStateMsg &state) {
     state.ts = std::chrono::steady_clock::now();
     // send state update to everyone, game state of other players could be displayed
     for (auto &addr_obj : addr_to_client) {
+        // set you to true when sent to the client whose state this is
+        // this is how the client learns which player they are
+        state.you = addr_obj.second->player_id == state.player_id;
         sock.send(addr_obj.first, &state, sizeof(state));
     }
 }

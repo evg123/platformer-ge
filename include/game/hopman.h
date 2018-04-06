@@ -71,13 +71,15 @@ static std::string LIVES_STR = "Lives: ";
 static std::string LEVEL_STR = "Level: ";
 static std::string FPS_STR = "FPS: ";
 
-enum class GameState {
+enum GameState {
+    NONE,
     LEVEL_START,
     PLAYING,
     EXITING,
     RESPAWN,
     LOSS,
     LEVEL_WON,
+    LOADING,
 };
 
 /**
@@ -87,17 +89,21 @@ struct LevelConfig {
     std::vector<std::vector<int>> tiles;
 };
 
+class PlayerState {
+public:
+    Being *player;
+    bool assigned = false;
+    GameState state;
+
+    PlayerState(Being *player);
+};
+
 /**
  Main class for the Hopman platformer
  Most of the game logic is handled by this class.
  */
 class Hopman {
 protected:
-    bool server_mode;
-    Client client;
-    Server server;
-    ClientInputMsg player_input;
-
     int level;
     GameState game_state;
     bool paused;
@@ -108,20 +114,20 @@ protected:
     int fps_display;
     std::string game_message;
 
-    std::vector<Being*> players;
+    std::vector<PlayerState> players;
     Background background;
     std::map<int, Drawable*> objects;
     /** player dies if they fall past here */
     int lower_bound;
 
     /** set game state to start quitting */
-    void exitGame() { game_state = GameState::EXITING; }
+    void exitGame() { setGameState(GameState::EXITING); }
     void toggleFps();
     void pause();
     
     void handleInput();
     void advanceScreen();
-    void registerInputCallbacks();
+    virtual void registerInputCallbacks() = 0;
     void update(int delta);
     void render();
     void renderGui();
@@ -132,42 +138,62 @@ protected:
     void createPauseMenu();
     void createGameMessage();
     void setGameMessage(std::string new_msg);
+    void setGameState(GameState state);
     
     bool checkRemoval(Drawable *obj);
     void removeDestroyed();
     virtual void handleDeath() = 0;
     void tryRespawn();
-    void restartGame();
     void cleanupLevel();
     void hitGoal(Drawable &other);
 
-    void parseLevelConfig(LevelConfig &config);
-    void setupLevel();
     void createBackground();
     Drawable* addTile(int tile_type, int tx, int ty, int id);
+    Being* getPlayer();
     bool isPlayer(Drawable *obj);
+    virtual void handleGameState() {};
     virtual void networkUpdate() = 0;
 public:
-    void init(bool server_mode, std::string host);
+    virtual void init();
     void shutdown();
     int play();
 };
 
 class HopmanClient : public Hopman {
 private:
-    int player_num;
+    Client client;
+    ClientInputMsg player_input;
+    std::string server_host;
 
-    void networkUpdate();
+    void init() override;
+    void networkUpdate() override;
     void updatePlayerInput();
-    void handleDeath();
+    void handleDeath() override;
+    void registerInputCallbacks() override;
+
+    void moveRight();
+    void stopRight();
+    void moveLeft();
+    void stopLeft();
+    void jump();
 public:
+    HopmanClient(std::string server_host);
 };
 
 class HopmanServer : public Hopman {
 private:
-    Being* addNewPlayer();
-    void networkUpdate();
-    void handleDeath();
+    Server server;
+
+    void init() override;
+    PlayerState* addNewPlayer();
+    void processRegistration(PlayerState *pstate, ClientRegisterMsg *reg);
+    void handleGameState() override;
+    void networkUpdate() override;
+    void handleDeath() override;
+    void registerInputCallbacks() override;
+    void setupLevel();
+    void parseLevelConfig(LevelConfig &config);
+    void restartGame();
 public:
 };
 
