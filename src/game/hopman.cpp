@@ -358,7 +358,7 @@ void Hopman::renderGui() {
 /**
  create a tile object at the given tile coordinates
  */
-Drawable* Hopman::addTile(int tile_type, int tx, int ty) {
+Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
     if (tile_type == TileNum::EMPTY) {
         return NULL;
     }
@@ -369,7 +369,10 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty) {
 
     Drawable *obj;
     if (tile_type == TileNum::PLAYER) {
-        obj = addPlayerTile(xpos, ypos);
+        Being *player = new Being();
+        player->init(BeingType::player());
+        players.push_back(player);
+        obj = player;
 
     } else if (tile_type == TileNum::RED_ENEMY) {
         Being *enemy = new Being();
@@ -387,6 +390,11 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty) {
             tile->setCollisionCallback(std::bind(&Hopman::hitGoal, this, std::placeholders::_1));
         }
         obj = tile;
+    }
+
+    if (id > 0) {
+        // id was specified, override the auto-assigned id
+        obj->setId(id);
     }
 
     obj->setPosition(xpos, ypos);
@@ -445,7 +453,8 @@ void Hopman::setupLevel() {
             } else if (tile_num == TileNum::GOAL) {
                 have_goal = true;
             }
-            addTile(tile_num, tx, ty);
+            // use id = 0 to auto-assign
+            addTile(tile_num, tx, ty, 0);
         }
     }
 
@@ -552,11 +561,6 @@ bool Hopman::isPlayer(Drawable *obj) {
 }
 
 // Client Definitions
-Being* HopmanClient::addPlayerTile(int xpos, int ypos) {
-    Being *player = new Being();
-    player->init(BeingType::player());
-    return player;
-}
 
 void HopmanClient::networkUpdate() {
     // send an update about the player's action
@@ -564,25 +568,36 @@ void HopmanClient::networkUpdate() {
     client.sendInput(player_input);
     
     // process incoming state updates
-    State state;
-    while (client.getMessage(state)) {
-        Drawable *obj;
-        auto obj_record = objects.find(state.id);
-        if (obj_record == objects.end()) {
-            // new object
-            obj = addTile(state.type, 0, 0);
-            obj->setId(state.id);
-        } else {
-            // existing object
-            obj = obj_record->second;
+    int msg_type;
+    char buffer[client.msg_buffer_size];
+    while (client.getMessage(msg_type, buffer)) {
+        switch (buffer[0]) {
+            case MSG_TYPE::GAME_STATE: {
+                GameStateMsg *state = reinterpret_cast<GameStateMsg*>(buffer);
+                //TODO
+                break;
+            }
+            case MSG_TYPE::OBJECT_STATE: {
+                ObjectStateMsg *state = reinterpret_cast<ObjectStateMsg*>(buffer);
+                Drawable *obj;
+                auto obj_record = objects.find(state->id);
+                if (obj_record == objects.end()) {
+                    // new object
+                    obj = addTile(state->type, 0, 0, state->id);
+                    obj->setId(state->id);
+                } else {
+                    // existing object
+                    obj = obj_record->second;
+                }
+                // update the object with the state info
+                obj->updateWithObjectState(*state);
+                break;
+            }
         }
-        // update the object with the state info
-        obj->updateWithState(state);
     }
 }
 
 void HopmanClient::updatePlayerInput() {
-    player_input.ts = SDL_GetTicks();
     player_input.target_x_vel = players[0]->getTargetXVel();
     //TODO player_input.jumping = player.is
 }
@@ -596,47 +611,63 @@ void HopmanClient::handleDeath() {
 
 // Server Definitions
 
-Being* HopmanServer::addPlayerTile(int xpos, int ypos) {
-    player_start_pos_x = xpos;
-    player_start_pos_y = ypos;
-}
-
 void HopmanServer::networkUpdate() {
     // handle input from clients
-    int player_id;
-    ClientInput input;
-    while (server.getInput(player_id, input)) {
-        Being *player;
-        auto obj_record = objects.find(player_id);
-        if (obj_record == objects.end()) {
-            // new player
-            player = addNewPlayer();
-        } else {
-            // existing object
-            player = static_cast<Being*>(obj_record->second);
+    int *player_id;
+    int msg_type;
+    char buffer[server.msg_buffer_size];
+    while (server.getMessage(msg_type, &player_id, buffer)) {
+        switch (msg_type) {
+            case MSG_TYPE::CLIENT_REGISTER: {
+                Being *player;
+                auto obj_record = objects.find(*player_id);
+                if (obj_record == objects.end()) {
+                    // new player
+                    player = addNewPlayer();
+                    *player_id = player->getId();
+                } else {
+                    // existing object
+                    player = static_cast<Being*>(obj_record->second);
+                }
+                ClientRegisterMsg *reg = reinterpret_cast<ClientRegisterMsg*>(buffer);
+                //TODO other stuff
+                break;
+            }
+            case MSG_TYPE::CLIENT_INPUT: {
+                auto *input = reinterpret_cast<ClientInputMsg*>(buffer);
+                // update the player object based on input
+                auto obj_record = objects.find(*player_id);
+                if (obj_record != objects.end()) {
+                    static_cast<Being*>(obj_record->second)->updateWithInput(*input);
+                } // ignore if player is not recognized
+                break;
+            }
         }
-        // update the object with the state info
-        player->updateWithInput(input);
     }
-    
+
     // send updates to clients
-    State state;
+    GameStateMsg gstate;
+    for (auto &player : players) {
+        // dispatch to clients
+        //TODO
+        server.sendGameStateUpdate(gstate);
+    }
+    ObjectStateMsg ostate;
     for (auto &obj : objects) {
         // dispatch to clients
-        obj.second->fillState(state);
-        server.sendStateUpdate(state);
+        obj.second->fillObjectState(ostate);
+        server.sendObjectStateUpdate(ostate);
     }
 }
 
 Being* HopmanServer::addNewPlayer() {
-    Being *player = new Being();
-    player->setPosition(player_start_pos_x, player_start_pos_y);
-    players.push_back(player);
-    return player;
+    //instead of allocating here, just take the first inactive player from players
+    //need to convert list of players into list of playerstate object
+    return NULL;
 }
 
 void HopmanServer::handleDeath() {
-    
+    //TODO
 }
 
 

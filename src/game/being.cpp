@@ -112,11 +112,29 @@ void Being::update(int delta, std::map<int, Drawable*> &objects) {
 
 /**
  Update this drawable using the values from a state object
+ Used by HopmanClient
  */
-void Being::updateWithState(State &state) {
-    Drawable::updateWithState(state);
+void Being::updateWithObjectState(ObjectStateMsg &state) {
+    Drawable::updateWithObjectState(state);
     hp = state.hp;
     air_jumps = state.air_jumps;
+}
+
+/**
+ Update the being based on input received from the client
+ Used by HopmanServer
+ */
+void Being::updateWithInput(ClientInputMsg &input) {
+    target_x_vel = input.target_x_vel;
+    if (input.target_x_vel > 0) {
+        moveRight();
+    } else if (input.target_x_vel < 0) {
+        moveLeft();
+    }
+    if (input.jumping) {
+        //TODO this needs work
+        jump();
+    }
 }
 
 /**
@@ -363,8 +381,8 @@ void Being::updateSprite() {
     sprite.update();
 }
 
-void Being::fillState(State &state) {
-    Drawable::fillState(state);
+void Being::fillObjectState(ObjectStateMsg &state) {
+    Drawable::fillObjectState(state);
     state.hp = hp;
     state.air_jumps = air_jumps;
 }

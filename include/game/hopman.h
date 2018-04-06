@@ -16,6 +16,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 #include "frame_timer.h"
 #include "graphics.h"
 #include "audio.h"
@@ -95,7 +96,7 @@ protected:
     bool server_mode;
     Client client;
     Server server;
-    ClientInput player_input;
+    ClientInputMsg player_input;
 
     int level;
     GameState game_state;
@@ -143,8 +144,7 @@ protected:
     void parseLevelConfig(LevelConfig &config);
     void setupLevel();
     void createBackground();
-    Drawable* addTile(int tile_type, int tx, int ty);
-    virtual Being* addPlayerTile(int xpos, int ypos) = 0;
+    Drawable* addTile(int tile_type, int tx, int ty, int id);
     bool isPlayer(Drawable *obj);
     virtual void networkUpdate() = 0;
 public:
@@ -155,7 +155,8 @@ public:
 
 class HopmanClient : public Hopman {
 private:
-    Being* addPlayerTile(int xpos, int ypos);
+    int player_num;
+
     void networkUpdate();
     void updatePlayerInput();
     void handleDeath();
@@ -164,10 +165,6 @@ public:
 
 class HopmanServer : public Hopman {
 private:
-    int player_start_pos_x;
-    int player_start_pos_y;
-
-    Being* addPlayerTile(int xpos, int ypos);
     Being* addNewPlayer();
     void networkUpdate();
     void handleDeath();

@@ -21,13 +21,25 @@ void Client::shutdown() {
     sock.close();
 }
 
-void Client::sendInput(ClientInput &input) {
+void Client::sendRegister(ClientRegisterMsg &reg) {
+    reg.msg_type = MSG_TYPE::CLIENT_REGISTER;
+    reg.ts = std::chrono::steady_clock::now();
+    sock.send(server_addr, &reg, sizeof(reg));
+}
+
+void Client::sendInput(ClientInputMsg &input) {
+    input.msg_type = MSG_TYPE::CLIENT_INPUT;
+    input.ts = std::chrono::steady_clock::now();
     sock.send(server_addr, &input, sizeof(input));
 }
 
-bool Client::getMessage(State &state) {
-    size_t bytes = sock.receive(NULL, NULL, &state, sizeof(state));
-    return bytes == sizeof(state);
+bool Client::getMessage(int &msg_type, char *buffer) {
+    size_t bytes = sock.receive(NULL, NULL, buffer, msg_buffer_size);
+
+    // figure out the type of the message
+    msg_type = buffer[0];
+
+    return bytes == msg_buffer_size;
 }
 
 // Server definitions
@@ -43,27 +55,34 @@ void Server::shutdown() {
 /**
  Send the given state update to each client
  */
-void Server::sendStateUpdate(State &state) {
-    int client_id = state.id;
+
+void Server::sendGameStateUpdate(GameStateMsg &state) {
+    state.msg_type = MSG_TYPE::GAME_STATE;
+    state.ts = std::chrono::steady_clock::now();
+    // send state update to everyone, game state of other players could be displayed
     for (auto &addr_obj : addr_to_client) {
-        if (addr_obj.first != client_id) {
-            sock.send(addr_obj.first, &state, sizeof(state));
-        }
+        sock.send(addr_obj.first, &state, sizeof(state));
     }
-    // send to the client whose player is being updated
-    // use a special signifier so the client knows this is its player
-    //TODO consider using a hash of addr and port instead so that client and server can both determine id
-    state.id = -1;
-    sock.send(addr_to_client[client_id]->client_addr, &state, sizeof(state));
 }
 
-bool Server::getInput(int &player_id, ClientInput &input) {
+void Server::sendObjectStateUpdate(ObjectStateMsg &state) {
+    state.msg_type = MSG_TYPE::OBJECT_STATE;
+    state.ts = std::chrono::steady_clock::now();
+    for (auto &addr_obj : addr_to_client) {
+        sock.send(addr_obj.first, &state, sizeof(state));
+    }
+}
+
+bool Server::getMessage(int &msg_type, int **player_id, char *buffer) {
     unsigned int sender_addr;
     unsigned short sender_port;
-    size_t bytes = sock.receive(&sender_addr, &sender_port, &input, sizeof(input));
-    if (bytes != sizeof(input)) {
+    size_t bytes = sock.receive(&sender_addr, &sender_port, buffer, msg_buffer_size);
+    if (bytes != msg_buffer_size) {
         return false;
     }
+
+    // figure out the type of the message
+    msg_type = buffer[0];
 
     // we got a packet, see who it was from
     auto map_val = addr_to_client.find(sender_addr);
@@ -79,6 +98,6 @@ bool Server::getInput(int &player_id, ClientInput &input) {
     } else {
         record = map_val->second;
     }
-    player_id = record->player_id;
+    *player_id = &record->player_id;
     return true;
 }

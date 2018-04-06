@@ -12,18 +12,48 @@
 #include <string>
 #include <map>
 #include <arpa/inet.h>
+#include <chrono>
 #include "socket.h"
 
 constexpr int CLIENT_PORT = 2552;
 constexpr int SERVER_PORT = 2553;
 
-struct ClientInput {
-    int ts;
+typedef std::chrono::time_point<std::chrono::steady_clock> timestamp;
+
+enum MSG_TYPE {
+    // server -> client
+    GAME_STATE,
+    OBJECT_STATE,
+
+    // client -> server
+    CLIENT_REGISTER,
+    CLIENT_INPUT,
+};
+
+struct ClientRegisterMsg {
+    int msg_type;
+    timestamp ts;
     float target_x_vel;
     bool jumping;
 };
 
-struct State {
+struct ClientInputMsg {
+    int msg_type;
+    timestamp ts;
+    float target_x_vel;
+    bool jumping;
+};
+
+struct GameStateMsg {
+    int msg_type;
+    timestamp ts;
+    int state;
+    int player_id;
+};
+
+struct ObjectStateMsg {
+    int msg_type;
+    timestamp ts;
     int id;
     int type;
     bool active;
@@ -47,10 +77,12 @@ private:
     Socket sock;
     unsigned int server_addr;
 public:
+    static const size_t msg_buffer_size = std::max(sizeof(GameStateMsg), sizeof(ObjectStateMsg));
     void init(std::string server_addr);
     void shutdown();
-    void sendInput(ClientInput &input);
-    bool getMessage(State &state);
+    void sendRegister(ClientRegisterMsg &reg);
+    void sendInput(ClientInputMsg &input);
+    bool getMessage(int &msg_type, char *buffer);
 };
 
 class Server {
@@ -58,10 +90,12 @@ private:
     Socket sock;
     std::map<unsigned int, ClientRecord*> addr_to_client;
 public:
+    static const size_t msg_buffer_size = std::max(sizeof(ClientRegisterMsg), sizeof(ClientInputMsg));
     void init();
     void shutdown();
-    void sendStateUpdate(State &state);
-    bool getInput(int &player_id, ClientInput &input);
+    void sendGameStateUpdate(GameStateMsg &state);
+    void sendObjectStateUpdate(ObjectStateMsg &state);
+    bool getMessage(int &msg_type, int **player_id, char *buffer);
 };
 
 #endif /* network_h */

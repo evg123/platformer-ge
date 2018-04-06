@@ -80,9 +80,6 @@ void Graphics::clearColor(int red, int green, int blue) {
  Replace the screen with the frame that has just been drawn
  */
 void Graphics::swapFrame() {
-    //TODO needed for windows? causes flickering on OSX
-    //SDL_RenderPresent(renderer);
-    
     SDL_GL_SwapWindow(window);
 }
 

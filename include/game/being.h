@@ -64,7 +64,7 @@ protected:
     void resetJumps();
     void doMove(float x_offset, float y_offset, std::map<int, Drawable*> &objects) override;
     void update(int delta, std::map<int, Drawable*> &objects) override;
-    void updateWithState(State &state) override;
+    void updateWithObjectState(ObjectStateMsg &state) override;
     void performAction(int delta);
     void updateSprite();
     void render() override;
@@ -74,7 +74,7 @@ protected:
 public:
     void init(BeingType type);
     void destroy() override;
-    void updateWithInput(ClientInput &input);
+    void updateWithInput(ClientInputMsg &input);
     /** Get direction that being is trying to move*/
     int getTargetXVel() { return target_x_vel; };
     bool dead();
@@ -89,7 +89,7 @@ public:
     void hitOther(Drawable &other) override;
     void hitBy(Drawable &other) override;
     void ranInto(Drawable &other) override;
-    void fillState(State &state) override;
+    void fillObjectState(ObjectStateMsg &state) override;
 };
 
 #endif /* being_h */

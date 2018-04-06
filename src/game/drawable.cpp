@@ -34,7 +34,7 @@ void Drawable::update(int delta, std::map<int, Drawable*> &objects) {
 /**
  Update this drawable using the values from a state object
  */
-void Drawable::updateWithState(State &state) {
+void Drawable::updateWithObjectState(ObjectStateMsg &state) {
     //TODO smooth out updates based on how far off they are
     setPosition(state.xpos, state.ypos);
     x_vel = state.xvel;
@@ -233,7 +233,7 @@ void Drawable::applyAcceleration(int delta) {
     y_vel += delta * y_accel;
 }
 
-void Drawable::fillState(State &state) {
+void Drawable::fillObjectState(ObjectStateMsg &state) {
     state.id = id;
     state.type = tile_num;
     state.xpos = rect.xPos();

@@ -77,7 +77,7 @@ public:
     void setId(int new_id) { id = new_id; }
     // update based on delta in ms since last update
     virtual void update(int delta, std::map<int, Drawable*> &objects);
-    virtual void updateWithState(State &state);
+    virtual void updateWithObjectState(ObjectStateMsg &state);
     virtual void render() = 0;
     /** Get the bounding rect of this object */
     virtual EvgRect& getRect() { return rect; }
@@ -104,7 +104,7 @@ public:
     virtual void hitBy(Drawable &other) {};
     /** Called when this drawable bumps into another. Default does nothing */
     virtual void ranInto(Drawable &other) {};
-    virtual void fillState(State &state);
+    virtual void fillObjectState(ObjectStateMsg &state);
 };
 
 /**
