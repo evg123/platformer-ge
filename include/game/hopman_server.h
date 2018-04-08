@@ -18,6 +18,7 @@ private:
     Server server;
     
     void init() override;
+    int play() override;
     PlayerState* addNewPlayer();
     void processRegistration(PlayerState *pstate, ClientRegisterMsg *reg);
     void handleGameState() override;

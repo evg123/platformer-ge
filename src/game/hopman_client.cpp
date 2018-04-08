@@ -16,8 +16,57 @@ void HopmanClient::init() {
     client.init(server_host);
 }
 
+/**
+ Main gameplay loop
+ */
+int HopmanClient::play() {
+    registerInputCallbacks();
+    createUI();
+    
+    FrameTimer timer = FrameTimer(fps_limit);
+    
+    while (true) {
+        // wait until it is time to render the next frame
+        timer.delayUntilNextFrame();
+        
+        fps_display = timer.getFps();
+        
+        // signal a new frame to the fps timer and get the delta since the last frame
+        int delta = timer.newFrame();
+        
+        // tell the input singleton to poll for events
+        Input::instance().handleEvents();
+        if (!running) {
+            break;
+        }
+
+        // update game objects
+        if (getPlayerGameState() == GameState::PLAYING && !paused) {
+            update(delta);
+            
+            // focus the screen on the player
+            Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
+            background.updateLayerOffsets(getPlayer()->getRect().xPos(),
+                                          getPlayer()->getRect().yPos());
+        }
+        
+        // update the GUI
+        Gui::instance().update();
+        
+        // draw the new frame
+        render();
+        
+        handleGameState();
+        
+        // send/receive updates on the network
+        networkUpdate();
+    }
+    
+    return 0;
+}
+
 void HopmanClient::networkUpdate() {
-    if (game_state == GameState::LOADING) {
+    if (getPlayerGameState() == GameState::LOADING) {
         // send a registration message
         ClientRegisterMsg reg;
         reg.obj_count = objects.size();
@@ -26,6 +75,8 @@ void HopmanClient::networkUpdate() {
         // send an update about the player's action
         updatePlayerInput();
         client.sendInput(player_input);
+        player_input.clicked = false;
+        player_input.jumped = false;
     }
     
     // process incoming state updates
@@ -40,7 +91,7 @@ void HopmanClient::networkUpdate() {
                     score = state->score;
                     lives = state->lives;
                     level = state->level;
-                    setGameState(static_cast<GameState>(state->state));
+                    setGameState(getPlayerState(), static_cast<GameState>(state->state));
                 } else {
                     //TODO update gui based on the state of other players
                 }
@@ -68,42 +119,58 @@ void HopmanClient::networkUpdate() {
 
 void HopmanClient::updatePlayerInput() {
     player_input.target_x_vel = getPlayer()->getTargetXVel();
-    //TODO player_input.jumping = player.is
 }
 
 void HopmanClient::handleDeath() {
     // check if the player was killed
     if (getPlayer()->dead() || getPlayer()->needsRemoval()) {
-        tryRespawn();
+        tryRespawn(players[0]);
     }
 }
 
+GameState HopmanClient::getPlayerGameState() {
+    if (players.size() < 1) {
+        // haven't been assigned a player yet
+        return GameState::LOADING;
+    }
+    return getPlayerState().active_state;
+}
+
+/**
+ Check if the user is ready to move on from the end of a level / loss
+ */
+void HopmanClient::advanceScreenCallback() {
+    player_input.clicked = true;
+    advanceScreen(getPlayerState());
+}
+
 void HopmanClient::moveRight() {
-    if (game_state != GameState::LOADING) {
+    if (getPlayerGameState() != GameState::LOADING) {
         getPlayer()->moveRight();
     }
 }
 
 void HopmanClient::stopRight() {
-    if (game_state != GameState::LOADING) {
+    if (getPlayerGameState() != GameState::LOADING) {
         getPlayer()->stopRight();
     }
 }
 
 void HopmanClient::moveLeft() {
-    if (game_state != GameState::LOADING) {
+    if (getPlayerGameState() != GameState::LOADING) {
         getPlayer()->moveLeft();
     }
 }
 
 void HopmanClient::stopLeft() {
-    if (game_state != GameState::LOADING) {
+    if (getPlayerGameState() != GameState::LOADING) {
         getPlayer()->stopLeft();
     }
 }
 
 void HopmanClient::jump() {
-    if (game_state != GameState::LOADING) {
+    if (getPlayerGameState() != GameState::LOADING) {
+        player_input.jumped = true;
         getPlayer()->jump();
     }
 }
@@ -114,7 +181,7 @@ void HopmanClient::jump() {
 void HopmanClient::registerInputCallbacks() {
     // game events
     Input::instance().registerCallback(Action::EXIT_GAME, std::bind(&HopmanClient::exitGame, this));
-    Input::instance().registerCallback(Action::ADVACNE, std::bind(&HopmanClient::advanceScreen, this));
+    Input::instance().registerCallback(Action::ADVACNE, std::bind(&HopmanClient::advanceScreenCallback, this));
     Input::instance().registerCallback(Action::TOGGLE_FPS, std::bind(&HopmanClient::toggleFps, this));
     Input::instance().registerCallback(Action::TOGGLE_PAUSE, std::bind(&HopmanClient::pause, this));
     

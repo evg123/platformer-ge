@@ -18,13 +18,17 @@ private:
     Client client;
     ClientInputMsg player_input;
     std::string server_host;
+    GameState requested_game_state;
     
     void init() override;
+    int play() override;
+    GameState getPlayerGameState();
     void networkUpdate() override;
     void updatePlayerInput();
     void handleDeath() override;
     void registerInputCallbacks() override;
-    
+
+    void advanceScreenCallback();
     void moveRight();
     void stopRight();
     void moveLeft();

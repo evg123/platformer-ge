@@ -14,20 +14,67 @@ void HopmanServer::init() {
     setupLevel();
 }
 
+/**
+ Main gameplay loop
+ */
+int HopmanServer::play() {
+    registerInputCallbacks();
+    createUI();
+    
+    FrameTimer timer = FrameTimer(fps_limit);
+    
+    while (true) {
+        // wait until it is time to render the next frame
+        timer.delayUntilNextFrame();
+        
+        fps_display = timer.getFps();
+        
+        // signal a new frame to the fps timer and get the delta since the last frame
+        int delta = timer.newFrame();
+        
+        // tell the input singleton to poll for events
+        Input::instance().handleEvents();
+        if (!running) {
+            break;
+        }
+        
+        // update game objects
+        update(delta);
+            
+        // focus the screen on the player
+        Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
+        background.updateLayerOffsets(getPlayer()->getRect().xPos(),
+                                          getPlayer()->getRect().yPos());
+        
+        // update the GUI
+        Gui::instance().update();
+        
+        // draw the new frame
+        render();
+        
+        handleGameState();
+        
+        // send/receive updates on the network
+        networkUpdate();
+    }
+    
+    return 0;
+}
+
 void HopmanServer::networkUpdate() {
     // handle input from clients
     int *player_id;
     int msg_type;
     char buffer[server.msg_buffer_size];
     while (server.getMessage(msg_type, &player_id, buffer)) {
+        PlayerState *pstate = NULL;
+        for (auto &player_record : players) {
+            if (player_record.player->getId() == *player_id) {
+                pstate = &player_record;
+            }
+        }
         switch (msg_type) {
             case MSG_TYPE::CLIENT_REGISTER: {
-                PlayerState *pstate = NULL;
-                for (auto &player_record : players) {
-                    if (player_record.player->getId() == *player_id) {
-                        pstate = &player_record;
-                    }
-                }
                 if (pstate == NULL) {
                     // new player
                     pstate = addNewPlayer();
@@ -48,22 +95,9 @@ void HopmanServer::networkUpdate() {
                 if (obj_record != objects.end()) {
                     static_cast<Being*>(obj_record->second)->updateWithInput(*input);
                     // handle clicks
-                    //TODO
-                    /*
-                     if (game_state == GameState::LOSS) {
-                     restartGame();
-                     } else if (game_state == GameState::LEVEL_WON) {
-                     // move to next level
-                     ++level;
-                     setupLevel();
-                     } else if (game_state == GameState::RESPAWN) {
-                     // try the level again
-                     setupLevel();
-                     } else if (game_state == GameState::LEVEL_START) {
-                     // start the level
-                     setGameState(GameState::PLAYING);
-                     }
-                     */
+                    if (input->clicked) {
+                        advanceScreen(*pstate);
+                    }
                 } // ignore if player is not recognized
                 break;
             }
@@ -75,8 +109,8 @@ void HopmanServer::networkUpdate() {
     for (auto &player_state : players) {
         // dispatch to clients
         gstate.player_id = player_state.player->getId();
-        gstate.state = player_state.state;
-        gstate.lives = lives;
+        gstate.state = player_state.active_state;
+        gstate.lives = player_state.lives;
         gstate.score = score;
         gstate.level = level;
         server.sendGameStateUpdate(gstate);
@@ -92,7 +126,7 @@ void HopmanServer::networkUpdate() {
 void HopmanServer::processRegistration(PlayerState *pstate, ClientRegisterMsg *reg) {
     if (reg->obj_count >= objects.size()) {
         // client is done loading
-        pstate->state = GameState::LEVEL_START;
+        pstate->active_state = GameState::LEVEL_START;
     }
 }
 
@@ -110,7 +144,12 @@ PlayerState* HopmanServer::addNewPlayer() {
 }
 
 void HopmanServer::handleDeath() {
-    //TODO
+    // check if players were killed
+    for (auto &pstate : players) {
+        if (pstate.player->dead() || pstate.player->needsRemoval()) {
+            tryRespawn(pstate);
+        }
+    }
 }
 
 void HopmanServer::registerInputCallbacks() {
@@ -169,7 +208,7 @@ void HopmanServer::setupLevel() {
     //Audio::instance().setBgTrack(BG_TRACK);
     
     // start out on the level start screen
-    setGameState(GameState::LEVEL_START);
+    setAllGameStates(GameState::LEVEL_START);
 }
 
 /**

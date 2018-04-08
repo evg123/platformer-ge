@@ -131,8 +131,7 @@ void Being::updateWithInput(ClientInputMsg &input) {
     } else if (input.target_x_vel < 0) {
         moveLeft();
     }
-    if (input.jumping) {
-        //TODO this needs work
+    if (input.jumped) {
         jump();
     }
 }

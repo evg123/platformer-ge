@@ -74,7 +74,6 @@ enum GameState {
     NONE,
     LEVEL_START,
     PLAYING,
-    EXITING,
     RESPAWN,
     LOSS,
     LEVEL_WON,
@@ -92,7 +91,8 @@ class PlayerState {
 public:
     Being *player;
     bool assigned = false;
-    GameState state;
+    GameState active_state;
+    int lives;
 
     PlayerState(Being *player);
 };
@@ -103,8 +103,8 @@ public:
  */
 class Hopman {
 protected:
+    bool running;
     int level;
-    GameState game_state;
     bool paused;
     int fps_limit;
     int score;
@@ -120,12 +120,12 @@ protected:
     int lower_bound;
 
     /** set game state to start quitting */
-    void exitGame() { setGameState(GameState::EXITING); }
+    void exitGame() { running = false; }
     void toggleFps();
     void pause();
     
     void handleInput();
-    void advanceScreen();
+    void advanceScreen(PlayerState &pstate);
     virtual void registerInputCallbacks() = 0;
     void update(int delta);
     void render();
@@ -137,17 +137,19 @@ protected:
     void createPauseMenu();
     void createGameMessage();
     void setGameMessage(std::string new_msg);
-    void setGameState(GameState state);
+    void setGameState(PlayerState &pstate, GameState state);
+    void setAllGameStates(GameState state);
     
     bool checkRemoval(Drawable *obj);
     void removeDestroyed();
     virtual void handleDeath() = 0;
-    void tryRespawn();
+    void tryRespawn(PlayerState &pstate);
     void cleanupLevel();
     void hitGoal(Drawable &other);
 
     void createBackground();
     Drawable* addTile(int tile_type, int tx, int ty, int id);
+    PlayerState& getPlayerState();
     Being* getPlayer();
     bool isPlayer(Drawable *obj);
     virtual void handleGameState() {};
@@ -155,7 +157,7 @@ protected:
 public:
     virtual void init();
     void shutdown();
-    int play();
+    virtual int play() = 0;
 };
 
 #endif /* hopman_h */

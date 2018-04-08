@@ -43,7 +43,8 @@ struct ClientInputMsg {
     int msg_type;
     timestamp ts;
     float target_x_vel;
-    bool jumping;
+    bool jumped;
+    bool clicked;
 };
 
 struct GameStateMsg {
