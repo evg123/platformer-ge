@@ -82,8 +82,9 @@ class Client {
 private:
     Socket sock;
     unsigned int server_addr;
+    unsigned short server_port;
 public:
-    static const size_t msg_buffer_size = std::max(sizeof(GameStateMsg), sizeof(ObjectStateMsg));
+    static const ssize_t msg_buffer_size = std::max(sizeof(GameStateMsg), sizeof(ObjectStateMsg));
     void init(std::string server_addr);
     void shutdown();
     void sendRegister(ClientRegisterMsg &reg);
@@ -95,8 +96,9 @@ class Server {
 private:
     Socket sock;
     std::map<unsigned int, ClientRecord*> addr_to_client;
+    unsigned short client_port;
 public:
-    static const size_t msg_buffer_size = std::max(sizeof(ClientRegisterMsg), sizeof(ClientInputMsg));
+    static const ssize_t msg_buffer_size = std::max(sizeof(ClientRegisterMsg), sizeof(ClientInputMsg));
     void init();
     void shutdown();
     void sendGameStateUpdate(GameStateMsg &state);

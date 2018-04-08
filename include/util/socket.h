@@ -13,6 +13,8 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <cerrno>
+#include "SDL.h"
 
 class Socket {
 private:
@@ -22,9 +24,10 @@ private:
 public:
     bool open(unsigned short port);
     void close();
-    bool send(unsigned int addr, const void *data, size_t data_size);
-    size_t receive(unsigned int *sender_addr, unsigned short *sender_port,
-                   void *buffer, size_t buffer_size);
+    bool send(unsigned int dest_addr, unsigned short dest_port,
+              const void *data, ssize_t data_size);
+    ssize_t receive(unsigned int *sender_addr, unsigned short *sender_port,
+                    void *buffer, ssize_t buffer_size);
 };
 
 #endif /* socket_h */

@@ -77,7 +77,10 @@ void Input::registerCallback(Action action, std::function<void()> callback) {
  Do the callback associated with action
  */
 void Input::callAction(Action action) {
-    callbacks[action]();
+    auto cb_func = callbacks.find(action);
+    if (cb_func != callbacks.end()) {
+        cb_func->second();
+    }
 }
 
 /**

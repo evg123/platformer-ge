@@ -29,7 +29,6 @@
 #include "being.h"
 #include "tile.h"
 #include "background.h"
-#include "network.h"
 
 constexpr int STARTING_LEVEL = 1;
 constexpr auto BG_TRACK = "bg_track.mp3";
@@ -157,44 +156,6 @@ public:
     virtual void init();
     void shutdown();
     int play();
-};
-
-class HopmanClient : public Hopman {
-private:
-    Client client;
-    ClientInputMsg player_input;
-    std::string server_host;
-
-    void init() override;
-    void networkUpdate() override;
-    void updatePlayerInput();
-    void handleDeath() override;
-    void registerInputCallbacks() override;
-
-    void moveRight();
-    void stopRight();
-    void moveLeft();
-    void stopLeft();
-    void jump();
-public:
-    HopmanClient(std::string server_host);
-};
-
-class HopmanServer : public Hopman {
-private:
-    Server server;
-
-    void init() override;
-    PlayerState* addNewPlayer();
-    void processRegistration(PlayerState *pstate, ClientRegisterMsg *reg);
-    void handleGameState() override;
-    void networkUpdate() override;
-    void handleDeath() override;
-    void registerInputCallbacks() override;
-    void setupLevel();
-    void parseLevelConfig(LevelConfig &config);
-    void restartGame();
-public:
 };
 
 #endif /* hopman_h */

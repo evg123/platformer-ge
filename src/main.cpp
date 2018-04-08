@@ -22,9 +22,11 @@
 
 #include <string>
 #include "hopman.h"
+#include "hopman_server.h"
+#include "hopman_client.h"
 
 #define SERVER_MODE_FLAG  "--server-mode"
-#define HOST_OPT  "--host"
+#define HOST_OPT  "--server-host"
 
 bool getCmdLineFlag(char **start, char **end, std::string flag) {
     char** opt_start = std::find(start, end, flag);
