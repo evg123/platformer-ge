@@ -13,6 +13,10 @@ HopmanClient::HopmanClient(std::string server_host)
 
 void HopmanClient::init() {
     Hopman::init();
+    // create a player for this client
+    // id will be filled in when we register with the server
+    addTile(TileNum::PLAYER, 0, 0, -1);
+
     client.init(server_host);
 }
 
@@ -83,15 +87,16 @@ void HopmanClient::networkUpdate() {
     int msg_type;
     char buffer[client.msg_buffer_size];
     while (client.getMessage(msg_type, buffer)) {
-        switch (buffer[0]) {
+        switch (msg_type) {
             case MSG_TYPE::GAME_STATE: {
                 GameStateMsg *state = reinterpret_cast<GameStateMsg*>(buffer);
-                if (state->you) {
+                PlayerState *pstate = getPlayerState();
+                if (state->you && pstate != NULL) {
                     // we got a state update for our client
+                    pstate->lives = state->lives;
                     score = state->score;
-                    lives = state->lives;
                     level = state->level;
-                    setGameState(getPlayerState(), static_cast<GameState>(state->state));
+                    setGameState(pstate, static_cast<GameState>(state->state));
                 } else {
                     //TODO update gui based on the state of other players
                 }
@@ -100,14 +105,21 @@ void HopmanClient::networkUpdate() {
             case MSG_TYPE::OBJECT_STATE: {
                 ObjectStateMsg *state = reinterpret_cast<ObjectStateMsg*>(buffer);
                 Drawable *obj;
-                auto obj_record = objects.find(state->id);
-                if (obj_record == objects.end()) {
-                    // new object
-                    obj = addTile(state->type, 0, 0, state->id);
-                    obj->setId(state->id);
+                if (state->you) {
+                    obj = getPlayer();
+                    if (obj->getId() != state->id) {
+                        obj->setId(state->id);
+                    }
                 } else {
-                    // existing object
-                    obj = obj_record->second;
+                    auto obj_record = objects.find(state->id);
+                    if (obj_record == objects.end()) {
+                        // new object
+                        obj = addTile(state->type, 0, 0, state->id);
+                        obj->setId(state->id);
+                    } else {
+                        // existing object
+                        obj = obj_record->second;
+                    }
                 }
                 // update the object with the state info
                 obj->updateWithObjectState(*state);
@@ -124,7 +136,7 @@ void HopmanClient::updatePlayerInput() {
 void HopmanClient::handleDeath() {
     // check if the player was killed
     if (getPlayer()->dead() || getPlayer()->needsRemoval()) {
-        tryRespawn(players[0]);
+        //tryRespawn(players[0]);
     }
 }
 
@@ -133,7 +145,18 @@ GameState HopmanClient::getPlayerGameState() {
         // haven't been assigned a player yet
         return GameState::LOADING;
     }
-    return getPlayerState().active_state;
+    return getPlayerState()->active_state;
+}
+
+void HopmanClient::setGameState(PlayerState *pstate, GameState gstate) {
+    Hopman::setGameState(pstate, gstate);
+    if (pstate == getPlayerState() && pstate->active_state != gstate) {
+        // handle state transition for our client
+        if (gstate == GameState::LOADING) {
+            // the first time we eneter loading we need to clear out our objects
+            cleanupLevel();
+        }
+    }
 }
 
 /**
@@ -141,7 +164,7 @@ GameState HopmanClient::getPlayerGameState() {
  */
 void HopmanClient::advanceScreenCallback() {
     player_input.clicked = true;
-    advanceScreen(getPlayerState());
+    //advanceScreen(getPlayerState());
 }
 
 void HopmanClient::moveRight() {
@@ -183,7 +206,7 @@ void HopmanClient::registerInputCallbacks() {
     Input::instance().registerCallback(Action::EXIT_GAME, std::bind(&HopmanClient::exitGame, this));
     Input::instance().registerCallback(Action::ADVACNE, std::bind(&HopmanClient::advanceScreenCallback, this));
     Input::instance().registerCallback(Action::TOGGLE_FPS, std::bind(&HopmanClient::toggleFps, this));
-    Input::instance().registerCallback(Action::TOGGLE_PAUSE, std::bind(&HopmanClient::pause, this));
+    Input::instance().registerCallback(Action::TOGGLE_PAUSE, std::bind(&HopmanClient::togglePause, this));
     
     // player movement
     Input::instance().registerCallback(Action::MOVE_LEFT, std::bind(&HopmanClient::moveLeft, this));

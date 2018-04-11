@@ -27,6 +27,7 @@ private:
     void updatePlayerInput();
     void handleDeath() override;
     void registerInputCallbacks() override;
+    void setGameState(PlayerState *pstate, GameState state) override;
 
     void advanceScreenCallback();
     void moveRight();

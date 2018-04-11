@@ -29,7 +29,6 @@ void Hopman::init() {
     setAllGameStates(GameState::LOADING);
     fps_limit = DEFAULT_FPS_LIMIT;
     score = 0;
-    lives = DEFAULT_EXTRA_LIVES;
 }
 
 /**
@@ -98,7 +97,7 @@ void Hopman::createStatusBar() {
                                            LIVES_STR, STATUS_BAR_TEXT_SIZE);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
     elem = new TextGuiElement<int>({elem_pos + elem->getWidth(), STATUS_BAR_Y + 5, 0, 0},
-                                   lives, STATUS_BAR_TEXT_SIZE, true);
+                                   getPlayerState()->lives, STATUS_BAR_TEXT_SIZE, true);
     Gui::instance().add(GuiGroupId::STATUS_BAR, elem);
 
     // fps display
@@ -207,17 +206,17 @@ void Hopman::removeDestroyed() {
 /**
  try to respawn after player death
  */
-void Hopman::tryRespawn(PlayerState &pstate) {
-    if (pstate.lives > 0) {
+void Hopman::tryRespawn(PlayerState *pstate) {
+    if (pstate->lives > 0) {
         // respawn
-        --lives;
+        --pstate->lives;
         setGameState(pstate, GameState::RESPAWN);
     } else {
         setGameState(pstate, GameState::LOSS);
     }
 }
 
-void Hopman::pause() {
+void Hopman::togglePause() {
     paused = !paused;
     Gui::instance().toggleGroupDisplay(GuiGroupId::PAUSE);
 }
@@ -225,22 +224,23 @@ void Hopman::pause() {
 /**
  Check if the user is ready to move on from the end of a level / loss
  */
-void Hopman::advanceScreen(PlayerState &pstate) {
+void Hopman::advanceScreen(PlayerState *pstate) {
     if (paused) {
         // don't advance if we are paused
-        return;
+        //return;
     }
     
-    if (pstate.active_state == GameState::LOSS) {
-        setGameState(pstate, GameState::LOADING);
-    } else if (pstate.active_state == GameState::LEVEL_WON) {
-        // move to next level
-        setGameState(pstate, GameState::LOADING);
-    } else if (pstate.active_state == GameState::RESPAWN) {
-        // try the level again
+    if (pstate->active_state == GameState::LOSS) {
+        // ready to reset the level
+        pstate->ready = true;
+    } else if (pstate->active_state == GameState::LEVEL_WON) {
+        // ready to move to next level
+        pstate->ready = true;
+    } else if (pstate->active_state == GameState::RESPAWN) {
+        // respawn the character
         setGameState(pstate, GameState::LEVEL_START);
-    } else if (pstate.active_state == GameState::LEVEL_START) {
-        // start the level
+    } else if (pstate->active_state == GameState::LEVEL_START) {
+        // start playing
         setGameState(pstate, GameState::PLAYING);
     }
 }
@@ -284,7 +284,7 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
     if (tile_type == TileNum::PLAYER) {
         Being *player = new Being();
         player->init(BeingType::player());
-        PlayerState player_state(player);
+        PlayerState *player_state = new PlayerState(player);
         players.push_back(player_state);
         obj = player;
 
@@ -306,7 +306,7 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
         obj = tile;
     }
 
-    if (id > 0) {
+    if (id != 0) {
         // id was specified, override the auto-assigned id
         obj->setId(id);
     }
@@ -316,12 +316,19 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
     return obj;
 }
 
-PlayerState& Hopman::getPlayerState() {
-    return players[0];
+PlayerState* Hopman::getPlayerState() {
+    if (players.size() > 0) {
+        return players[0];
+    }
+    return NULL;
 }
 
 Being* Hopman::getPlayer() {
-    return getPlayerState().player;
+    PlayerState *pstate = getPlayerState();
+    if (pstate != NULL) {
+        return pstate->player;
+    }
+    return NULL;
 }
 
 /**
@@ -377,15 +384,15 @@ void Hopman::cleanupLevel() {
  */
 bool Hopman::isPlayer(Drawable *obj) {
     for (auto &player_state : players) {
-        if (player_state.player == obj) {
+        if (player_state->player == obj) {
             return true;
         }
     }
     return false;
 }
 
-void Hopman::setGameState(PlayerState &pstate, GameState gstate) {
-    if (gstate == pstate.active_state) {
+void Hopman::setGameState(PlayerState *pstate, GameState gstate) {
+    if (gstate == pstate->active_state) {
         // no change
         return;
     }
@@ -414,17 +421,17 @@ void Hopman::setGameState(PlayerState &pstate, GameState gstate) {
         default:
             break;
     }
-    pstate.active_state = gstate;
+    pstate->active_state = gstate;
 }
 
 void Hopman::setAllGameStates(GameState state) {
     for (auto &player_state_obj : players) {
-        player_state_obj.active_state = state;
+        player_state_obj->active_state = state;
     }
 }
 
 // PlayerState Definitions
 
 PlayerState::PlayerState(Being *player)
-: player(player), assigned(false), active_state(GameState::LOADING), lives(DEFAULT_EXTRA_LIVES) {}
+: player(player), assigned(false), active_state(GameState::LOADING), ready(false), lives(DEFAULT_EXTRA_LIVES) {}
 

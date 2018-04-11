@@ -10,8 +10,9 @@
 
 void HopmanServer::init() {
     Hopman::init();
-    server.init();
     setupLevel();
+    //pause();
+    server.init();
 }
 
 /**
@@ -69,8 +70,8 @@ void HopmanServer::networkUpdate() {
     while (server.getMessage(msg_type, &player_id, buffer)) {
         PlayerState *pstate = NULL;
         for (auto &player_record : players) {
-            if (player_record.player->getId() == *player_id) {
-                pstate = &player_record;
+            if (player_record->player->getId() == *player_id) {
+                pstate = player_record;
             }
         }
         switch (msg_type) {
@@ -96,7 +97,7 @@ void HopmanServer::networkUpdate() {
                     static_cast<Being*>(obj_record->second)->updateWithInput(*input);
                     // handle clicks
                     if (input->clicked) {
-                        advanceScreen(*pstate);
+                        advanceScreen(pstate);
                     }
                 } // ignore if player is not recognized
                 break;
@@ -107,10 +108,13 @@ void HopmanServer::networkUpdate() {
     // send updates to clients
     GameStateMsg gstate;
     for (auto &player_state : players) {
+        if (!player_state->assigned) {
+            continue;
+        }
         // dispatch to clients
-        gstate.player_id = player_state.player->getId();
-        gstate.state = player_state.active_state;
-        gstate.lives = player_state.lives;
+        gstate.player_id = player_state->player->getId();
+        gstate.state = player_state->active_state;
+        gstate.lives = player_state->lives;
         gstate.score = score;
         gstate.level = level;
         server.sendGameStateUpdate(gstate);
@@ -133,9 +137,9 @@ void HopmanServer::processRegistration(PlayerState *pstate, ClientRegisterMsg *r
 PlayerState* HopmanServer::addNewPlayer() {
     // take the first inactive player from the players list
     for (auto &player_state : players) {
-        if (!player_state.assigned) {
-            player_state.assigned = true;
-            return &player_state;
+        if (!player_state->assigned) {
+            player_state->assigned = true;
+            return player_state;
         }
     }
     // all allocated players are taken
@@ -146,7 +150,7 @@ PlayerState* HopmanServer::addNewPlayer() {
 void HopmanServer::handleDeath() {
     // check if players were killed
     for (auto &pstate : players) {
-        if (pstate.player->dead() || pstate.player->needsRemoval()) {
+        if (pstate->player->dead() || pstate->player->needsRemoval()) {
             tryRespawn(pstate);
         }
     }
@@ -162,7 +166,29 @@ void HopmanServer::registerInputCallbacks() {
  Update server's game state based on client's states
  */
 void HopmanServer::handleGameState() {
-    
+    bool all_ready = false;
+    bool all_lost = false;
+    bool any_won = false;
+    bool any_playing = false;
+    for (auto &pstate : players) {
+        all_ready &= pstate->ready;
+        all_lost &= pstate->active_state == GameState::LOSS;
+        any_won |= pstate->active_state == GameState::LEVEL_WON;
+        any_playing |= pstate->active_state == GameState::PLAYING;
+    }
+    if (all_lost && all_ready) {
+        // we can restart the level completely
+        setAllGameStates(GameState::LOADING);
+        restartGame();
+    } else if (any_won && all_ready) {
+        // we can move to the next level
+        ++level;
+        setAllGameStates(GameState::LOADING);
+        setupLevel();
+    } else if (paused && any_playing) {
+        // someone started playing, unpause the level
+        togglePause();
+    }
 }
 
 /**
@@ -276,7 +302,9 @@ void HopmanServer::restartGame() {
     // restart game
     level = STARTING_LEVEL;
     score = 0;
-    lives = DEFAULT_EXTRA_LIVES;
+    for (PlayerState *pstate : players) {
+        pstate->lives = DEFAULT_EXTRA_LIVES;
+    }
     setupLevel();
     
     // unpause in case we restarted from the menu

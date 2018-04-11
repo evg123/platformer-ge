@@ -92,6 +92,7 @@ public:
     Being *player;
     bool assigned = false;
     GameState active_state;
+    bool ready;
     int lives;
 
     PlayerState(Being *player);
@@ -108,12 +109,11 @@ protected:
     bool paused;
     int fps_limit;
     int score;
-    int lives;
 
     int fps_display;
     std::string game_message;
 
-    std::vector<PlayerState> players;
+    std::vector<PlayerState*> players;
     Background background;
     std::map<int, Drawable*> objects;
     /** player dies if they fall past here */
@@ -122,10 +122,10 @@ protected:
     /** set game state to start quitting */
     void exitGame() { running = false; }
     void toggleFps();
-    void pause();
+    void togglePause();
     
     void handleInput();
-    void advanceScreen(PlayerState &pstate);
+    void advanceScreen(PlayerState *pstate);
     virtual void registerInputCallbacks() = 0;
     void update(int delta);
     void render();
@@ -137,19 +137,19 @@ protected:
     void createPauseMenu();
     void createGameMessage();
     void setGameMessage(std::string new_msg);
-    void setGameState(PlayerState &pstate, GameState state);
+    virtual void setGameState(PlayerState *pstate, GameState state);
     void setAllGameStates(GameState state);
     
     bool checkRemoval(Drawable *obj);
     void removeDestroyed();
     virtual void handleDeath() = 0;
-    void tryRespawn(PlayerState &pstate);
+    void tryRespawn(PlayerState *pstate);
     void cleanupLevel();
     void hitGoal(Drawable &other);
 
     void createBackground();
     Drawable* addTile(int tile_type, int tx, int ty, int id);
-    PlayerState& getPlayerState();
+    PlayerState* getPlayerState();
     Being* getPlayer();
     bool isPlayer(Drawable *obj);
     virtual void handleGameState() {};

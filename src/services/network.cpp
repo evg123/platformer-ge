@@ -23,13 +23,13 @@ void Client::shutdown() {
 }
 
 void Client::sendRegister(ClientRegisterMsg &reg) {
-    reg.msg_type = MSG_TYPE::CLIENT_REGISTER;
+    reg.msg.type = MSG_TYPE::CLIENT_REGISTER;
     reg.ts = std::chrono::steady_clock::now();
     sock.send(server_addr, server_port, &reg, sizeof(reg));
 }
 
 void Client::sendInput(ClientInputMsg &input) {
-    input.msg_type = MSG_TYPE::CLIENT_INPUT;
+    input.msg.type = MSG_TYPE::CLIENT_INPUT;
     input.ts = std::chrono::steady_clock::now();
     sock.send(server_addr, server_port, &input, sizeof(input));
 }
@@ -38,9 +38,9 @@ bool Client::getMessage(int &msg_type, char *buffer) {
     ssize_t bytes = sock.receive(NULL, NULL, buffer, msg_buffer_size);
 
     // figure out the type of the message
-    msg_type = buffer[0];
+    msg_type = reinterpret_cast<Msg*>(buffer)->type;
 
-    return bytes == msg_buffer_size;
+    return bytes > 0;
 }
 
 // Server definitions
@@ -57,9 +57,8 @@ void Server::shutdown() {
 /**
  Send the given state update to each client
  */
-
 void Server::sendGameStateUpdate(GameStateMsg &state) {
-    state.msg_type = MSG_TYPE::GAME_STATE;
+    state.msg.type = MSG_TYPE::GAME_STATE;
     state.ts = std::chrono::steady_clock::now();
     // send state update to everyone, game state of other players could be displayed
     for (auto &addr_obj : addr_to_client) {
@@ -71,9 +70,12 @@ void Server::sendGameStateUpdate(GameStateMsg &state) {
 }
 
 void Server::sendObjectStateUpdate(ObjectStateMsg &state) {
-    state.msg_type = MSG_TYPE::OBJECT_STATE;
+    state.msg.type = MSG_TYPE::OBJECT_STATE;
     state.ts = std::chrono::steady_clock::now();
     for (auto &addr_obj : addr_to_client) {
+        // set you to true when sent to the client whose state this is
+        // this is how the client learns which player they are
+        state.you = addr_obj.second->player_id == state.id;
         sock.send(addr_obj.first, client_port, &state, sizeof(state));
     }
 }
@@ -82,12 +84,12 @@ bool Server::getMessage(int &msg_type, int **player_id, char *buffer) {
     unsigned int sender_addr;
     unsigned short sender_port;
     ssize_t bytes = sock.receive(&sender_addr, &sender_port, buffer, msg_buffer_size);
-    if (bytes != msg_buffer_size) {
+    if (bytes <= 0) {
         return false;
     }
 
     // figure out the type of the message
-    msg_type = buffer[0];
+    msg_type = reinterpret_cast<Msg*>(buffer)->type;
 
     // we got a packet, see who it was from
     auto map_val = addr_to_client.find(sender_addr);

@@ -33,14 +33,18 @@ enum MSG_TYPE {
     CLIENT_INPUT,
 };
 
+struct Msg {
+    int type;
+};
+
 struct ClientRegisterMsg {
-    int msg_type;
+    Msg msg;
     timestamp ts;
     size_t obj_count;
 };
 
 struct ClientInputMsg {
-    int msg_type;
+    Msg msg;
     timestamp ts;
     float target_x_vel;
     bool jumped;
@@ -48,7 +52,7 @@ struct ClientInputMsg {
 };
 
 struct GameStateMsg {
-    int msg_type;
+    Msg msg;
     timestamp ts;
     int player_id;
     bool you;
@@ -59,8 +63,9 @@ struct GameStateMsg {
 };
 
 struct ObjectStateMsg {
-    int msg_type;
+    Msg msg;
     timestamp ts;
+    bool you;
     int id;
     int type;
     bool active;
