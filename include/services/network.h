@@ -60,6 +60,7 @@ struct GameStateMsg {
     int lives;
     int score;
     int level;
+    int lower_bound;
 };
 
 struct ObjectStateMsg {
@@ -74,6 +75,7 @@ struct ObjectStateMsg {
     int hp;
     bool marked_for_removal;
     int air_jumps;
+    bool on_ground;
 };
 
 struct ClientRecord {

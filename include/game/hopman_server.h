@@ -13,9 +13,12 @@
 #include "hopman.h"
 #include "network.h"
 
+constexpr int NETWORK_UPDATE_INTERVAL = 50;
+
 class HopmanServer : public Hopman {
 private:
     Server server;
+    int last_net_update;
     
     void init() override;
     int play() override;
@@ -23,6 +26,7 @@ private:
     void processRegistration(PlayerState *pstate, ClientRegisterMsg *reg);
     void handleGameState() override;
     void networkUpdate() override;
+    bool shouldSendNetworkUpdate();
     void handleDeath() override;
     void registerInputCallbacks() override;
     void setupLevel();

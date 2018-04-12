@@ -90,9 +90,10 @@ struct LevelConfig {
 class PlayerState {
 public:
     Being *player;
-    bool assigned = false;
+    bool assigned = false; // assigned to a client
+    bool placed = false; // placed in a level
     GameState active_state;
-    bool ready;
+    bool ready; // ready to move on to the next state
     int lives;
 
     PlayerState(Being *player);

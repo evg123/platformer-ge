@@ -35,6 +35,7 @@ void Hopman::init() {
  Tear it down
  */
 void Hopman::shutdown() {
+    background.shutdown();
     cleanupLevel();
 
     // shutdown services
@@ -195,7 +196,7 @@ void Hopman::removeDestroyed() {
     // remove destroyed objects
     for (auto iter = objects.begin(); iter != objects.end();) {
         if (iter->second->needsRemoval() && !isPlayer(iter->second)) {
-           this->score += iter->second->getScoreOnDestruction();
+            this->score += iter->second->getScoreOnDestruction();
             iter = objects.erase(iter);
         } else {
             ++iter;
@@ -280,14 +281,27 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
     int xpos = tx * TILE_SIDE;
     int ypos = ty * TILE_SIDE;
 
-    Drawable *obj;
+    Drawable *obj = NULL;
     if (tile_type == TileNum::PLAYER) {
-        Being *player = new Being();
-        player->init(BeingType::player());
-        PlayerState *player_state = new PlayerState(player);
-        players.push_back(player_state);
-        obj = player;
-
+        for (auto &pstate : players) {
+            if (id == pstate->player->getId() ||
+                (id == 0 && !pstate->placed)) {
+                // use this existing player state for this player in the level
+                obj = pstate->player;
+                pstate->player->init(BeingType::player());
+                pstate->placed = true;
+                break;
+            }
+        }
+        if (obj == NULL) {
+            // need to allcoate a new player
+            Being *player = new Being();
+            PlayerState *player_state = new PlayerState(player);
+            player_state->placed = true;
+            player->init(BeingType::player());
+            players.push_back(player_state);
+            obj = player;
+        }
     } else if (tile_type == TileNum::RED_ENEMY) {
         Being *enemy = new Being();
         enemy->init(BeingType::redEnemy());
@@ -374,9 +388,11 @@ void Hopman::cleanupLevel() {
     }
     objects.clear();
 
-    Gui::instance().setGroupDisplay(GuiGroupId::GAME_MESSAGE, false);
+    for (auto &pstate : players) {
+        pstate->placed = false;
+    }
 
-    background.shutdown();
+    Gui::instance().setGroupDisplay(GuiGroupId::GAME_MESSAGE, false);
 }
 
 /**
@@ -421,12 +437,13 @@ void Hopman::setGameState(PlayerState *pstate, GameState gstate) {
         default:
             break;
     }
+    pstate->ready = false;
     pstate->active_state = gstate;
 }
 
 void Hopman::setAllGameStates(GameState state) {
     for (auto &player_state_obj : players) {
-        player_state_obj->active_state = state;
+        setGameState(player_state_obj, state);
     }
 }
 

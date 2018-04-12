@@ -14,10 +14,16 @@
 #include <algorithm>
 #include <queue>
 #include <functional>
+#include <cmath>
 #include "SDL.h"
 #include "evg_rect.h"
 #include "resource_manager.h"
 #include "network.h"
+
+constexpr int MIN_SMOOTH_POS = 2;
+constexpr int MAX_SMOOTH_POS = 100;
+constexpr float MIN_SMOOTH_VEL = 0.05f;
+constexpr float MAX_SMOOTH_VEL = 1.0f;
 
 enum class Axis {
     X,
@@ -78,6 +84,7 @@ public:
     // update based on delta in ms since last update
     virtual void update(int delta, std::map<int, Drawable*> &objects);
     virtual void updateWithObjectState(ObjectStateMsg &state);
+    float smoothValue(float current, float update, float min_off, float max_off);
     virtual void render() = 0;
     /** Get the bounding rect of this object */
     virtual EvgRect& getRect() { return rect; }

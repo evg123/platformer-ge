@@ -22,6 +22,7 @@ void Being::init(BeingType type) {
     y_vel = 0;
     x_accel = 0;
     y_accel = 0;
+    last_update = std::chrono::steady_clock::now();
     
     // unpack type class
     this->type = type;
@@ -55,7 +56,7 @@ void Being::destroy() {
 bool Being::isOnGround() {
     //TODO could calculate this once on update
     unsigned int diff = SDL_GetTicks() - last_grounded;
-    return diff <= JUMP_TOLERANCE_MS;
+    return diff <= JUMP_TOLERANCE_MS && jump_start_ts == 0;
 }
 
 /**
@@ -74,6 +75,7 @@ void Being::jump() {
         if (!isOnGround()) {
             --air_jumps;
         }
+        last_grounded = 0;
         Audio::instance().playSound(type.jump_sound);
     }
 }
@@ -118,6 +120,10 @@ void Being::updateWithObjectState(ObjectStateMsg &state) {
     Drawable::updateWithObjectState(state);
     hp = state.hp;
     air_jumps = state.air_jumps;
+    if (state.on_ground) {
+        last_grounded = SDL_GetTicks();
+        jump_start_ts = 0;
+    }
 }
 
 /**
@@ -312,7 +318,6 @@ void Being::applyAcceleration(int delta) {
         // stopping
         // slow to zero unless we are in the air
         if (x_vel > 0) {
-            //SDL_Log("slow");
             x_vel = std::max(0.0f, x_vel - FRICTION * delta);
         } else if (x_vel < 0) {
             x_vel = std::min(0.0f, x_vel + FRICTION * delta);
@@ -384,4 +389,5 @@ void Being::fillObjectState(ObjectStateMsg &state) {
     Drawable::fillObjectState(state);
     state.hp = hp;
     state.air_jumps = air_jumps;
+    state.on_ground = isOnGround();
 }

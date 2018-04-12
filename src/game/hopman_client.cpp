@@ -26,6 +26,7 @@ void HopmanClient::init() {
 int HopmanClient::play() {
     registerInputCallbacks();
     createUI();
+    createBackground();
     
     FrameTimer timer = FrameTimer(fps_limit);
     
@@ -45,7 +46,7 @@ int HopmanClient::play() {
         }
 
         // update game objects
-        if (getPlayerGameState() == GameState::PLAYING && !paused) {
+        if (!paused) {
             update(delta);
             
             // focus the screen on the player
@@ -96,6 +97,7 @@ void HopmanClient::networkUpdate() {
                     pstate->lives = state->lives;
                     score = state->score;
                     level = state->level;
+                    lower_bound = state->lower_bound;
                     setGameState(pstate, static_cast<GameState>(state->state));
                 } else {
                     //TODO update gui based on the state of other players
@@ -110,16 +112,15 @@ void HopmanClient::networkUpdate() {
                     if (obj->getId() != state->id) {
                         obj->setId(state->id);
                     }
+                }
+                auto obj_record = objects.find(state->id);
+                if (obj_record == objects.end()) {
+                    // new object
+                    obj = addTile(state->type, 0, 0, state->id);
+                    obj->setId(state->id);
                 } else {
-                    auto obj_record = objects.find(state->id);
-                    if (obj_record == objects.end()) {
-                        // new object
-                        obj = addTile(state->type, 0, 0, state->id);
-                        obj->setId(state->id);
-                    } else {
-                        // existing object
-                        obj = obj_record->second;
-                    }
+                    // existing object
+                    obj = obj_record->second;
                 }
                 // update the object with the state info
                 obj->updateWithObjectState(*state);
@@ -149,7 +150,6 @@ GameState HopmanClient::getPlayerGameState() {
 }
 
 void HopmanClient::setGameState(PlayerState *pstate, GameState gstate) {
-    Hopman::setGameState(pstate, gstate);
     if (pstate == getPlayerState() && pstate->active_state != gstate) {
         // handle state transition for our client
         if (gstate == GameState::LOADING) {
@@ -157,6 +157,7 @@ void HopmanClient::setGameState(PlayerState *pstate, GameState gstate) {
             cleanupLevel();
         }
     }
+    Hopman::setGameState(pstate, gstate);
 }
 
 /**

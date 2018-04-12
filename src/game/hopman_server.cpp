@@ -9,9 +9,10 @@
 #include "hopman_server.h"
 
 void HopmanServer::init() {
+    last_net_update = 0;
     Hopman::init();
     setupLevel();
-    //pause();
+    togglePause();
     server.init();
 }
 
@@ -21,6 +22,7 @@ void HopmanServer::init() {
 int HopmanServer::play() {
     registerInputCallbacks();
     createUI();
+    createBackground();
     
     FrameTimer timer = FrameTimer(fps_limit);
     
@@ -40,13 +42,15 @@ int HopmanServer::play() {
         }
         
         // update game objects
-        update(delta);
+        if (!paused) {
+            update(delta);
             
-        // focus the screen on the player
-        Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
-        background.updateLayerOffsets(getPlayer()->getRect().xPos(),
-                                          getPlayer()->getRect().yPos());
-        
+            // focus the screen on the player
+            Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
+            background.updateLayerOffsets(getPlayer()->getRect().xPos(),
+                                              getPlayer()->getRect().yPos());
+        }
+
         // update the GUI
         Gui::instance().update();
         
@@ -91,10 +95,14 @@ void HopmanServer::networkUpdate() {
             }
             case MSG_TYPE::CLIENT_INPUT: {
                 auto *input = reinterpret_cast<ClientInputMsg*>(buffer);
+                //TODO drop inputs that are out of date
                 // update the player object based on input
                 auto obj_record = objects.find(*player_id);
                 if (obj_record != objects.end()) {
-                    static_cast<Being*>(obj_record->second)->updateWithInput(*input);
+                    Being *player = static_cast<Being*>(obj_record->second);
+                    auto delta = input->ts - player->getLastUpdate();
+                    player->updateWithInput(*input);
+                    player->update(delta, objects);//TODO stop updating in main loop for client
                     // handle clicks
                     if (input->clicked) {
                         advanceScreen(pstate);
@@ -105,26 +113,39 @@ void HopmanServer::networkUpdate() {
         }
     }
     
-    // send updates to clients
-    GameStateMsg gstate;
-    for (auto &player_state : players) {
-        if (!player_state->assigned) {
-            continue;
+    // send updates to clients periodically
+    if (shouldSendNetworkUpdate()) {
+        GameStateMsg gstate;
+        for (auto &player_state : players) {
+            if (!player_state->assigned) {
+                continue;
+            }
+            // dispatch to clients
+            gstate.player_id = player_state->player->getId();
+            gstate.state = player_state->active_state;
+            gstate.lives = player_state->lives;
+            gstate.score = score;
+            gstate.level = level;
+            gstate.lower_bound = lower_bound;
+            server.sendGameStateUpdate(gstate);
         }
-        // dispatch to clients
-        gstate.player_id = player_state->player->getId();
-        gstate.state = player_state->active_state;
-        gstate.lives = player_state->lives;
-        gstate.score = score;
-        gstate.level = level;
-        server.sendGameStateUpdate(gstate);
+        ObjectStateMsg ostate;
+        for (auto &obj : objects) {
+            // dispatch to clients
+            obj.second->fillObjectState(ostate);
+            server.sendObjectStateUpdate(ostate);
+        }
     }
-    ObjectStateMsg ostate;
-    for (auto &obj : objects) {
-        // dispatch to clients
-        obj.second->fillObjectState(ostate);
-        server.sendObjectStateUpdate(ostate);
+}
+
+bool HopmanServer::shouldSendNetworkUpdate() {
+    int now = SDL_GetTicks();
+    int diff = now - last_net_update;
+    if (diff > NETWORK_UPDATE_INTERVAL) {
+        last_net_update = now;
+        return true;
     }
+    return false;
 }
 
 void HopmanServer::processRegistration(PlayerState *pstate, ClientRegisterMsg *reg) {
@@ -166,17 +187,26 @@ void HopmanServer::registerInputCallbacks() {
  Update server's game state based on client's states
  */
 void HopmanServer::handleGameState() {
-    bool all_ready = false;
-    bool all_lost = false;
+    bool all_ready = true;
+    bool all_lost = true;
+    bool any_assigned = false;
     bool any_won = false;
     bool any_playing = false;
     for (auto &pstate : players) {
+        if (!pstate->assigned) {
+            // only look at active players
+            continue;
+        }
+        any_assigned = true;
         all_ready &= pstate->ready;
         all_lost &= pstate->active_state == GameState::LOSS;
         any_won |= pstate->active_state == GameState::LEVEL_WON;
         any_playing |= pstate->active_state == GameState::PLAYING;
     }
-    if (all_lost && all_ready) {
+    if (!any_assigned) {
+        // don't do anything if no one is connected
+        return;
+    } else if (all_lost && all_ready) {
         // we can restart the level completely
         setAllGameStates(GameState::LOADING);
         restartGame();
@@ -226,15 +256,12 @@ void HopmanServer::setupLevel() {
         throw std::runtime_error("Invalid level file, no goal tile found!");
     }
     
-    // setup background layers
-    createBackground();
-    
     // start the background track for the level
     //TODO make custom for each level
     //Audio::instance().setBgTrack(BG_TRACK);
     
     // start out on the level start screen
-    setAllGameStates(GameState::LEVEL_START);
+    //setAllGameStates(GameState::LEVEL_START); should already be loading
 }
 
 /**

@@ -10,6 +10,7 @@
 #define being_h
 
 #include <map>
+#include <chrono>
 #include "drawable.h"
 #include "being_type.h"
 #include "sprite.h"
@@ -26,6 +27,8 @@ constexpr int WALK_SOUND_INTERVAL_MS = 300; // play the walk sound every x ms wh
 constexpr float MOVE_ACCEL = 500 / 1000.0f / 1000.0f;
 constexpr float CORRECTION_ACCEL = 200 / 1000.0f / 1000.0f;
 constexpr float JUMP_VELOCITY = 250 / 1000.0f;
+
+typedef std::chrono::time_point<std::chrono::steady_clock> timestamp;
 
 /**
  enum for direction being is facing
@@ -60,10 +63,10 @@ protected:
     float target_x_vel;
     int action_start_ts;
     int destroy_at_ts;
+    timestamp last_update;
 
     void resetJumps();
     void doMove(float x_offset, float y_offset, std::map<int, Drawable*> &objects) override;
-    void update(int delta, std::map<int, Drawable*> &objects) override;
     void updateWithObjectState(ObjectStateMsg &state) override;
     void performAction(int delta);
     void updateSprite();
@@ -73,10 +76,12 @@ protected:
     void takeDamage(int damage);
 public:
     void init(BeingType type);
+    void update(int delta, std::map<int, Drawable*> &objects) override;
     void destroy() override;
     void updateWithInput(ClientInputMsg &input);
     /** Get direction that being is trying to move*/
-    int getTargetXVel() { return target_x_vel; };
+    float getTargetXVel() { return target_x_vel; };
+    timestamp getLastUpdate() { return last_update; };
     bool dead();
     void jump();
     bool canJump();
