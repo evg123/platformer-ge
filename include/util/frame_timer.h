@@ -23,15 +23,17 @@ constexpr float FPS_UPDATE_INTERVAL_MS = 1000.0f;
 class FrameTimer {
 private:
     int fps_target;
-    int frame_start;
-    int fps_update_start;
+    long frame_start;
+    long fps_update_start;
     int frame_count;
     int fps;
 public:
-    FrameTimer(int fps_target);
+    void init(int fps_target);
 
     /** Return the last recorded fps count */
     int getFps() { return fps; };
+    /** Return the timestamp of the current frame */
+    long getFrameStart() { return frame_start; };
 
     int newFrame();
     void delayUntilNextFrame();

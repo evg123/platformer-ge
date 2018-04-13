@@ -111,6 +111,7 @@ protected:
     int fps_limit;
     int score;
 
+    FrameTimer timer;
     int fps_display;
     std::string game_message;
 

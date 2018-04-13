@@ -29,6 +29,7 @@ void Hopman::init() {
     setAllGameStates(GameState::LOADING);
     fps_limit = DEFAULT_FPS_LIMIT;
     score = 0;
+    timer.init(fps_limit);
 }
 
 /**

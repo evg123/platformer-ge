@@ -9,7 +9,7 @@
 #include "hopman_client.h"
 
 HopmanClient::HopmanClient(std::string server_host)
-: server_host(server_host) {}
+: server_host(server_host), client_state_history(STATE_HISTORY_SIZE), state_history_head(0) {}
 
 void HopmanClient::init() {
     Hopman::init();
@@ -27,8 +27,6 @@ int HopmanClient::play() {
     registerInputCallbacks();
     createUI();
     createBackground();
-    
-    FrameTimer timer = FrameTimer(fps_limit);
     
     while (true) {
         // wait until it is time to render the next frame
@@ -106,13 +104,11 @@ void HopmanClient::networkUpdate() {
             }
             case MSG_TYPE::OBJECT_STATE: {
                 ObjectStateMsg *state = reinterpret_cast<ObjectStateMsg*>(buffer);
-                Drawable *obj;
                 if (state->you) {
-                    obj = getPlayer();
-                    if (obj->getId() != state->id) {
-                        obj->setId(state->id);
-                    }
+                    handlePlayerObjectState(state);
+                    break;
                 }
+                Drawable *obj;
                 auto obj_record = objects.find(state->id);
                 if (obj_record == objects.end()) {
                     // new object
@@ -128,6 +124,55 @@ void HopmanClient::networkUpdate() {
             }
         }
     }
+}
+
+void HopmanClient::handlePlayerObjectState(ObjectStateMsg *state) {
+    Being *player = getPlayer();
+    if (player->getId() != state->id) {
+        player->setId(state->id);
+    }
+    for (int idx = state_history_head; idx < state_history_head + STATE_HISTORY_SIZE; idx++) {
+        ClientStateRecord *csr = &client_state_history[idx % STATE_HISTORY_SIZE];
+        if (csr->ts == 0) {
+            // not filled in yet, we've reached the end
+            break;
+        }
+        if (csr->ts <= state->ts) {
+            if (doStatesDiffer(&csr->state, state)) {
+                // start replaying from this saved state
+                replayClientHistory(player, state, idx);
+            }
+        }
+    }
+    // we don't have state that goes back this far, ignore the update
+    return;
+}
+
+bool HopmanClient::doStatesDiffer(ObjectStateMsg *state1, ObjectStateMsg *state2) {
+    return (std::abs(state1->xpos - state2->xpos) > MIN_SMOOTH_POS ||
+            std::abs(state1->ypos - state2->ypos) > MIN_SMOOTH_POS);
+        
+}
+
+void HopmanClient::replayClientHistory(Being *player, ObjectStateMsg *state, int history_idx) {
+    ClientStateRecord *csr = &client_state_history[history_idx % STATE_HISTORY_SIZE];
+    // start with the first state
+    player->Drawable::updateWithObjectState(*state);
+    long prev_state_ts = state->ts;
+    player->updateWithInput(csr->input);
+    for (int idx = history_idx - 1; idx <= state_history_head; idx--) {
+        csr = &client_state_history[idx % STATE_HISTORY_SIZE];
+        int diff = static_cast<int>(csr->ts - prev_state_ts); // diff doesn't need long precision
+        player->update(diff, objects);
+        // update the remembered state object with the adjusted state at that ts
+        player->fillObjectState(csr->state);
+        prev_state_ts = csr->ts;
+        player->updateWithInput(csr->input);
+    }
+    int diff = static_cast<int>(timer.getFrameStart() - prev_state_ts); // diff doesn't need long precision
+    // update to the current time
+    player->update(diff, objects);
+    //TODO dont accept updates before prev_state_ts
 }
 
 void HopmanClient::updatePlayerInput() {

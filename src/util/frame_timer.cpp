@@ -6,10 +6,10 @@
 #include "frame_timer.h"
 
 /**
- Create a new timer.
+ Setup up the timer.
  The framerate will be capped at fps_target
  */
-FrameTimer::FrameTimer(int fps_target) {
+void FrameTimer::init(int fps_target) {
     this->fps_target = fps_target;
     frame_start = SDL_GetTicks();
     fps_update_start = SDL_GetTicks();
@@ -21,8 +21,8 @@ FrameTimer::FrameTimer(int fps_target) {
  Mark the start of a new frame for timing purposes
  */
 int FrameTimer::newFrame() {
-    int now = SDL_GetTicks();
-    int delta = now - frame_start;
+    long now = SDL_GetTicks();
+    int delta = static_cast<int>(now - frame_start); // delta doesn't need long precision
     frame_start = now;
 
     // limit delta

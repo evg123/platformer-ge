@@ -10,8 +10,18 @@
 #define hopman_client_h
 
 #include <string>
+#include <vector>
 #include "hopman.h"
 #include "network.h"
+
+constexpr int STATE_SAVE_INTERVAL = 100;
+constexpr int STATE_HISTORY_SIZE = 20;
+
+struct ClientStateRecord {
+    long ts = 0;
+    ClientInputMsg input;
+    ObjectStateMsg state;
+};
 
 class HopmanClient : public Hopman {
 private:
@@ -19,11 +29,16 @@ private:
     ClientInputMsg player_input;
     std::string server_host;
     GameState requested_game_state;
+    std::vector<ClientStateRecord> client_state_history;
+    int state_history_head;
     
     void init() override;
     int play() override;
     GameState getPlayerGameState();
     void networkUpdate() override;
+    void handlePlayerObjectState(ObjectStateMsg *state);
+    bool doStatesDiffer(ObjectStateMsg *state1, ObjectStateMsg *state2);
+    void replayClientHistory(Being *player, ObjectStateMsg *state, int history_idx);
     void updatePlayerInput();
     void handleDeath() override;
     void registerInputCallbacks() override;

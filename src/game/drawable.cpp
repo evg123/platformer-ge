@@ -35,12 +35,17 @@ void Drawable::update(int delta, std::map<int, Drawable*> &objects) {
  Update this drawable using the values from a state object
  */
 void Drawable::updateWithObjectState(ObjectStateMsg &state) {
-    // smooth out updates based on how far off they are
-    int xpos = smoothValue(rect.xPos(), state.xpos, MIN_SMOOTH_POS, MAX_SMOOTH_POS);
-    int ypos = smoothValue(rect.yPos(), state.ypos, MIN_SMOOTH_POS, MAX_SMOOTH_POS);
-    setPosition(xpos, ypos);
-    x_vel = smoothValue(x_vel, state.xvel, MIN_SMOOTH_VEL, MAX_SMOOTH_VEL);
-    y_vel = smoothValue(y_vel, state.yvel, MIN_SMOOTH_VEL, MAX_SMOOTH_VEL);
+    /*
+    if (smooth) {
+        // smooth out updates based on how far off they are
+        int xpos = smoothValue(rect.xPos(), state.xpos, MIN_SMOOTH_POS, MAX_SMOOTH_POS);
+        int ypos = smoothValue(rect.yPos(), state.ypos, MIN_SMOOTH_POS, MAX_SMOOTH_POS);
+        setPosition(xpos, ypos);
+    }
+    */
+    setPosition(state.xpos, state.ypos);
+    x_vel = state.xvel;
+    y_vel = state.yvel;
     marked_for_removal = state.marked_for_removal;
 }
 

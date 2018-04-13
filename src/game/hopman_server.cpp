@@ -24,8 +24,6 @@ int HopmanServer::play() {
     createUI();
     createBackground();
     
-    FrameTimer timer = FrameTimer(fps_limit);
-    
     while (true) {
         // wait until it is time to render the next frame
         timer.delayUntilNextFrame();
