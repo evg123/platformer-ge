@@ -13,12 +13,11 @@
 #include <map>
 #include <arpa/inet.h>
 #include <chrono>
+#include <set>
 #include "socket.h"
 
 constexpr int CLIENT_PORT = 2552;
 constexpr int SERVER_PORT = 2553;
-
-typedef std::chrono::time_point<std::chrono::steady_clock> timestamp;
 
 //TODO lots of info sent in these messages that doesn't update very often
 //     should split more static info into new, less frequent msg types
@@ -39,13 +38,13 @@ struct Msg {
 
 struct ClientRegisterMsg {
     Msg msg;
-    timestamp ts;
+    long ts;
     size_t obj_count;
 };
 
 struct ClientInputMsg {
     Msg msg;
-    timestamp ts;
+    long ts;
     float target_x_vel;
     bool jumped;
     bool clicked;
@@ -53,7 +52,7 @@ struct ClientInputMsg {
 
 struct GameStateMsg {
     Msg msg;
-    timestamp ts;
+    long ts;
     int player_id;
     bool you;
     int state;
@@ -65,7 +64,7 @@ struct GameStateMsg {
 
 struct ObjectStateMsg {
     Msg msg;
-    timestamp ts;
+    long ts;
     bool you;
     int id;
     int type;
@@ -104,13 +103,12 @@ class Server {
 private:
     Socket sock;
     std::map<unsigned int, ClientRecord*> addr_to_client;
-    unsigned short client_port;
 public:
     static const ssize_t msg_buffer_size = std::max(sizeof(ClientRegisterMsg), sizeof(ClientInputMsg));
     void init();
     void shutdown();
     void sendGameStateUpdate(GameStateMsg &state);
-    void sendObjectStateUpdate(ObjectStateMsg &state);
+    void sendObjectStateUpdate(ObjectStateMsg &state, std::set<int> *player_ids);
     bool getMessage(int &msg_type, int **player_id, char *buffer);
 };
 

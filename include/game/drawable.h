@@ -94,6 +94,8 @@ public:
     int getDamage() { return damage; }
     /** Return true if things will bounce off of this drawable */
     bool isBouncy() { return bouncy; }
+    /** return true if this object will not update once loaded. Overridden by subclasses */
+    virtual bool isStatic() { return true; }
     void setColor(int color_r, int color_g, int color_b, int alpha);
     void setVelocity(float x_vel, float y_vel);
     void setAcceleration(float x_acceleration, float y_acceleration);

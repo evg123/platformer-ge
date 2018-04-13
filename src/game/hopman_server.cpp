@@ -43,7 +43,7 @@ int HopmanServer::play() {
         
         // update game objects
         if (!paused) {
-            update(delta);
+            update(delta, false);
             
             // focus the screen on the player
             Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
@@ -100,9 +100,16 @@ void HopmanServer::networkUpdate() {
                 auto obj_record = objects.find(*player_id);
                 if (obj_record != objects.end()) {
                     Being *player = static_cast<Being*>(obj_record->second);
-                    auto delta = input->ts - player->getLastUpdate();
+                    int delta;
+                    if (player->getLastUpdate() == 0) {
+                        // first update, use 0
+                        delta = 0;
+                    } else {
+                        // cast delta to int, if its too big then something else is wrong anyway
+                        delta = static_cast<int>(input->ts - player->getLastUpdate());
+                    }
                     player->updateWithInput(*input);
-                    player->update(delta, objects);//TODO stop updating in main loop for client
+                    player->update(delta, objects);
                     // handle clicks
                     if (input->clicked) {
                         advanceScreen(pstate);
@@ -115,10 +122,14 @@ void HopmanServer::networkUpdate() {
     
     // send updates to clients periodically
     if (shouldSendNetworkUpdate()) {
+        std::set<int> loading_player_ids;
         GameStateMsg gstate;
         for (auto &player_state : players) {
             if (!player_state->assigned) {
                 continue;
+            }
+            if (player_state->active_state == GameState::LOADING) {
+                loading_player_ids.insert(player_state->player->getId());
             }
             // dispatch to clients
             gstate.player_id = player_state->player->getId();
@@ -133,7 +144,11 @@ void HopmanServer::networkUpdate() {
         for (auto &obj : objects) {
             // dispatch to clients
             obj.second->fillObjectState(ostate);
-            server.sendObjectStateUpdate(ostate);
+            if (obj.second->isStatic()) {
+                server.sendObjectStateUpdate(ostate, &loading_player_ids);
+            } else {
+                server.sendObjectStateUpdate(ostate, NULL);
+            }
         }
     }
 }

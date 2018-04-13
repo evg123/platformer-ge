@@ -47,7 +47,7 @@ int HopmanClient::play() {
 
         // update game objects
         if (!paused) {
-            update(delta);
+            update(delta, true);
             
             // focus the screen on the player
             Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());

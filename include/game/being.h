@@ -28,8 +28,6 @@ constexpr float MOVE_ACCEL = 500 / 1000.0f / 1000.0f;
 constexpr float CORRECTION_ACCEL = 200 / 1000.0f / 1000.0f;
 constexpr float JUMP_VELOCITY = 250 / 1000.0f;
 
-typedef std::chrono::time_point<std::chrono::steady_clock> timestamp;
-
 /**
  enum for direction being is facing
  */
@@ -63,7 +61,7 @@ protected:
     float target_x_vel;
     int action_start_ts;
     int destroy_at_ts;
-    timestamp last_update;
+    long last_update;
 
     void resetJumps();
     void doMove(float x_offset, float y_offset, std::map<int, Drawable*> &objects) override;
@@ -81,7 +79,9 @@ public:
     void updateWithInput(ClientInputMsg &input);
     /** Get direction that being is trying to move*/
     float getTargetXVel() { return target_x_vel; };
-    timestamp getLastUpdate() { return last_update; };
+    long getLastUpdate() { return last_update; };
+    /** beings are not static */
+    virtual bool isStatic() override { return false; };
     bool dead();
     void jump();
     bool canJump();

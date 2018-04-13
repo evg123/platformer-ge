@@ -24,13 +24,15 @@ void Client::shutdown() {
 
 void Client::sendRegister(ClientRegisterMsg &reg) {
     reg.msg.type = MSG_TYPE::CLIENT_REGISTER;
-    reg.ts = std::chrono::steady_clock::now();
+    auto now = std::chrono::steady_clock::now();
+    reg.ts = std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch().count();
     sock.send(server_addr, server_port, &reg, sizeof(reg));
 }
 
 void Client::sendInput(ClientInputMsg &input) {
     input.msg.type = MSG_TYPE::CLIENT_INPUT;
-    input.ts = std::chrono::steady_clock::now();
+    auto now = std::chrono::steady_clock::now();
+    input.ts = std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch().count();
     sock.send(server_addr, server_port, &input, sizeof(input));
 }
 
@@ -46,7 +48,6 @@ bool Client::getMessage(int &msg_type, char *buffer) {
 // Server definitions
 
 void Server::init() {
-    client_port = CLIENT_PORT;
     sock.open(SERVER_PORT);
 }
 
@@ -59,24 +60,31 @@ void Server::shutdown() {
  */
 void Server::sendGameStateUpdate(GameStateMsg &state) {
     state.msg.type = MSG_TYPE::GAME_STATE;
-    state.ts = std::chrono::steady_clock::now();
+    auto now = std::chrono::steady_clock::now();
+    state.ts = std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch().count();
     // send state update to everyone, game state of other players could be displayed
     for (auto &addr_obj : addr_to_client) {
         // set you to true when sent to the client whose state this is
         // this is how the client learns which player they are
         state.you = addr_obj.second->player_id == state.player_id;
-        sock.send(addr_obj.first, client_port, &state, sizeof(state));
+        sock.send(addr_obj.first, addr_obj.second->client_port, &state, sizeof(state));
     }
 }
 
-void Server::sendObjectStateUpdate(ObjectStateMsg &state) {
+void Server::sendObjectStateUpdate(ObjectStateMsg &state, std::set<int> *player_ids) {
     state.msg.type = MSG_TYPE::OBJECT_STATE;
-    state.ts = std::chrono::steady_clock::now();
+    auto now = std::chrono::steady_clock::now();
+    state.ts = std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch().count();
     for (auto &addr_obj : addr_to_client) {
+        int player_id = addr_obj.second->player_id;
+        if (player_ids != NULL && player_ids->find(player_id) == player_ids->end()) {
+            // not in the set, skip this one
+            continue;
+        }
         // set you to true when sent to the client whose state this is
         // this is how the client learns which player they are
         state.you = addr_obj.second->player_id == state.id;
-        sock.send(addr_obj.first, client_port, &state, sizeof(state));
+        sock.send(addr_obj.first, addr_obj.second->client_port, &state, sizeof(state));
     }
 }
 

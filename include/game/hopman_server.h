@@ -10,6 +10,7 @@
 #define hopman_server_h
 
 #include <string>
+#include <set>
 #include "hopman.h"
 #include "network.h"
 

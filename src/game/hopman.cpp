@@ -173,9 +173,12 @@ void Hopman::setGameMessage(std::string new_msg) {
 /**
  Update all the game objects
  */
-void Hopman::update(int delta) {
+void Hopman::update(int delta, bool update_players) {
     for (auto &obj_record : objects) {
         Drawable *obj = obj_record.second;
+        if (!update_players && isPlayer(obj)) {
+            //continue;
+        }
         obj->update(delta, objects);
         // check if obj has fallen off the map
         if (obj->getRect().top() > lower_bound) {

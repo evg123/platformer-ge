@@ -22,7 +22,7 @@ void Being::init(BeingType type) {
     y_vel = 0;
     x_accel = 0;
     y_accel = 0;
-    last_update = std::chrono::steady_clock::now();
+    last_update = 0;
     
     // unpack type class
     this->type = type;
