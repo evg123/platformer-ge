@@ -14,16 +14,26 @@
 #include <arpa/inet.h>
 #include <chrono>
 #include <set>
+#include <limits>
+#include <vector>
+#include <algorithm>
 #include "socket.h"
 #include "frame_timer.h"
 
 constexpr int CLIENT_PORT = 2552;
 constexpr int SERVER_PORT = 2553;
 
+constexpr long UNSET_SERVER_TIME = std::numeric_limits<long>::max();
+constexpr long PREVIOUS_DATAPOINT_FACTOR = 3;
+constexpr long DATAPOINTS_PER_UPDATE = 10;
+
 //TODO lots of info sent in these messages that doesn't update very often
 //     should split more static info into new, less frequent msg types
 
 enum MSG_TYPE {
+    // both ways
+    TIME_SYNC,
+    
     // server -> client
     GAME_STATE,
     OBJECT_STATE,
@@ -36,6 +46,12 @@ enum MSG_TYPE {
 struct Header {
     int type;
     long ts;
+};
+
+struct TimeSyncMsg {
+    Header hdr;
+    long client_ts;
+    long server_ts;
 };
 
 struct ClientRegisterMsg {
@@ -91,13 +107,19 @@ private:
     Socket sock;
     unsigned int server_addr;
     unsigned short server_port;
+    long server_clock_offset;
+    std::vector<long> server_time_datapoints;
 public:
-    static const ssize_t msg_buffer_size = std::max(sizeof(GameStateMsg), sizeof(ObjectStateMsg));
+    static const ssize_t msg_buffer_size = std::max({sizeof(TimeSyncMsg),
+                                                     sizeof(GameStateMsg),
+                                                     sizeof(ObjectStateMsg)});
     void init(std::string server_addr);
     void shutdown();
+    void sendTimeSync();
     void sendRegister(ClientRegisterMsg &reg);
     void sendInput(ClientInputMsg &input);
     bool getMessage(int &msg_type, char *buffer);
+    void updateServerTime(TimeSyncMsg *msg);
 };
 
 class Server {
@@ -105,9 +127,12 @@ private:
     Socket sock;
     std::map<unsigned int, ClientRecord*> addr_to_client;
 public:
-    static const ssize_t msg_buffer_size = std::max(sizeof(ClientRegisterMsg), sizeof(ClientInputMsg));
+    static const ssize_t msg_buffer_size = std::max({sizeof(TimeSyncMsg),
+                                                     sizeof(ClientRegisterMsg),
+                                                     sizeof(ClientInputMsg)});
     void init();
     void shutdown();
+    void sendTimeSync(TimeSyncMsg &msg, ClientRecord *record);
     void sendGameStateUpdate(GameStateMsg &state);
     void sendObjectStateUpdate(ObjectStateMsg &state, std::set<int> *player_ids);
     bool getMessage(int &msg_type, int **player_id, char *buffer);

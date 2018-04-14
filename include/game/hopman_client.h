@@ -14,6 +14,7 @@
 #include "hopman.h"
 #include "network.h"
 
+constexpr int TIME_SYNC_INTERVAL = 300;
 constexpr int STATE_SAVE_INTERVAL = 100;
 constexpr int STATE_HISTORY_SIZE = 20;
 
@@ -33,6 +34,7 @@ private:
     int state_history_head;
     bool should_save_client_state;
     bool need_to_load;
+    long last_time_sync;
     
     void init() override;
     int play() override;
@@ -47,6 +49,7 @@ private:
     void handleDeath() override;
     void registerInputCallbacks() override;
     void setGameState(PlayerState *pstate, GameState state) override;
+    bool shouldTimeSync();
 
     void advanceScreenCallback();
     void moveRight();

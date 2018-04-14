@@ -117,6 +117,7 @@ void HopmanServer::networkUpdate() {
                 Being *player = pstate->player;
                 if (pstate->active_state == GameState::PLAYING) {
                     // only update player if we are playing
+                    /*
                     long delta;
                     if (pstate->last_update == 0) {
                         // first update, use 0
@@ -124,8 +125,10 @@ void HopmanServer::networkUpdate() {
                     } else {
                         delta = input->hdr.ts - pstate->last_update;
                     }
+                    */
                     player->updateWithInput(*input);
                     //player->update(delta, objects);
+                    
                 }
                 // handle clicks
                 if (input->clicked) {

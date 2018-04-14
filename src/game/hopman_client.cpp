@@ -94,7 +94,19 @@ void HopmanClient::updateNpcs(long delta) {
     }
 }
 
+bool HopmanClient::shouldTimeSync() {
+    long now = getTime();
+    if (now - last_time_sync >= TIME_SYNC_INTERVAL) {
+        last_time_sync = now;
+        return true;
+    }
+    return false;
+}
+
 void HopmanClient::networkUpdate() {
+    if (shouldTimeSync()) {
+        client.sendTimeSync();
+    }
     if (getPlayerGameState() == GameState::LOADING) {
         // send a registration message
         ClientRegisterMsg reg;

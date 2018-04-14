@@ -16,10 +16,19 @@ void Client::init(std::string server_addr_str) {
     inet_pton(AF_INET, server_addr_str.c_str(), &(addr.sin_addr));
     this->server_addr = addr.sin_addr.s_addr;
     sock.open(CLIENT_PORT);
+    server_clock_offset = UNSET_SERVER_TIME;
 }
 
 void Client::shutdown() {
     sock.close();
+}
+
+void Client::sendTimeSync() {
+    TimeSyncMsg sync_msg;
+    sync_msg.hdr.type = MSG_TYPE::TIME_SYNC;
+    sync_msg.hdr.ts = getTime();
+    sync_msg.client_ts = sync_msg.hdr.ts;
+    sock.send(server_addr, server_port, &sync_msg, sizeof(sync_msg));
 }
 
 void Client::sendRegister(ClientRegisterMsg &reg) {
@@ -36,13 +45,43 @@ void Client::sendInput(ClientInputMsg &input) {
 
 bool Client::getMessage(int &msg_type, char *buffer) {
     ssize_t bytes = sock.receive(NULL, NULL, buffer, msg_buffer_size);
+    if (bytes <= 0) {
+        return false;
+    }
 
     Header *msg_header = reinterpret_cast<Header*>(buffer);
 
     // figure out the type of the message
     msg_type = msg_header->type;
+    
+    // adjust msg timestamp based on server clock offset measurement
+     msg_header->ts += server_clock_offset;
+    
+    if (msg_type == MSG_TYPE::TIME_SYNC) {
+        // update the server clock offset
+        updateServerTime(reinterpret_cast<TimeSyncMsg*>(buffer));
+    }
 
-    return bytes > 0;
+    return true;
+}
+
+void Client::updateServerTime(TimeSyncMsg *msg) {
+    long now = getTime();
+    long rtt = now - msg->client_ts;
+    long server_time_datapoint = now - msg->server_ts - rtt / 2;
+    if (server_time_datapoint == UNSET_SERVER_TIME) {
+        // use the first value we get, have to start somewhere
+        server_clock_offset = server_time_datapoint;
+    }
+    server_time_datapoints.push_back(server_time_datapoint);
+    if (server_time_datapoints.size() >= DATAPOINTS_PER_UPDATE) {
+        // use the collected points to update our guess at the server time
+        std::sort(server_time_datapoints.begin(), server_time_datapoints.end());
+        server_clock_offset = server_time_datapoints[DATAPOINTS_PER_UPDATE / 2];
+        //server_clock_offset = (server_clock_offset + new_guess) / 2;
+        server_time_datapoints.clear();
+    }
+    
 }
 
 // Server definitions
@@ -53,6 +92,12 @@ void Server::init() {
 
 void Server::shutdown() {
     sock.close();
+}
+
+void Server::sendTimeSync(TimeSyncMsg &msg, ClientRecord *record) {
+    msg.hdr.ts = getTime();
+    msg.server_ts = msg.hdr.ts;
+    sock.send(record->client_addr, record->client_port, &msg, sizeof(msg));
 }
 
 /**
@@ -115,6 +160,10 @@ bool Server::getMessage(int &msg_type, int **player_id, char *buffer) {
     }
     if (msg_header->ts < record->latest_msg_ts) {
         return false;
+    }
+    if (msg_type == MSG_TYPE::TIME_SYNC) {
+        // respond with the server's time
+        sendTimeSync(*reinterpret_cast<TimeSyncMsg*>(buffer), record);
     }
     record->latest_msg_ts = msg_header->ts;
     *player_id = &record->player_id;
