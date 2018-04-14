@@ -55,31 +55,31 @@ protected:
 
     int air_jumps;
     float jump_vel;
-    int jump_start_ts; // 0 means not jumping
-    unsigned int last_grounded; // ts of the last time we landed on something
+    long jump_start_ts; // 0 means not jumping
+    unsigned long last_grounded; // ts of the last time we landed on something
     float movement_accel;
     float target_x_vel;
-    int action_start_ts;
-    int destroy_at_ts;
-    long last_update;
+    long action_start_ts;
+    long destroy_at_ts;
 
     void resetJumps();
     void doMove(float x_offset, float y_offset, std::map<int, Drawable*> &objects) override;
     void updateWithObjectState(ObjectStateMsg &state) override;
-    void performAction(int delta);
+    void performAction(long delta);
     void updateSprite();
     void render() override;
     void processCollision(Drawable &other, float x_off, float y_off) override;
-    void applyAcceleration(int delta) override;
+    void applyAcceleration(long delta) override;
     void takeDamage(int damage);
 public:
     void init(BeingType type);
-    void update(int delta, std::map<int, Drawable*> &objects) override;
+    /** re-init the being */
+    void reset() { init(type); }
+    void update(long delta, std::map<int, Drawable*> &objects) override;
     void destroy() override;
     void updateWithInput(ClientInputMsg &input);
     /** Get direction that being is trying to move*/
     float getTargetXVel() { return target_x_vel; };
-    long getLastUpdate() { return last_update; };
     /** beings are not static */
     virtual bool isStatic() override { return false; };
     bool dead();

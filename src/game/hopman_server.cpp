@@ -31,7 +31,7 @@ int HopmanServer::play() {
         fps_display = timer.getFps();
         
         // signal a new frame to the fps timer and get the delta since the last frame
-        int delta = timer.newFrame();
+        long delta = timer.newFrame();
         
         // tell the input singleton to poll for events
         Input::instance().handleEvents();
@@ -41,7 +41,7 @@ int HopmanServer::play() {
         
         // update game objects
         if (!paused) {
-            update(delta, false);
+            updateNpcs(delta);
             
             // focus the screen on the player
             Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
@@ -62,6 +62,26 @@ int HopmanServer::play() {
     }
     
     return 0;
+}
+
+/**
+ Update all non-player objects
+ Players will be updated as input is received from their clients
+ */
+void HopmanServer::updateNpcs(long delta) {
+    for (auto &obj_record : objects) {
+        Drawable *obj = obj_record.second;
+        if (!isPlayer(obj)) {
+            obj->update(delta, objects);
+        }
+        // check if obj has fallen off the map
+        if (obj->getRect().top() > lower_bound) {
+            obj->destroy();
+        }
+    }
+    
+    // clean up objects that need to be removed from the game
+    removeDestroyed();
 }
 
 void HopmanServer::networkUpdate() {
@@ -86,6 +106,8 @@ void HopmanServer::networkUpdate() {
                         return;
                     }
                     *player_id = pstate->player->getId();
+                    // now that the player is assigned, add it to the objects list
+                    objects[*player_id] = pstate->player;
                 }
                 ClientRegisterMsg *reg = reinterpret_cast<ClientRegisterMsg*>(buffer);
                 processRegistration(pstate, reg);
@@ -93,26 +115,25 @@ void HopmanServer::networkUpdate() {
             }
             case MSG_TYPE::CLIENT_INPUT: {
                 auto *input = reinterpret_cast<ClientInputMsg*>(buffer);
-                //TODO drop inputs that are out of date
                 // update the player object based on input
-                auto obj_record = objects.find(*player_id);
-                if (obj_record != objects.end()) {
-                    Being *player = static_cast<Being*>(obj_record->second);
-                    int delta;
-                    if (player->getLastUpdate() == 0) {
+                Being *player = pstate->player;
+                if (pstate->active_state == GameState::PLAYING) {
+                    // only update player if we are playing
+                    long delta;
+                    if (pstate->last_update == 0) {
                         // first update, use 0
                         delta = 0;
                     } else {
-                        // cast delta to int, if its too big then something else is wrong anyway
-                        delta = static_cast<int>(input->ts - player->getLastUpdate());
+                        delta = input->hdr.ts - pstate->last_update;
                     }
                     player->updateWithInput(*input);
                     player->update(delta, objects);
-                    // handle clicks
-                    if (input->clicked) {
-                        advanceScreen(pstate);
-                    }
-                } // ignore if player is not recognized
+                }
+                // handle clicks
+                if (input->clicked) {
+                    advanceScreen(pstate);
+                }
+                pstate->last_update = input->hdr.ts;
                 break;
             }
         }
@@ -132,6 +153,7 @@ void HopmanServer::networkUpdate() {
             // dispatch to clients
             gstate.player_id = player_state->player->getId();
             gstate.state = player_state->active_state;
+            gstate.assigned = player_state->assigned;
             gstate.lives = player_state->lives;
             gstate.score = score;
             gstate.level = level;
@@ -152,8 +174,8 @@ void HopmanServer::networkUpdate() {
 }
 
 bool HopmanServer::shouldSendNetworkUpdate() {
-    int now = SDL_GetTicks();
-    int diff = now - last_net_update;
+    long now = getTime();
+    long diff = now - last_net_update;
     if (diff > NETWORK_UPDATE_INTERVAL) {
         last_net_update = now;
         return true;
@@ -162,7 +184,11 @@ bool HopmanServer::shouldSendNetworkUpdate() {
 }
 
 void HopmanServer::processRegistration(PlayerState *pstate, ClientRegisterMsg *reg) {
-    if (reg->obj_count >= objects.size()) {
+    if (reg->need_to_load) {
+        // client is requesting we set it to loading mode
+        // could be a reconnection
+        pstate->active_state = GameState::LOADING;
+    } else if (reg->obj_count >= objects.size()) {
         // client is done loading
         pstate->active_state = GameState::LEVEL_START;
     }

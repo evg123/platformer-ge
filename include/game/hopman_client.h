@@ -31,9 +31,12 @@ private:
     GameState requested_game_state;
     std::vector<ClientStateRecord> client_state_history;
     int state_history_head;
+    bool should_save_client_state;
+    bool need_to_load;
     
     void init() override;
     int play() override;
+    void updatePlayer(long delta);
     GameState getPlayerGameState();
     void networkUpdate() override;
     void handlePlayerObjectState(ObjectStateMsg *state);

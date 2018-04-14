@@ -45,14 +45,14 @@ void Audio::shutdown() {
  Record the time that this sound was played
  */
 void Audio::setPlayed(const std::string &track_name) {
-    last_played_map[track_name] = SDL_GetTicks();
+    last_played_map[track_name] = getTime();
 }
 
 /**
  Get the timestamp for the last time the passed in sound was played.
  Returns 0 if this is the first time it was played.
  */
-Uint32 Audio::getLastPlayed(const std::string &sound_name) {
+long Audio::getLastPlayed(const std::string &sound_name) {
     auto item = last_played_map.find(sound_name);
     if (item == last_played_map.end()) {
         return 0;

@@ -65,12 +65,13 @@ protected:
     int damage = 0; // damage done on collision
     bool bouncy = false; // beings will bounce off of this
     bool hit_back_when_hopped_on = false;
+    bool intangible = false;
 
     // fired on collision
     std::function<void(Drawable&)> collision_callback;
 
-    std::tuple<float, float> calcVelocityOffset(int delta);
-    virtual void applyAcceleration(int delta);
+    std::tuple<float, float> calcVelocityOffset(long delta);
+    virtual void applyAcceleration(long delta);
     virtual void doMove(float x_offset, float y_offset, std::map<int, Drawable*> &objects);
     virtual void processCollision(Drawable &other, float x_off, float y_off);
 public:
@@ -82,7 +83,7 @@ public:
     /** Set unique id */
     void setId(int new_id) { id = new_id; }
     // update based on delta in ms since last update
-    virtual void update(int delta, std::map<int, Drawable*> &objects);
+    virtual void update(long delta, std::map<int, Drawable*> &objects);
     virtual void updateWithObjectState(ObjectStateMsg &state);
     float smoothValue(float current, float update, float min_off, float max_off);
     virtual void render() = 0;
@@ -92,10 +93,14 @@ public:
     int getScoreOnDestruction() { return score_on_destruction; }
     /** Return the amount of damage this drawable does when it hits something */
     int getDamage() { return damage; }
+    /** Return the tile number of this drawable */
+    int getTileNum() { return tile_num; }
     /** Return true if things will bounce off of this drawable */
     bool isBouncy() { return bouncy; }
     /** return true if this object will not update once loaded. Overridden by subclasses */
     virtual bool isStatic() { return true; }
+    /** Set whether the object should be interactable */
+    void setIntangible(bool value) { intangible = value; }
     void setColor(int color_r, int color_g, int color_b, int alpha);
     void setVelocity(float x_vel, float y_vel);
     void setAcceleration(float x_acceleration, float y_acceleration);

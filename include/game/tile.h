@@ -28,7 +28,7 @@ class Tile : public Drawable {
 private:
 public:
     Tile(int tile_num);
-    void update(int delta, std::map<int, Drawable*> &objects) override;
+    void update(long delta, std::map<int, Drawable*> &objects) override;
     void render() override;
 };
 

@@ -5,14 +5,19 @@
 
 #include "frame_timer.h"
 
+long getTime() {
+    auto now = std::chrono::steady_clock::now();
+    return std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch().count();
+}
+
 /**
  Setup up the timer.
  The framerate will be capped at fps_target
  */
 void FrameTimer::init(int fps_target) {
     this->fps_target = fps_target;
-    frame_start = SDL_GetTicks();
-    fps_update_start = SDL_GetTicks();
+    frame_start = getTime();
+    fps_update_start = frame_start;
     frame_count = 0;
     fps = 0;
 }
@@ -20,9 +25,9 @@ void FrameTimer::init(int fps_target) {
 /**
  Mark the start of a new frame for timing purposes
  */
-int FrameTimer::newFrame() {
-    long now = SDL_GetTicks();
-    int delta = static_cast<int>(now - frame_start); // delta doesn't need long precision
+long FrameTimer::newFrame() {
+    long now = getTime();
+    long delta = now - frame_start;
     frame_start = now;
 
     // limit delta
@@ -45,7 +50,7 @@ int FrameTimer::newFrame() {
  Delay until it is time to draw the next frame
  */
 void FrameTimer::delayUntilNextFrame() {
-    float delay_time = (fps_update_start + (frame_count + 1) * (1000.0f / fps_target)) - SDL_GetTicks();
+    float delay_time = (fps_update_start + (frame_count + 1) * (1000.0f / fps_target)) - getTime();;
     if (delay_time > 0) {
         SDL_Delay(delay_time);
     }

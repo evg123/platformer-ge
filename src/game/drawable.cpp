@@ -24,7 +24,7 @@ void Drawable::destroy() {
  Update the object based on how much time has passed.
  delta is in ms.
  */
-void Drawable::update(int delta, std::map<int, Drawable*> &objects) {
+void Drawable::update(long delta, std::map<int, Drawable*> &objects) {
     applyAcceleration(delta);
     float x_off, y_off;
     std::tie(x_off, y_off) = calcVelocityOffset(delta);
@@ -46,6 +46,7 @@ void Drawable::updateWithObjectState(ObjectStateMsg &state) {
     setPosition(state.xpos, state.ypos);
     x_vel = state.xvel;
     y_vel = state.yvel;
+    intangible = state.intangible;
     marked_for_removal = state.marked_for_removal;
 }
 
@@ -102,6 +103,10 @@ void Drawable::doMove(float x_offset, float y_offset, std::map<int, Drawable*> &
     std::priority_queue<CollisionRecord> collisions;
     for (auto &other_record : objects) {
         Drawable *other = other_record.second;
+        if (other->intangible) {
+            // this object can't be interacted with
+            continue;
+        }
         if (SDL_HasIntersection(&new_rect, &other->rect.getCollider())) {
             if (x_offset > 0) {
                 // find the distance to the other object on this axis
@@ -238,7 +243,7 @@ void Drawable::processCollision(Drawable &other, float x_off, float y_off) {
 /**
  Calculate how far in both axis this drawable should move in delta milliseconds
  */
-std::tuple<float, float> Drawable::calcVelocityOffset(int delta) {
+std::tuple<float, float> Drawable::calcVelocityOffset(long delta) {
     // move according to current velocity
     float x_off = x_vel * delta;
     float y_off = y_vel * delta;
@@ -249,7 +254,7 @@ std::tuple<float, float> Drawable::calcVelocityOffset(int delta) {
 /**
  adjust velocity based on acceleration
  */
-void Drawable::applyAcceleration(int delta) {
+void Drawable::applyAcceleration(long delta) {
     x_vel += delta * x_accel;
     y_vel += delta * y_accel;
 }
@@ -261,5 +266,6 @@ void Drawable::fillObjectState(ObjectStateMsg &state) {
     state.ypos = rect.yPos();
     state.xvel = x_vel;
     state.yvel = y_vel;
+    state.intangible = intangible;
     state.marked_for_removal = marked_for_removal;
 }

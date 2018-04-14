@@ -10,6 +10,7 @@
 #define sprite_h
 
 #include "SDL.h"
+#include "frame_timer.h"
 
 constexpr int FRAME_WIDTH = 16;
 constexpr int FRAME_HEIGHT = 16;
@@ -54,7 +55,7 @@ private:
     int current_frame;
     int frame_start; // starting frame number in the cycle
     int frame_count; // number of frames in the cycle
-    unsigned int start_time;
+    unsigned long start_time;
     SDL_Rect frame_rect;
     FrameConfig frame_config;
     

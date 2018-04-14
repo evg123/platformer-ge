@@ -29,7 +29,7 @@ Tile::Tile(int tile_num) {
  Update the object based on how much time has passed.
  delta is in ms.
  */
-void Tile::update(int delta, std::map<int, Drawable*> &objects) {
+void Tile::update(long delta, std::map<int, Drawable*> &objects) {
     // tiles don't do anything
 }
 

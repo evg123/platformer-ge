@@ -43,14 +43,14 @@ void Sprite::setState(SpriteState state) {
         frame_count = frame_config.dead_frame_final - frame_config.dead_frame_start + 1;
     }
     setFrame(frame_start);
-    start_time = SDL_GetTicks();
+    start_time = getTime();
 }
 
 /**
  Update the sprite to be in its next frame if enough time has passed
  */
 void Sprite::update() {
-    unsigned int diff = SDL_GetTicks() - start_time;
+    unsigned long diff = getTime() - start_time;
     int new_frame = frame_start + (diff / TICKS_PER_FRAME) % frame_count;
     if (current_frame != new_frame) {
         //SDL_Log("frame %d", new_frame);

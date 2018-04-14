@@ -172,26 +172,6 @@ void Hopman::setGameMessage(std::string new_msg) {
 }
 
 /**
- Update all the game objects
- */
-void Hopman::update(int delta, bool update_players) {
-    for (auto &obj_record : objects) {
-        Drawable *obj = obj_record.second;
-        if (!update_players && isPlayer(obj)) {
-            //continue;
-        }
-        obj->update(delta, objects);
-        // check if obj has fallen off the map
-        if (obj->getRect().top() > lower_bound) {
-            obj->destroy();
-        }
-    }
-
-    // clean up objects that need to be removed from the game
-    removeDestroyed();
-}
-
-/**
  Remove any objects that have been destroyed
  */
 void Hopman::removeDestroyed() {
@@ -212,6 +192,10 @@ void Hopman::removeDestroyed() {
  try to respawn after player death
  */
 void Hopman::tryRespawn(PlayerState *pstate) {
+    if (pstate->active_state != GameState::PLAYING) {
+        // already handled
+        return;
+    }
     if (pstate->lives > 0) {
         // respawn
         --pstate->lives;
@@ -243,6 +227,8 @@ void Hopman::advanceScreen(PlayerState *pstate) {
         pstate->ready = true;
     } else if (pstate->active_state == GameState::RESPAWN) {
         // respawn the character
+        pstate->player->reset();
+        pstate->player->setPosition(pstate->starting_x, pstate->starting_y);
         setGameState(pstate, GameState::LEVEL_START);
     } else if (pstate->active_state == GameState::LEVEL_START) {
         // start playing
@@ -293,6 +279,9 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
                 // use this existing player state for this player in the level
                 obj = pstate->player;
                 pstate->player->init(BeingType::player());
+                // set the x and y position to respawn to
+                pstate->starting_x = xpos;
+                pstate->starting_y = ypos;
                 pstate->placed = true;
                 break;
             }
@@ -303,6 +292,11 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
             PlayerState *player_state = new PlayerState(player);
             player_state->placed = true;
             player->init(BeingType::player());
+            // set the x and y position to respawn to
+            player_state->starting_x = xpos;
+            player_state->starting_y = ypos;
+            // make the player immune until done entering game
+            player->setIntangible(true);
             players.push_back(player_state);
             obj = player;
         }
@@ -367,7 +361,7 @@ void Hopman::createBackground() {
     int sh = Graphics::instance().getWindowHeight();
     background.init(getPlayer()->getRect().xPos(),
                     getPlayer()->getRect().yPos(),
-                    lower_bound - 200);
+                    lower_bound);
     background.setColor(125, 90, 125);
     
     // add layers at different distances
@@ -430,6 +424,8 @@ void Hopman::setGameState(PlayerState *pstate, GameState gstate) {
             break;
         case GameState::PLAYING:
             Gui::instance().setGroupDisplay(GuiGroupId::GAME_MESSAGE, false);
+            // done entering game, now we can be hit
+            pstate->player->setIntangible(false);
             break;
         case GameState::LEVEL_WON:
             setGameMessage("YOU WIN!");

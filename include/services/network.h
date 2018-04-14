@@ -15,6 +15,7 @@
 #include <chrono>
 #include <set>
 #include "socket.h"
+#include "frame_timer.h"
 
 constexpr int CLIENT_PORT = 2552;
 constexpr int SERVER_PORT = 2553;
@@ -32,30 +33,30 @@ enum MSG_TYPE {
     CLIENT_INPUT,
 };
 
-struct Msg {
+struct Header {
     int type;
+    long ts;
 };
 
 struct ClientRegisterMsg {
-    Msg msg;
-    long ts;
+    Header hdr;
     size_t obj_count;
+    bool need_to_load;
 };
 
 struct ClientInputMsg {
-    Msg msg;
-    long ts;
+    Header hdr;
     float target_x_vel;
     bool jumped;
     bool clicked;
 };
 
 struct GameStateMsg {
-    Msg msg;
-    long ts;
+    Header hdr;
     int player_id;
     bool you;
     int state;
+    int assigned;
     int lives;
     int score;
     int level;
@@ -63,14 +64,13 @@ struct GameStateMsg {
 };
 
 struct ObjectStateMsg {
-    Msg msg;
-    long ts;
+    Header hdr;
     bool you;
     int id;
     int type;
-    bool active;
     int xpos, ypos;
-    int xvel, yvel;
+    float xvel, yvel;
+    bool intangible;
     int hp;
     bool marked_for_removal;
     int air_jumps;
@@ -81,6 +81,7 @@ struct ClientRecord {
     int player_id;
     unsigned int client_addr;
     unsigned short client_port;
+    long latest_msg_ts;
 public:
     
 };

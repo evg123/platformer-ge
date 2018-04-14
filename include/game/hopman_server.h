@@ -19,10 +19,11 @@ constexpr int NETWORK_UPDATE_INTERVAL = 50;
 class HopmanServer : public Hopman {
 private:
     Server server;
-    int last_net_update;
+    long last_net_update;
     
     void init() override;
     int play() override;
+    void updateNpcs(long delta);
     PlayerState* addNewPlayer();
     void processRegistration(PlayerState *pstate, ClientRegisterMsg *reg);
     void handleGameState() override;

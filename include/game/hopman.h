@@ -30,7 +30,7 @@
 #include "tile.h"
 #include "background.h"
 
-constexpr int STARTING_LEVEL = 2;
+constexpr int STARTING_LEVEL = 1;
 constexpr auto BG_TRACK = "bg_track.mp3";
 
 constexpr int DEFAULT_FPS_LIMIT = 60;
@@ -93,8 +93,11 @@ public:
     bool assigned = false; // assigned to a client
     bool placed = false; // placed in a level
     GameState active_state;
+    long last_update = 0;
     bool ready; // ready to move on to the next state
     int lives;
+    int starting_x;
+    int starting_y;
 
     PlayerState(Being *player);
 };
@@ -129,7 +132,6 @@ protected:
     void handleInput();
     void advanceScreen(PlayerState *pstate);
     virtual void registerInputCallbacks() = 0;
-    void update(int delta, bool update_players);
     void render();
     void renderGui();
     void renderText(int xpos, int ypos, int font_size, std::string text);

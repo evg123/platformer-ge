@@ -55,9 +55,13 @@ bool bgLayerComparator(BgLayer *lhs, BgLayer *rhs) {
  */
 void Background::init(int start_x, int start_y, int lower_bound) {
     clearLayers();
-    this->lower_bound = lower_bound;
-    this->start_x = start_x;
-    this->start_y = start_y;
+    start_x = -1;
+    start_y = -1;
+    setLowerBound(lower_bound);
+}
+
+void Background::setLowerBound(int lower_bound) {
+    this->lower_bound = lower_bound - 200;
 }
 
 /**
@@ -94,6 +98,12 @@ void Background::addLayer(std::string img_file, int width, int height, int dista
  Update each layer of the background based on the new center of the screen
  */
 void Background::updateLayerOffsets(int center_x, int center_y) {
+    if (start_x == -1) {
+        // first update, use as the starting point
+        start_x = center_x;
+        start_y = center_y;
+        return;
+    }
     int sox = start_x - center_x;
     int soy = start_y - center_y;
     for (auto bgl : layers) {

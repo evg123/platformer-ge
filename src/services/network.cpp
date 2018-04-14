@@ -23,24 +23,24 @@ void Client::shutdown() {
 }
 
 void Client::sendRegister(ClientRegisterMsg &reg) {
-    reg.msg.type = MSG_TYPE::CLIENT_REGISTER;
-    auto now = std::chrono::steady_clock::now();
-    reg.ts = std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch().count();
+    reg.hdr.type = MSG_TYPE::CLIENT_REGISTER;
+    reg.hdr.ts = getTime();
     sock.send(server_addr, server_port, &reg, sizeof(reg));
 }
 
 void Client::sendInput(ClientInputMsg &input) {
-    input.msg.type = MSG_TYPE::CLIENT_INPUT;
-    auto now = std::chrono::steady_clock::now();
-    input.ts = std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch().count();
+    input.hdr.type = MSG_TYPE::CLIENT_INPUT;
+    input.hdr.ts = getTime();
     sock.send(server_addr, server_port, &input, sizeof(input));
 }
 
 bool Client::getMessage(int &msg_type, char *buffer) {
     ssize_t bytes = sock.receive(NULL, NULL, buffer, msg_buffer_size);
 
+    Header *msg_header = reinterpret_cast<Header*>(buffer);
+
     // figure out the type of the message
-    msg_type = reinterpret_cast<Msg*>(buffer)->type;
+    msg_type = msg_header->type;
 
     return bytes > 0;
 }
@@ -59,9 +59,8 @@ void Server::shutdown() {
  Send the given state update to each client
  */
 void Server::sendGameStateUpdate(GameStateMsg &state) {
-    state.msg.type = MSG_TYPE::GAME_STATE;
-    auto now = std::chrono::steady_clock::now();
-    state.ts = std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch().count();
+    state.hdr.type = MSG_TYPE::GAME_STATE;
+    state.hdr.ts = getTime();
     // send state update to everyone, game state of other players could be displayed
     for (auto &addr_obj : addr_to_client) {
         // set you to true when sent to the client whose state this is
@@ -72,9 +71,8 @@ void Server::sendGameStateUpdate(GameStateMsg &state) {
 }
 
 void Server::sendObjectStateUpdate(ObjectStateMsg &state, std::set<int> *player_ids) {
-    state.msg.type = MSG_TYPE::OBJECT_STATE;
-    auto now = std::chrono::steady_clock::now();
-    state.ts = std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch().count();
+    state.hdr.type = MSG_TYPE::OBJECT_STATE;
+    state.hdr.ts = getTime();
     for (auto &addr_obj : addr_to_client) {
         int player_id = addr_obj.second->player_id;
         if (player_ids != NULL && player_ids->find(player_id) == player_ids->end()) {
@@ -96,8 +94,10 @@ bool Server::getMessage(int &msg_type, int **player_id, char *buffer) {
         return false;
     }
 
+    Header *msg_header = reinterpret_cast<Header*>(buffer);
+
     // figure out the type of the message
-    msg_type = reinterpret_cast<Msg*>(buffer)->type;
+    msg_type = msg_header->type;
 
     // we got a packet, see who it was from
     auto map_val = addr_to_client.find(sender_addr);
@@ -113,6 +113,10 @@ bool Server::getMessage(int &msg_type, int **player_id, char *buffer) {
     } else {
         record = map_val->second;
     }
+    if (msg_header->ts < record->latest_msg_ts) {
+        return false;
+    }
+    record->latest_msg_ts = msg_header->ts;
     *player_id = &record->player_id;
     return true;
 }

@@ -22,7 +22,6 @@ void Being::init(BeingType type) {
     y_vel = 0;
     x_accel = 0;
     y_accel = 0;
-    last_update = 0;
     
     // unpack type class
     this->type = type;
@@ -55,7 +54,7 @@ void Being::destroy() {
  */
 bool Being::isOnGround() {
     //TODO could calculate this once on update
-    unsigned int diff = SDL_GetTicks() - last_grounded;
+    unsigned long diff = getTime() - last_grounded;
     return diff <= JUMP_TOLERANCE_MS && jump_start_ts == 0;
 }
 
@@ -71,7 +70,7 @@ void Being::resetJumps() {
  */
 void Being::jump() {
     if (canJump()) {
-        jump_start_ts = SDL_GetTicks();
+        jump_start_ts = getTime();
         if (!isOnGround()) {
             --air_jumps;
         }
@@ -94,14 +93,14 @@ bool Being::dead() {
     return hp <= 0;
 }
 
-void Being::update(int delta, std::map<int, Drawable*> &objects) {
+void Being::update(long delta, std::map<int, Drawable*> &objects) {
     if (!dead()) {
         performAction(delta);
         Drawable::update(delta, objects);
     }
 
     if (dead()) {
-        int now = SDL_GetTicks();
+        long now = getTime();
         if (destroy_at_ts == 0) {
             destroy_at_ts = now + BEING_DEATH_DELAY_MS;
         } else if (now >= destroy_at_ts) {
@@ -121,7 +120,7 @@ void Being::updateWithObjectState(ObjectStateMsg &state) {
     hp = state.hp;
     air_jumps = state.air_jumps;
     if (state.on_ground) {
-        last_grounded = SDL_GetTicks();
+        last_grounded = getTime();
         jump_start_ts = 0;
     }
 }
@@ -158,9 +157,9 @@ void Being::render() {
 /**
  Update the being based on its defined action type
  */
-void Being::performAction(int delta) {
-    int now = SDL_GetTicks();
-    int action_len = now - action_start_ts;
+void Being::performAction(long delta) {
+    long now = getTime();
+    long action_len = now - action_start_ts;
     if (type.action_type == ActionType::CHARGE) {
         // run in a direction for 1 second
         if (action_len > 1000) {
@@ -229,7 +228,7 @@ void Being::processCollision(Drawable &other, float x_off, float y_off) {
         if (!isOnGround()) {
             Audio::instance().playSound(type.landed_sound);
         }
-        last_grounded = SDL_GetTicks();
+        last_grounded = getTime();
         jump_start_ts = 0; // zero means not jumping
         resetJumps();
     }
@@ -249,14 +248,17 @@ void Being::hitOther(Drawable &other) {
  Called when this being is hit by other
  */
 void Being::hitBy(Drawable &other) {
-    takeDamage(other.getDamage());
+    if (getTileNum() != other.getTileNum()) {
+        // don't hurt beings of the same type
+        takeDamage(other.getDamage());
+    }
 }
 
 /**
  Called when this being bumps into other
  */
 void Being::ranInto(Drawable &other) {
-    if (!bump_immune) {
+    if (!bump_immune && getTileNum() != other.getTileNum()) {
         takeDamage(other.getDamage());
     }
 }
@@ -274,7 +276,7 @@ void Being::takeDamage(int damage) {
 /**
  adjust velocity based on acceleration
  */
-void Being::applyAcceleration(int delta) {
+void Being::applyAcceleration(long delta) {
     // do default first
     Drawable::applyAcceleration(delta);
     
@@ -287,7 +289,7 @@ void Being::applyAcceleration(int delta) {
     }
 
     // vertical movement / jump
-    if (jump_start_ts != 0 && SDL_GetTicks() - jump_start_ts <= jump_duration) {
+    if (jump_start_ts != 0 && getTime() - jump_start_ts <= jump_duration) {
         y_vel = -jump_vel;
     }
 
@@ -326,7 +328,7 @@ void Being::applyAcceleration(int delta) {
 
     // play sounds
     if (target_x_vel != 0 and isOnGround()) {
-        Uint32 played_ago = SDL_GetTicks() - Audio::instance().getLastPlayed(type.walk_sound);
+        long played_ago = getTime() - Audio::instance().getLastPlayed(type.walk_sound);
         if (played_ago > WALK_SOUND_INTERVAL_MS) {
             Audio::instance().playSound(type.walk_sound);
         }
