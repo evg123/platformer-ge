@@ -68,7 +68,8 @@ int HopmanServer::play() {
 void HopmanServer::updateNpcs(long delta) {
     for (auto &obj_record : objects) {
         Drawable *obj = obj_record.second;
-        if (!isPlayer(obj)) {
+        //if (!isPlayer(obj)) {
+        {
             obj->update(delta, objects);
         }
         // check if obj has fallen off the map
@@ -124,7 +125,7 @@ void HopmanServer::networkUpdate() {
                         delta = input->hdr.ts - pstate->last_update;
                     }
                     player->updateWithInput(*input);
-                    player->update(delta, objects);
+                    //player->update(delta, objects);
                 }
                 // handle clicks
                 if (input->clicked) {
@@ -184,10 +185,10 @@ void HopmanServer::processRegistration(PlayerState *pstate, ClientRegisterMsg *r
     if (reg->need_to_load) {
         // client is requesting we set it to loading mode
         // could be a reconnection
-        pstate->active_state = GameState::LOADING;
+        setGameState(pstate, GameState::LOADING);
     } else if (reg->obj_count >= objects.size()) {
         // client is done loading
-        pstate->active_state = GameState::LEVEL_START;
+        setGameState(pstate, GameState::LEVEL_START);
     }
 }
 

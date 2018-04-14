@@ -30,7 +30,7 @@
 #include "tile.h"
 #include "background.h"
 
-constexpr int STARTING_LEVEL = 0;
+constexpr int STARTING_LEVEL = 1;
 constexpr auto BG_TRACK = "bg_track.mp3";
 
 constexpr int DEFAULT_FPS_LIMIT = 60;
