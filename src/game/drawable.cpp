@@ -25,10 +25,19 @@ void Drawable::destroy() {
  delta is in ms.
  */
 void Drawable::update(long delta, std::map<int, Drawable*> &objects) {
+    updatePhysics(delta, objects);
+    updateState(delta);
+}
+
+void Drawable::updatePhysics(long delta, std::map<int, Drawable*> &objects) {
     applyAcceleration(delta);
     float x_off, y_off;
     std::tie(x_off, y_off) = calcVelocityOffset(delta);
     doMove(x_off, y_off, objects);
+}
+
+void Drawable::updateState(long delta) {
+    // nothing in base class
 }
 
 /**

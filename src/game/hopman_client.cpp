@@ -27,7 +27,6 @@ void HopmanClient::init() {
 int HopmanClient::play() {
     registerInputCallbacks();
     createUI();
-    createBackground();
     
     while (true) {
         // wait until it is time to render the next frame
@@ -50,6 +49,8 @@ int HopmanClient::play() {
 
             updatePlayer(delta);
         }
+        
+        updateNpcs(delta);
 
         // focus the screen on the player
         Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
@@ -87,6 +88,12 @@ void HopmanClient::updatePlayer(long delta) {
     removeDestroyed();
 }
 
+void HopmanClient::updateNpcs(long delta) {
+    for (auto &obj_rec : objects) {
+        obj_rec.second->updateState(delta);
+    }
+}
+
 void HopmanClient::networkUpdate() {
     if (getPlayerGameState() == GameState::LOADING) {
         // send a registration message
@@ -117,7 +124,7 @@ void HopmanClient::networkUpdate() {
                     level = state->level;
                     if (lower_bound != state->lower_bound) {
                         lower_bound = state->lower_bound;
-                        background.setLowerBound(lower_bound);
+                        createBackground();
                     }
                     if (need_to_load) {
                         if (state->state == GameState::LOADING) {
@@ -187,14 +194,15 @@ void HopmanClient::handlePlayerObjectState(ObjectStateMsg *state) {
 
 bool HopmanClient::doStatesDiffer(ObjectStateMsg *state1, ObjectStateMsg *state2) {
     return (std::abs(state1->xpos - state2->xpos) > MIN_SMOOTH_POS ||
-            std::abs(state1->ypos - state2->ypos) > MIN_SMOOTH_POS);
+            std::abs(state1->ypos - state2->ypos) > MIN_SMOOTH_POS ||
+            state1->hp != state2->hp);
         
 }
 
 void HopmanClient::replayClientHistory(Being *player, ObjectStateMsg *state, int history_idx) {
     ClientStateRecord *csr = &client_state_history[history_idx % STATE_HISTORY_SIZE];
     // start with the first state
-    player->Drawable::updateWithObjectState(*state);
+    player->updateWithObjectState(*state);
     long prev_state_ts = state->hdr.ts;
     player->updateWithInput(csr->input);
     for (int idx = history_idx - 1; idx >= state_history_head; idx--) {
@@ -256,7 +264,6 @@ void HopmanClient::setGameState(PlayerState *pstate, GameState gstate) {
  */
 void HopmanClient::advanceScreenCallback() {
     player_input.clicked = true;
-    //advanceScreen(getPlayerState());
 }
 
 void HopmanClient::moveRight() {
@@ -267,10 +274,8 @@ void HopmanClient::moveRight() {
 }
 
 void HopmanClient::stopRight() {
-    if (getPlayerGameState() == GameState::PLAYING) {
-        getPlayer()->stopRight();
-        should_save_client_state = true;
-    }
+    getPlayer()->stopRight();
+    should_save_client_state = true;
 }
 
 void HopmanClient::moveLeft() {
@@ -281,10 +286,8 @@ void HopmanClient::moveLeft() {
 }
 
 void HopmanClient::stopLeft() {
-    if (getPlayerGameState() == GameState::PLAYING) {
-        getPlayer()->stopLeft();
-        should_save_client_state = true;
-    }
+    getPlayer()->stopLeft();
+    should_save_client_state = true;
 }
 
 void HopmanClient::jump() {

@@ -55,7 +55,7 @@ void Being::destroy() {
 bool Being::isOnGround() {
     //TODO could calculate this once on update
     unsigned long diff = getTime() - last_grounded;
-    return diff <= JUMP_TOLERANCE_MS && jump_start_ts == 0;
+    return diff <= JUMP_TOLERANCE_MS || jump_start_ts == 0;
 }
 
 /**
@@ -70,10 +70,10 @@ void Being::resetJumps() {
  */
 void Being::jump() {
     if (canJump()) {
-        jump_start_ts = getTime();
         if (!isOnGround()) {
             --air_jumps;
         }
+        jump_start_ts = getTime();
         last_grounded = 0;
         Audio::instance().playSound(type.jump_sound);
     }
@@ -93,12 +93,14 @@ bool Being::dead() {
     return hp <= 0;
 }
 
-void Being::update(long delta, std::map<int, Drawable*> &objects) {
+void Being::updatePhysics(long delta, std::map<int, Drawable*> &objects) {
     if (!dead()) {
         performAction(delta);
-        Drawable::update(delta, objects);
+        Drawable::updatePhysics(delta, objects);
     }
+}
 
+void Being::updateState(long delta) {
     if (dead()) {
         long now = getTime();
         if (destroy_at_ts == 0) {
@@ -371,7 +373,6 @@ void Being::stopLeft() {
  Update the state of this being's sprite based on what the being is doing
  */
 void Being::updateSprite() {
-    //SDL_Log("%d", isOnGround());
     if (dead()) {
         sprite.setDead();
     } else if (!isOnGround()) {

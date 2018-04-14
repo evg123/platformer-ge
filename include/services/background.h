@@ -50,7 +50,7 @@ private:
     int bg_green;
     int bg_blue;
 public:
-    void init(int start_x, int start_y, int lower_bound);
+    void init(int lower_bound);
     void shutdown();
     void setColor(int red, int green, int blue);
     void setLowerBound(int lower_bound);

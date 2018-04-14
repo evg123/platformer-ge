@@ -37,6 +37,7 @@ private:
     void init() override;
     int play() override;
     void updatePlayer(long delta);
+    void updateNpcs(long delta);
     GameState getPlayerGameState();
     void networkUpdate() override;
     void handlePlayerObjectState(ObjectStateMsg *state);

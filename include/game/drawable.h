@@ -84,6 +84,8 @@ public:
     void setId(int new_id) { id = new_id; }
     // update based on delta in ms since last update
     virtual void update(long delta, std::map<int, Drawable*> &objects);
+    virtual void updatePhysics(long delta, std::map<int, Drawable*> &objects);
+    virtual void updateState(long delta);
     virtual void updateWithObjectState(ObjectStateMsg &state);
     float smoothValue(float current, float update, float min_off, float max_off);
     virtual void render() = 0;

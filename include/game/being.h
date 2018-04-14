@@ -64,7 +64,6 @@ protected:
 
     void resetJumps();
     void doMove(float x_offset, float y_offset, std::map<int, Drawable*> &objects) override;
-    void updateWithObjectState(ObjectStateMsg &state) override;
     void performAction(long delta);
     void updateSprite();
     void render() override;
@@ -75,7 +74,9 @@ public:
     void init(BeingType type);
     /** re-init the being */
     void reset() { init(type); }
-    void update(long delta, std::map<int, Drawable*> &objects) override;
+    void updatePhysics(long delta, std::map<int, Drawable*> &objects) override;
+    void updateState(long delta) override;
+    void updateWithObjectState(ObjectStateMsg &state) override;
     void destroy() override;
     void updateWithInput(ClientInputMsg &input);
     /** Get direction that being is trying to move*/

@@ -22,7 +22,6 @@ void HopmanServer::init() {
 int HopmanServer::play() {
     registerInputCallbacks();
     createUI();
-    createBackground();
     
     while (true) {
         // wait until it is time to render the next frame
@@ -45,8 +44,6 @@ int HopmanServer::play() {
             
             // focus the screen on the player
             Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
-            background.updateLayerOffsets(getPlayer()->getRect().xPos(),
-                                              getPlayer()->getRect().yPos());
         }
 
         // update the GUI

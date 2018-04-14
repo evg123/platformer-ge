@@ -359,9 +359,7 @@ void Hopman::hitGoal(Drawable& other) {
 void Hopman::createBackground() {
     int sw = Graphics::instance().getWindowWidth();
     int sh = Graphics::instance().getWindowHeight();
-    background.init(getPlayer()->getRect().xPos(),
-                    getPlayer()->getRect().yPos(),
-                    lower_bound);
+    background.init(lower_bound);
     background.setColor(125, 90, 125);
     
     // add layers at different distances
