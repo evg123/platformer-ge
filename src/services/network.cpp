@@ -17,6 +17,7 @@ void Client::init(std::string server_addr_str) {
     this->server_addr = addr.sin_addr.s_addr;
     sock.open(CLIENT_PORT);
     server_clock_offset = UNSET_SERVER_TIME;
+    accurate_time_sync = false;
 }
 
 void Client::shutdown() {
@@ -80,6 +81,7 @@ void Client::updateServerTime(TimeSyncMsg *msg) {
         server_clock_offset = server_time_datapoints[DATAPOINTS_PER_UPDATE / 2];
         //server_clock_offset = (server_clock_offset + new_guess) / 2;
         server_time_datapoints.clear();
+        accurate_time_sync = true;
     }
     
 }

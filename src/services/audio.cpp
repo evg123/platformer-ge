@@ -26,7 +26,8 @@ Audio& Audio::instance() {
 /**
  Set up
  */
-void Audio::init() {
+void Audio::init(bool enabled) {
+    this->enabled = enabled;
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         SDL_Log("%s\n", Mix_GetError());
         throw std::runtime_error("Failed to init audio");
@@ -66,6 +67,9 @@ long Audio::getLastPlayed(const std::string &sound_name) {
  track_name should be the name of a file in the music directory.
  */
 void Audio::setBgTrack(const std::string &track_name) {
+    if (!enabled) {
+        return;
+    }
     if (track_name.empty()) {
         Mix_HaltMusic();
         bg_track = NULL;
@@ -88,6 +92,9 @@ void Audio::setBgTrack(const std::string &track_name) {
  sound_name should be the name of a file in the sounds directory.
  */
 void Audio::playSound(const std::string &sound_name) {
+    if (!enabled) {
+        return;
+    }
     if (sound_name.empty()) {
         // don't play anything
         return;

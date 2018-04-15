@@ -46,6 +46,7 @@ void Being::init(BeingType type) {
  */
 void Being::destroy() {
     Drawable::destroy();
+    hp = 0;
     Audio::instance().playSound(type.damaged_sound);
 }
 
@@ -105,7 +106,7 @@ void Being::updateState(long delta) {
         long now = getTime();
         if (destroy_at_ts == 0) {
             destroy_at_ts = now + BEING_DEATH_DELAY_MS;
-        } else if (now >= destroy_at_ts) {
+        } else if (now >= destroy_at_ts && !needsRemoval()) {
             destroy();
         }
     }

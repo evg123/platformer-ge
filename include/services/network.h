@@ -25,7 +25,7 @@ constexpr int SERVER_PORT = 2553;
 
 constexpr long UNSET_SERVER_TIME = std::numeric_limits<long>::max();
 constexpr long PREVIOUS_DATAPOINT_FACTOR = 3;
-constexpr long DATAPOINTS_PER_UPDATE = 10;
+constexpr long DATAPOINTS_PER_UPDATE = 5;
 
 //TODO lots of info sent in these messages that doesn't update very often
 //     should split more static info into new, less frequent msg types
@@ -109,6 +109,7 @@ private:
     unsigned short server_port;
     long server_clock_offset;
     std::vector<long> server_time_datapoints;
+    bool accurate_time_sync;
 public:
     static const ssize_t msg_buffer_size = std::max({sizeof(TimeSyncMsg),
                                                      sizeof(GameStateMsg),
@@ -120,6 +121,7 @@ public:
     void sendInput(ClientInputMsg &input);
     bool getMessage(int &msg_type, char *buffer);
     void updateServerTime(TimeSyncMsg *msg);
+    bool hasAccurateSync() { return accurate_time_sync; }
 };
 
 class Server {

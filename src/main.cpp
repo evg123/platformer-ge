@@ -26,6 +26,7 @@
 #include "hopman_client.h"
 
 #define SERVER_MODE_FLAG  "--server-mode"
+#define HEADLESS_FLAG  "--headless"
 #define HOST_OPT  "--server-host"
 
 bool getCmdLineFlag(char **start, char **end, std::string flag) {
@@ -57,6 +58,7 @@ std::string getCmdLineOption(char **start, char **end, std::string option) {
 int main(int argc, char *argv[]) {
     // parse arguments
     bool server_mode = getCmdLineFlag(argv, argv + argc, SERVER_MODE_FLAG);
+    bool headless = getCmdLineFlag(argv, argv + argc, HEADLESS_FLAG);
     std::string host = getCmdLineOption(argv, argv + argc, HOST_OPT);
 
     // start the game
@@ -67,7 +69,7 @@ int main(int argc, char *argv[]) {
         hpm = new HopmanClient(host);
     }
 
-    hpm->init();
+    hpm->init(headless);
     int ret = hpm->play();
     hpm->shutdown();
 

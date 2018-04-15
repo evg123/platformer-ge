@@ -8,9 +8,10 @@
 
 #include "hopman_server.h"
 
-void HopmanServer::init() {
+void HopmanServer::init(bool headless) {
     last_net_update = 0;
-    Hopman::init();
+    Hopman::init(headless);
+    Audio::instance().setEnabled(false);
     setupLevel();
     togglePause();
     server.init();
@@ -73,7 +74,7 @@ void HopmanServer::updateNpcs(long delta) {
             obj->update(delta, objects);
         }
         // check if obj has fallen off the map
-        if (obj->getRect().top() > lower_bound) {
+        if (obj->getRect().top() > lower_bound && !obj->needsRemoval()) {
             obj->destroy();
         }
     }
@@ -163,6 +164,11 @@ void HopmanServer::networkUpdate() {
         }
         ObjectStateMsg ostate;
         for (auto &obj : objects) {
+            PlayerState *pstate = getPlayerState(obj.second);
+            if (pstate != NULL && !pstate->assigned) {
+                // player has not been assigned yet, don't send
+                continue;
+            }
             // dispatch to clients
             obj.second->fillObjectState(ostate);
             if (obj.second->isStatic()) {
@@ -189,7 +195,7 @@ void HopmanServer::processRegistration(PlayerState *pstate, ClientRegisterMsg *r
         // client is requesting we set it to loading mode
         // could be a reconnection
         setGameState(pstate, GameState::LOADING);
-    } else if (reg->obj_count >= objects.size()) {
+    } else if (reg->obj_count >= objects.size() - players.size()) {
         // client is done loading
         setGameState(pstate, GameState::LEVEL_START);
     }
@@ -254,6 +260,10 @@ void HopmanServer::handleGameState() {
         // we can move to the next level
         ++level;
         setAllGameStates(GameState::LOADING);
+        for (auto &pstate : players) {
+            // give every player an extra life
+            ++pstate->lives;
+        }
         setupLevel();
     } else if (paused && any_playing) {
         // someone started playing, unpause the level

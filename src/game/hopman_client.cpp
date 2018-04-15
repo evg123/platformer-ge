@@ -10,15 +10,18 @@
 
 HopmanClient::HopmanClient(std::string server_host)
 : server_host(server_host), client_state_history(STATE_HISTORY_SIZE),
-  state_history_head(0), should_save_client_state(true), need_to_load(true) {}
+  state_history_head(0), should_save_client_state(true), need_to_load(true),
+  last_time_sync(0) {}
 
-void HopmanClient::init() {
-    Hopman::init();
+void HopmanClient::init(bool headless) {
+    Hopman::init(headless);
     // create a player for this client
     // id will be filled in when we register with the server
     addTile(TileNum::PLAYER, 0, 0, -1);
 
     client.init(server_host);
+    player_input.clicked = false;
+    player_input.jumped = false;
 }
 
 /**
@@ -44,9 +47,7 @@ int HopmanClient::play() {
         }
 
         // update game objects
-        if (!paused && getPlayerGameState() != GameState::LOADING &&
-            getPlayerGameState() != GameState::LEVEL_START) {
-
+        if (!paused) {
             updatePlayer(delta);
         }
         
@@ -80,7 +81,7 @@ void HopmanClient::updatePlayer(long delta) {
     Being *obj = getPlayer();
     obj->update(delta, objects);
     // check if obj has fallen off the map
-    if (obj->getRect().top() > lower_bound) {
+    if (obj->getRect().top() > lower_bound && !obj->needsRemoval()) {
         obj->destroy();
     }
     
@@ -90,7 +91,9 @@ void HopmanClient::updatePlayer(long delta) {
 
 void HopmanClient::updateNpcs(long delta) {
     for (auto &obj_rec : objects) {
-        obj_rec.second->updateState(delta);
+        if (getPlayerState(obj_rec.second) == NULL) {
+            obj_rec.second->updateState(delta);
+        }
     }
 }
 
@@ -110,7 +113,7 @@ void HopmanClient::networkUpdate() {
     if (getPlayerGameState() == GameState::LOADING) {
         // send a registration message
         ClientRegisterMsg reg;
-        reg.obj_count = objects.size();
+        reg.obj_count = objects.size() - players.size();
         reg.need_to_load = need_to_load;
         client.sendRegister(reg);
     } else {
@@ -266,6 +269,11 @@ void HopmanClient::setGameState(PlayerState *pstate, GameState gstate) {
         if (gstate == GameState::LOADING) {
             // the first time we eneter loading we need to clear out our objects
             cleanupLevel();
+        } else if (gstate == GameState::LEVEL_START) {
+            // keep loading until we have synced server time
+            if (!client.hasAccurateSync()) {
+                return;
+            }
         }
     }
     Hopman::setGameState(pstate, gstate);

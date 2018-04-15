@@ -8,7 +8,8 @@
 /**
  Set up the game
  */
-void Hopman::init() {
+void Hopman::init(bool headless) {
+    this->headless = headless;
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         throw std::runtime_error("Failed to initialize SDL");
     }
@@ -16,7 +17,7 @@ void Hopman::init() {
     // init services
     ResourceManager::instance().init();
     Graphics::instance().init(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
-    Audio::instance().init();
+    Audio::instance().init(!headless);
     Input::instance().init();
     Gui::instance().init();
 
@@ -179,7 +180,7 @@ void Hopman::removeDestroyed() {
 
     // remove destroyed objects
     for (auto iter = objects.begin(); iter != objects.end();) {
-        if (iter->second->needsRemoval() && !isPlayer(iter->second)) {
+        if (iter->second->needsRemoval() && getPlayerState(iter->second) == NULL) {
             this->score += iter->second->getScoreOnDestruction();
             iter = objects.erase(iter);
         } else {
@@ -290,6 +291,7 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
             // need to allcoate a new player
             Being *player = new Being();
             PlayerState *player_state = new PlayerState(player);
+            setGameState(player_state, GameState::LOADING);
             player_state->placed = true;
             player->init(BeingType::player());
             // set the x and y position to respawn to
@@ -348,7 +350,7 @@ Being* Hopman::getPlayer() {
  If its the player then they beat the level
  */
 void Hopman::hitGoal(Drawable& other) {
-    if (isPlayer(&other)) {
+    if (getPlayerState(&other) != NULL) {
         setAllGameStates(GameState::LEVEL_WON);
     }
 }
@@ -378,7 +380,7 @@ void Hopman::cleanupLevel() {
     // deallocate everything in the drawable list
     for (auto &obj_record : objects) {
         Drawable *obj = obj_record.second;
-        if (!isPlayer(obj)) {
+        if (getPlayerState(obj) == NULL) {
             delete obj;
         }
     }
@@ -394,13 +396,13 @@ void Hopman::cleanupLevel() {
 /**
  Return true if this object is one of the player characters
  */
-bool Hopman::isPlayer(Drawable *obj) {
+PlayerState* Hopman::getPlayerState(Drawable *obj) {
     for (auto &player_state : players) {
         if (player_state->player == obj) {
-            return true;
+            return player_state;
         }
     }
-    return false;
+    return NULL;
 }
 
 void Hopman::setGameState(PlayerState *pstate, GameState gstate) {
@@ -448,5 +450,6 @@ void Hopman::setAllGameStates(GameState state) {
 // PlayerState Definitions
 
 PlayerState::PlayerState(Being *player)
-: player(player), assigned(false), active_state(GameState::LOADING), ready(false), lives(DEFAULT_EXTRA_LIVES) {}
+: player(player), assigned(false), active_state(GameState::NONE),
+  ready(false), lives(DEFAULT_EXTRA_LIVES) {}
 

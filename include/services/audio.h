@@ -25,11 +25,13 @@ private:
     ~Audio();
     Mix_Music *bg_track;
     std::map<std::string, long> last_played_map;
+    bool enabled;
 
     void setPlayed(const std::string &track_name);
 public:
     static Audio& instance();
-    void init();
+    void init(bool enabled);
+    void setEnabled(bool value) { enabled = value; };
     void shutdown();
     void setBgTrack(const std::string &track_name);
     void playSound(const std::string &sound_name);

@@ -21,7 +21,7 @@ private:
     Server server;
     long last_net_update;
     
-    void init() override;
+    void init(bool headless) override;
     int play() override;
     void updateNpcs(long delta);
     PlayerState* addNewPlayer();

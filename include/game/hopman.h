@@ -108,6 +108,7 @@ public:
  */
 class Hopman {
 protected:
+    bool headless;
     bool running;
     int level;
     bool paused;
@@ -154,12 +155,12 @@ protected:
     void createBackground();
     Drawable* addTile(int tile_type, int tx, int ty, int id);
     PlayerState* getPlayerState();
+    PlayerState* getPlayerState(Drawable *obj);
     Being* getPlayer();
-    bool isPlayer(Drawable *obj);
     virtual void handleGameState() {};
     virtual void networkUpdate() = 0;
 public:
-    virtual void init();
+    virtual void init(bool headless);
     void shutdown();
     virtual int play() = 0;
 };
