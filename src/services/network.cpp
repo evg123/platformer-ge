@@ -154,6 +154,7 @@ bool Server::getMessage(int &msg_type, int **player_id, char *buffer) {
         record->client_addr = sender_addr;
         record->client_port = sender_port;
         record->player_id = -1;
+        record->latest_msg_ts = 0;
         addr_to_client[sender_addr] = record;
     } else {
         record = map_val->second;
@@ -161,11 +162,12 @@ bool Server::getMessage(int &msg_type, int **player_id, char *buffer) {
     if (msg_header->ts < record->latest_msg_ts) {
         return false;
     }
+    record->latest_msg_ts = msg_header->ts;
+    
     if (msg_type == MSG_TYPE::TIME_SYNC) {
         // respond with the server's time
         sendTimeSync(*reinterpret_cast<TimeSyncMsg*>(buffer), record);
     }
-    record->latest_msg_ts = msg_header->ts;
     *player_id = &record->player_id;
     return true;
 }
