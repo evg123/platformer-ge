@@ -30,10 +30,12 @@ void Drawable::update(long delta, std::map<int, Drawable*> &objects) {
 }
 
 void Drawable::updatePhysics(long delta, std::map<int, Drawable*> &objects) {
-    applyAcceleration(delta);
-    float x_off, y_off;
-    std::tie(x_off, y_off) = calcVelocityOffset(delta);
-    doMove(x_off, y_off, objects);
+    if (!intangible) {
+        applyAcceleration(delta);
+        float x_off, y_off;
+        std::tie(x_off, y_off) = calcVelocityOffset(delta);
+        doMove(x_off, y_off, objects);
+    }
 }
 
 void Drawable::updateState(long delta) {
@@ -101,7 +103,6 @@ void Drawable::setPosition(int x_pos, int y_pos) {
  Handle collisions.
  */
 void Drawable::doMove(float x_offset, float y_offset, std::map<int, Drawable*> &objects) {
-    //TODO adjust collision rect here?
     SDL_Rect new_rect = {
         int(rect.getCollider().x + x_offset),
         int(rect.getCollider().y + y_offset),

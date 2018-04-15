@@ -23,7 +23,7 @@ private:
     
     void init(bool headless) override;
     int play() override;
-    void updateNpcs(long delta);
+    void update(long delta);
     PlayerState* addNewPlayer();
     void processRegistration(PlayerState *pstate, ClientRegisterMsg *reg);
     void handleGameState() override;

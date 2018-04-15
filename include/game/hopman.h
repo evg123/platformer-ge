@@ -30,8 +30,9 @@
 #include "tile.h"
 #include "background.h"
 
-constexpr int STARTING_LEVEL = 1;
+constexpr int STARTING_LEVEL = 2;
 constexpr auto BG_TRACK = "bg_track.mp3";
+constexpr int MAX_PLAYERS = 4;
 
 constexpr int DEFAULT_FPS_LIMIT = 60;
 constexpr int DEFAULT_WINDOW_WIDTH = 1280;
@@ -55,6 +56,15 @@ constexpr auto STATUS_BAR_IMG = "ui/status_bar.png";
 constexpr int STATUS_BAR_Y = 0;
 constexpr int STATUS_BAR_THICKNESS = 55;
 constexpr int STATUS_BAR_TEXT_SIZE = 25;
+
+constexpr auto PLAYER_STATUS_IMG = "ui/player_status_bg.png";
+constexpr int PLAYER_STATUS_X = 0;
+constexpr int PLAYER_STATUS_Y = STATUS_BAR_THICKNESS - 5;
+constexpr int PLAYER_STATUS_W = 180;
+constexpr int PLAYER_STATUS_H = 140;
+constexpr int PLAYER_STATUS_MAX_LEN = 25;
+constexpr int PLAYER_STATUS_TEXT_SIZE = 20;
+constexpr int PLAYER_STATUS_DESCRIPTION_START = 4;
 
 constexpr int GAME_MESSAGE_MAX_LEN = 25;
 constexpr int GAME_MSG_WIDTH = 400;
@@ -118,6 +128,7 @@ protected:
     FrameTimer timer;
     int fps_display;
     std::string game_message;
+    std::vector<std::string> player_status_strs;
 
     std::vector<PlayerState*> players;
     Background background;
@@ -139,6 +150,7 @@ protected:
 
     void createUI();
     void createStatusBar();
+    void createPlayerStatus();
     void createPauseMenu();
     void createGameMessage();
     void setGameMessage(std::string new_msg);

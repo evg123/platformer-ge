@@ -22,6 +22,7 @@ void Hopman::init(bool headless) {
     Gui::instance().init();
 
     objects = {};
+    player_status_strs.reserve(MAX_PLAYERS);
     fps_display = 0;
     running = true;
     paused = false;
@@ -61,6 +62,7 @@ void Hopman::toggleFps() {
  */
 void Hopman::createUI() {
     createStatusBar();
+    createPlayerStatus();
     createPauseMenu();
     createGameMessage();
 }
@@ -115,6 +117,34 @@ void Hopman::createStatusBar() {
 
     // show the status bar
     Gui::instance().setGroupDisplay(GuiGroupId::STATUS_BAR, true);
+}
+
+void Hopman::createPlayerStatus() {
+    int box_x = PLAYER_STATUS_X;
+    int box_y = PLAYER_STATUS_Y;
+
+    // background
+    GuiElement *elem = new GuiElement({box_x, box_y, PLAYER_STATUS_W, PLAYER_STATUS_H},
+                                      ResourceManager::instance().getImageTexture(PLAYER_STATUS_IMG));
+    Gui::instance().add(GuiGroupId::PLAYER_STATUS, elem);
+    
+    // score display
+    int elem_x = box_x + 8;
+    int elem_y = box_y + 8;
+    player_status_strs.push_back("");
+    std::string base_str(PLAYER_STATUS_MAX_LEN, ' ');
+    for (int idx = 1; idx < MAX_PLAYERS; idx++) {
+        base_str.assign("P" + std::to_string(idx + 1) + ": None");
+        player_status_strs.push_back(base_str);
+        elem = new TextGuiElement<std::string>({elem_x, elem_y, 0, 0},
+                                               player_status_strs.at(idx),
+                                               PLAYER_STATUS_TEXT_SIZE, true);
+        Gui::instance().add(GuiGroupId::PLAYER_STATUS, elem);
+        elem_y += elem->getHeight() + 3;
+    }
+
+    // show the status bar
+    Gui::instance().setGroupDisplay(GuiGroupId::PLAYER_STATUS, true);
 }
 
 void Hopman::createPauseMenu() {
@@ -297,8 +327,6 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
             // set the x and y position to respawn to
             player_state->starting_x = xpos;
             player_state->starting_y = ypos;
-            // make the player immune until done entering game
-            player->setIntangible(true);
             players.push_back(player_state);
             obj = player;
         }
@@ -410,29 +438,46 @@ void Hopman::setGameState(PlayerState *pstate, GameState gstate) {
         // no change
         return;
     }
+    bool client_state = getPlayerState() == pstate;
 
     switch (gstate) {
         case GameState::LOADING:
-            setGameMessage("Loading...");
+            if (client_state) {
+                setGameMessage("Loading...");
+            }
+            // make the player immune until done entering game
+            pstate->player->setIntangible(true);
             break;
         case GameState::RESPAWN:
-            setGameMessage("You Died!");
+            if (client_state) {
+                setGameMessage("You Died!");
+            }
             break;
         case GameState::LOSS:
-            setGameMessage("GAME OVER :(");
-            Audio::instance().playSound("game_over.wav");
+            if (client_state) {
+                setGameMessage("GAME OVER :(");
+                Audio::instance().playSound("game_over.wav");
+            }
             break;
         case GameState::PLAYING:
-            Gui::instance().setGroupDisplay(GuiGroupId::GAME_MESSAGE, false);
-            // done entering game, now we can be hit
+            if (client_state) {
+                Gui::instance().setGroupDisplay(GuiGroupId::GAME_MESSAGE, false);
+                // done entering game, now we can be hit
+            }
             pstate->player->setIntangible(false);
             break;
         case GameState::LEVEL_WON:
-            setGameMessage("YOU WIN!");
-            Audio::instance().playSound("you_win.wav");
+            if (client_state) {
+                setGameMessage("YOU WIN!");
+                Audio::instance().playSound("you_win.wav");
+            }
             break;
         case GameState::LEVEL_START:
-            setGameMessage("Level " + std::to_string(level));
+            if (client_state) {
+                setGameMessage("Level " + std::to_string(level));
+            }
+            // make the player immune until done entering game
+            pstate->player->setIntangible(true);
             break;
         default:
             break;

@@ -41,7 +41,7 @@ int HopmanServer::play() {
         
         // update game objects
         if (!paused) {
-            updateNpcs(delta);
+            update(delta);
             
             // focus the screen on the player
             Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
@@ -63,16 +63,12 @@ int HopmanServer::play() {
 }
 
 /**
- Update all non-player objects
- Players will be updated as input is received from their clients
+ Update all object
  */
-void HopmanServer::updateNpcs(long delta) {
+void HopmanServer::update(long delta) {
     for (auto &obj_record : objects) {
         Drawable *obj = obj_record.second;
-        //if (!isPlayer(obj)) {
-        {
-            obj->update(delta, objects);
-        }
+        obj->update(delta, objects);
         // check if obj has fallen off the map
         if (obj->getRect().top() > lower_bound && !obj->needsRemoval()) {
             obj->destroy();

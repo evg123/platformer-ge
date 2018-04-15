@@ -131,9 +131,10 @@ void HopmanClient::networkUpdate() {
         switch (msg_type) {
             case MSG_TYPE::GAME_STATE: {
                 GameStateMsg *state = reinterpret_cast<GameStateMsg*>(buffer);
-                PlayerState *pstate = getPlayerState();
-                if (state->you && pstate != NULL) {
+                PlayerState *pstate;
+                if (state->you) {
                     // we got a state update for our client
+                    pstate = getPlayerState();
                     pstate->lives = state->lives;
                     score = state->score;
                     level = state->level;
@@ -150,8 +151,43 @@ void HopmanClient::networkUpdate() {
                         setGameState(pstate, static_cast<GameState>(state->state));
                     }
                 } else {
-                    //TODO update gui based on the state of other players
-                    // state.assigned
+                    if (!state->assigned) {
+                        // player hasn't been assigned yet, ignore
+                        break;
+                    }
+                    // update gui based on the state of other players
+                    for (int pidx = 0; pidx < players.size(); pidx++) {
+                        if (players[pidx]->player->getId() == state->player_id) {
+                            pstate = players[pidx];
+                            if (pstate->active_state == state->state) {
+                                // no update
+                                break;
+                            }
+                            std::string new_status;
+                            switch (state->state) {
+                                case GameState::LOADING:
+                                    new_status = "Loading";
+                                    break;
+                                case GameState::LOSS:
+                                    new_status = "GameOver";
+                                    break;
+                                case GameState::LEVEL_START:
+                                    new_status = "Starting";
+                                    break;
+                                case GameState::RESPAWN:
+                                    new_status = "Dead";
+                                    break;
+                                default:
+                                    new_status = "Playing";
+                                    break;
+                            }
+                            player_status_strs.at(pidx).replace(PLAYER_STATUS_DESCRIPTION_START,
+                                                                PLAYER_STATUS_MAX_LEN,
+                                                                new_status);
+                            setGameState(pstate, static_cast<GameState>(state->state));
+                            break;
+                        }
+                    }
                 }
                 break;
             }
