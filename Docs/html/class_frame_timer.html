@@ -23,7 +23,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Hopman
    </div>
-   <div id="projectbrief">A 2D platformer by Eric VandeGriek</div>
+   <div id="projectbrief">A Multiplayer 2D platformer by Eric VandeGriek</div>
   </td>
  </tr>
  </tbody>
@@ -74,38 +74,20 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acced2554bd33c4756078fb74eb56f8aa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_frame_timer.html#acced2554bd33c4756078fb74eb56f8aa">FrameTimer</a> (int fps_target)</td></tr>
-<tr class="separator:acced2554bd33c4756078fb74eb56f8aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae872b7c8a70a51a7369347d2711875ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_frame_timer.html#ae872b7c8a70a51a7369347d2711875ec">init</a> (int fps_target)</td></tr>
+<tr class="separator:ae872b7c8a70a51a7369347d2711875ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fc79de9c9320d11ec5e9b073ce47629"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_frame_timer.html#a5fc79de9c9320d11ec5e9b073ce47629">getFps</a> ()</td></tr>
 <tr class="separator:a5fc79de9c9320d11ec5e9b073ce47629"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5176299a668b2c4e9a84c0ca6453cad1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_frame_timer.html#a5176299a668b2c4e9a84c0ca6453cad1">newFrame</a> ()</td></tr>
-<tr class="separator:a5176299a668b2c4e9a84c0ca6453cad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c4fdfeaf425196b9bbf376dfd2b22cd"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_frame_timer.html#a2c4fdfeaf425196b9bbf376dfd2b22cd">getFrameStart</a> ()</td></tr>
+<tr class="separator:a2c4fdfeaf425196b9bbf376dfd2b22cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52163b5702abf89732eea5aa845bbd17"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_frame_timer.html#a52163b5702abf89732eea5aa845bbd17">newFrame</a> ()</td></tr>
+<tr class="separator:a52163b5702abf89732eea5aa845bbd17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad1b966cea3c788f4977f99bcd1cd769"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_frame_timer.html#aad1b966cea3c788f4977f99bcd1cd769">delayUntilNextFrame</a> ()</td></tr>
 <tr class="separator:aad1b966cea3c788f4977f99bcd1cd769"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Used to track frames per second and cap the framerate </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="acced2554bd33c4756078fb74eb56f8aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acced2554bd33c4756078fb74eb56f8aa">&#9670;&nbsp;</a></span>FrameTimer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">FrameTimer::FrameTimer </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>fps_target</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Create a new timer. The framerate will be capped at fps_target </p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aad1b966cea3c788f4977f99bcd1cd769"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aad1b966cea3c788f4977f99bcd1cd769">&#9670;&nbsp;</a></span>delayUntilNextFrame()</h2>
 
@@ -150,14 +132,59 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5176299a668b2c4e9a84c0ca6453cad1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5176299a668b2c4e9a84c0ca6453cad1">&#9670;&nbsp;</a></span>newFrame()</h2>
+<a id="a2c4fdfeaf425196b9bbf376dfd2b22cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c4fdfeaf425196b9bbf376dfd2b22cd">&#9670;&nbsp;</a></span>getFrameStart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">long FrameTimer::getFrameStart </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return the timestamp of the current frame </p>
+
+</div>
+</div>
+<a id="ae872b7c8a70a51a7369347d2711875ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae872b7c8a70a51a7369347d2711875ec">&#9670;&nbsp;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int FrameTimer::newFrame </td>
+          <td class="memname">void FrameTimer::init </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fps_target</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Setup up the timer. The framerate will be capped at fps_target </p>
+
+</div>
+</div>
+<a id="a52163b5702abf89732eea5aa845bbd17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52163b5702abf89732eea5aa845bbd17">&#9670;&nbsp;</a></span>newFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long FrameTimer::newFrame </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

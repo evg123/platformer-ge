@@ -8,20 +8,30 @@
 
 #include "hopman_client.h"
 
+/**
+ Constructor
+ */
 HopmanClient::HopmanClient(std::string server_host)
-: server_host(server_host), client_state_history(STATE_HISTORY_SIZE),
-  state_history_head(0), should_save_client_state(true), need_to_load(true),
-  last_time_sync(0) {}
+: Hopman(false), server_host(server_host), client_state_history(STATE_HISTORY_SIZE) {}
 
-void HopmanClient::init(bool headless) {
-    Hopman::init(headless);
+/**
+ Set up the game to run as a client
+ */
+void HopmanClient::init() {
+    Hopman::init();
     // create a player for this client
     // id will be filled in when we register with the server
     addTile(TileNum::PLAYER, 0, 0, -1);
-
     client.init(server_host);
     player_input.clicked = false;
     player_input.jumped = false;
+    for (auto &state : client_state_history) {
+        state.ts = 0;
+    }
+    state_history_head = 0;
+    should_save_client_state = true;
+    need_to_load = true;
+    last_time_sync = 0;
 }
 
 /**
@@ -64,8 +74,6 @@ int HopmanClient::play() {
         // draw the new frame
         render();
 
-        handleGameState();
-
         // send/receive updates on the network
         networkUpdate();
     }
@@ -74,7 +82,7 @@ int HopmanClient::play() {
 }
 
 /**
- Update all non-player objects
+ Update the player being object
  Players will be updated as input is received from their clients
  */
 void HopmanClient::updatePlayer(long delta) {
@@ -89,6 +97,9 @@ void HopmanClient::updatePlayer(long delta) {
     removeDestroyed();
 }
 
+/**
+ Update the state of all non-player objects
+ */
 void HopmanClient::updateNpcs(long delta) {
     for (auto &obj_rec : objects) {
         if (getPlayerState(obj_rec.second) == NULL) {
@@ -97,6 +108,9 @@ void HopmanClient::updateNpcs(long delta) {
     }
 }
 
+/**
+ See if it is time to get a new clock sync reading from the server
+ */
 bool HopmanClient::shouldTimeSync() {
     long now = getTime();
     if (now - last_time_sync >= TIME_SYNC_INTERVAL) {
@@ -106,6 +120,9 @@ bool HopmanClient::shouldTimeSync() {
     return false;
 }
 
+/**
+ Send and receive messages to/from the server
+ */
 void HopmanClient::networkUpdate() {
     if (shouldTimeSync()) {
         client.sendTimeSync();
@@ -215,6 +232,9 @@ void HopmanClient::networkUpdate() {
     }
 }
 
+/**
+ Handle an update from the server on our player object
+ */
 void HopmanClient::handlePlayerObjectState(ObjectStateMsg *state) {
     Being *player = getPlayer();
     if (player->getId() != state->id) {
@@ -243,6 +263,9 @@ void HopmanClient::handlePlayerObjectState(ObjectStateMsg *state) {
     return;
 }
 
+/**
+ True if two states differe by a minumum threshold
+ */
 bool HopmanClient::doStatesDiffer(ObjectStateMsg *state1, ObjectStateMsg *state2) {
     return (std::abs(state1->xpos - state2->xpos) > MIN_SMOOTH_POS ||
             std::abs(state1->ypos - state2->ypos) > MIN_SMOOTH_POS ||
@@ -250,6 +273,11 @@ bool HopmanClient::doStatesDiffer(ObjectStateMsg *state1, ObjectStateMsg *state2
         
 }
 
+/**
+ Using state as the starting point, replay our inputs and get a new state.
+ This is called when we have gotten out of sync with the server and receive an update
+ that conflicts with our view of out state.
+ */
 void HopmanClient::replayClientHistory(Being *player, ObjectStateMsg *state, int history_idx) {
     ClientStateRecord *csr = &client_state_history[history_idx % STATE_HISTORY_SIZE];
     // start with the first state
@@ -271,6 +299,9 @@ void HopmanClient::replayClientHistory(Being *player, ObjectStateMsg *state, int
     //TODO dont accept updates before prev_state_ts
 }
 
+/**
+ Update the player input msg and get it ready to send
+ */
 void HopmanClient::updatePlayerInput() {
     player_input.target_x_vel = getPlayer()->getTargetXVel();
     if (should_save_client_state) {
@@ -284,13 +315,21 @@ void HopmanClient::updatePlayerInput() {
     }
 }
 
+/**
+ Not currently used
+ */
 void HopmanClient::handleDeath() {
     // check if the player was killed
+    /*
     if (getPlayer()->dead() || getPlayer()->needsRemoval()) {
-        //tryRespawn(players[0]);
+        tryRespawn(getPlayer());
     }
+     */
 }
 
+/**
+ return the active state of the player
+ */
 GameState HopmanClient::getPlayerGameState() {
     if (players.size() < 1) {
         // haven't been assigned a player yet
@@ -299,6 +338,9 @@ GameState HopmanClient::getPlayerGameState() {
     return getPlayerState()->active_state;
 }
 
+/**
+ Update the active state of the player
+ */
 void HopmanClient::setGameState(PlayerState *pstate, GameState gstate) {
     if (pstate == getPlayerState() && pstate->active_state != gstate) {
         // handle state transition for our client
@@ -322,6 +364,9 @@ void HopmanClient::advanceScreenCallback() {
     player_input.clicked = true;
 }
 
+/**
+ Signal that we want to move right
+ */
 void HopmanClient::moveRight() {
     if (getPlayerGameState() == GameState::PLAYING) {
         getPlayer()->moveRight();
@@ -329,11 +374,18 @@ void HopmanClient::moveRight() {
     }
 }
 
+/**
+ Signal that we want to stop moving to the right
+ Called when a right key is released
+ */
 void HopmanClient::stopRight() {
     getPlayer()->stopRight();
     should_save_client_state = true;
 }
 
+/**
+ Signal that we want to move left
+ */
 void HopmanClient::moveLeft() {
     if (getPlayerGameState() == GameState::PLAYING) {
         getPlayer()->moveLeft();
@@ -341,11 +393,18 @@ void HopmanClient::moveLeft() {
     }
 }
 
+/**
+ Signal that we want to stop moving left.
+ Called when a left key is released
+ */
 void HopmanClient::stopLeft() {
     getPlayer()->stopLeft();
     should_save_client_state = true;
 }
 
+/**
+ Signal that we want to start a jump
+ */
 void HopmanClient::jump() {
     if (getPlayerGameState() == GameState::PLAYING) {
         player_input.jumped = true;
@@ -355,7 +414,7 @@ void HopmanClient::jump() {
 }
 
 /**
- register callbacks with the input subsystem that get called on certain actions
+ Register callbacks with the input subsystem that get called on certain actions
  */
 void HopmanClient::registerInputCallbacks() {
     // game events

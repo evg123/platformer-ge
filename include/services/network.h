@@ -121,6 +121,7 @@ public:
     void sendInput(ClientInputMsg &input);
     bool getMessage(int &msg_type, char *buffer);
     void updateServerTime(TimeSyncMsg *msg);
+    /** True if we have done a full calculation of server time offset */
     bool hasAccurateSync() { return accurate_time_sync; }
 };
 

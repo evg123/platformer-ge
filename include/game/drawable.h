@@ -103,7 +103,6 @@ public:
     virtual bool isStatic() { return true; }
     /** Set whether the object should be interactable */
     void setIntangible(bool value) { intangible = value; }
-    void setColor(int color_r, int color_g, int color_b, int alpha);
     void setVelocity(float x_vel, float y_vel);
     void setAcceleration(float x_acceleration, float y_acceleration);
     virtual void setPosition(int x_pos, int y_pos);

@@ -31,6 +31,7 @@ private:
 public:
     static Audio& instance();
     void init(bool enabled);
+    /** set whether sound should be played */
     void setEnabled(bool value) { enabled = value; };
     void shutdown();
     void setBgTrack(const std::string &track_name);

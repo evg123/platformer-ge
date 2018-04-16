@@ -140,13 +140,11 @@ protected:
     void exitGame() { running = false; }
     void toggleFps();
     void togglePause();
-    
-    void handleInput();
+
     void advanceScreen(PlayerState *pstate);
     virtual void registerInputCallbacks() = 0;
     void render();
     void renderGui();
-    void renderText(int xpos, int ypos, int font_size, std::string text);
 
     void createUI();
     void createStatusBar();
@@ -156,8 +154,7 @@ protected:
     void setGameMessage(std::string new_msg);
     virtual void setGameState(PlayerState *pstate, GameState state);
     void setAllGameStates(GameState state);
-    
-    bool checkRemoval(Drawable *obj);
+
     void removeDestroyed();
     virtual void handleDeath() = 0;
     void tryRespawn(PlayerState *pstate);
@@ -169,10 +166,10 @@ protected:
     PlayerState* getPlayerState();
     PlayerState* getPlayerState(Drawable *obj);
     Being* getPlayer();
-    virtual void handleGameState() {};
     virtual void networkUpdate() = 0;
 public:
-    virtual void init(bool headless);
+    Hopman(bool headless);
+    virtual void init();
     void shutdown();
     virtual int play() = 0;
 };

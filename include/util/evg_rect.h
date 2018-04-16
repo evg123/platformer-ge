@@ -25,6 +25,7 @@ private:
     int pad_left;
 public:
     EvgRect();
+    /** Get the rect that is used to check for collisions */
     const SDL_Rect& getCollider() { return collider; }
     void fillRenderRect(SDL_Rect &render_rect, int screen_off_x, int screen_off_y);
 

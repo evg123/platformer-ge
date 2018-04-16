@@ -10,6 +10,9 @@
 
 // Client definitions
 
+/**
+ Set up this client to talk to server_addr_str
+ */
 void Client::init(std::string server_addr_str) {
     server_port = SERVER_PORT;
     sockaddr_in addr;
@@ -20,10 +23,16 @@ void Client::init(std::string server_addr_str) {
     accurate_time_sync = false;
 }
 
+/**
+ Tear it down
+ */
 void Client::shutdown() {
     sock.close();
 }
 
+/**
+ Send a message to sync time between client and server
+ */
 void Client::sendTimeSync() {
     TimeSyncMsg sync_msg;
     sync_msg.hdr.type = MSG_TYPE::TIME_SYNC;
@@ -32,18 +41,28 @@ void Client::sendTimeSync() {
     sock.send(server_addr, server_port, &sync_msg, sizeof(sync_msg));
 }
 
+/**
+ Send a registration to the server
+ */
 void Client::sendRegister(ClientRegisterMsg &reg) {
     reg.hdr.type = MSG_TYPE::CLIENT_REGISTER;
     reg.hdr.ts = getTime();
     sock.send(server_addr, server_port, &reg, sizeof(reg));
 }
 
+/**
+ Send player input to the server
+ */
 void Client::sendInput(ClientInputMsg &input) {
     input.hdr.type = MSG_TYPE::CLIENT_INPUT;
     input.hdr.ts = getTime();
     sock.send(server_addr, server_port, &input, sizeof(input));
 }
 
+/**
+ Listen for a message from the server
+ Fill in buffer and msg_type
+ */
 bool Client::getMessage(int &msg_type, char *buffer) {
     ssize_t bytes = sock.receive(NULL, NULL, buffer, msg_buffer_size);
     if (bytes <= 0) {
@@ -66,6 +85,10 @@ bool Client::getMessage(int &msg_type, char *buffer) {
     return true;
 }
 
+/**
+ Receive a time sync message and update our calculation of the offset
+ of the server's internal clock
+ */
 void Client::updateServerTime(TimeSyncMsg *msg) {
     long now = getTime();
     long rtt = now - msg->client_ts;
@@ -88,14 +111,23 @@ void Client::updateServerTime(TimeSyncMsg *msg) {
 
 // Server definitions
 
+/**
+ Set up the server object
+ */
 void Server::init() {
     sock.open(SERVER_PORT);
 }
 
+/**
+ Tear it down
+ */
 void Server::shutdown() {
     sock.close();
 }
 
+/**
+ Reply to a time sync message from a client
+ */
 void Server::sendTimeSync(TimeSyncMsg &msg, ClientRecord *record) {
     msg.hdr.ts = getTime();
     msg.server_ts = msg.hdr.ts;
@@ -117,6 +149,9 @@ void Server::sendGameStateUpdate(GameStateMsg &state) {
     }
 }
 
+/**
+ Send an update for an object to the given players
+ */
 void Server::sendObjectStateUpdate(ObjectStateMsg &state, std::set<int> *player_ids) {
     state.hdr.type = MSG_TYPE::OBJECT_STATE;
     state.hdr.ts = getTime();
@@ -133,6 +168,12 @@ void Server::sendObjectStateUpdate(ObjectStateMsg &state, std::set<int> *player_
     }
 }
 
+/**
+ Listen for a message from a client
+ Fill in buffer with the message and set msg_type
+ Point player_id to the id in our client record for the client this came from.
+ The caller should set player_id to the id assigned to that client's player
+ */
 bool Server::getMessage(int &msg_type, int **player_id, char *buffer) {
     unsigned int sender_addr;
     unsigned short sender_port;

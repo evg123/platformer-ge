@@ -21,14 +21,28 @@
 */
 
 #include <string>
+#include <cstring>
+#include <iostream>
 #include "hopman.h"
 #include "hopman_server.h"
 #include "hopman_client.h"
 
-#define SERVER_MODE_FLAG  "--server-mode"
-#define HEADLESS_FLAG  "--headless"
 #define HOST_OPT  "--server-host"
+#define HEADLESS_FLAG  "--headless"
+#define HELP_FLAG_1 "--help"
+#define HELP_FLAG_2 "-h"
 
+/**
+ Display how to call the program
+ */
+void printUsage() {
+    std::cout << "Usage:" << std::endl;
+    std::cout << "  Hopman " << HOST_OPT << " <server address>" << " [" << HEADLESS_FLAG << "]" << std::endl;
+}
+
+/**
+ Check if a command line flag was provided
+ */
 bool getCmdLineFlag(char **start, char **end, std::string flag) {
     char** opt_start = std::find(start, end, flag);
     if (opt_start != end) {
@@ -37,19 +51,24 @@ bool getCmdLineFlag(char **start, char **end, std::string flag) {
     return false;
 }
 
-std::string getCmdLineOption(char **start, char **end, std::string option) {
+/**
+ Check if a command line parameter was set
+ Fill in value_destination if it was
+ */
+bool getCmdLineOption(char **start, char **end, std::string option, std::string &value_destination) {
     char** opt_start = std::find(start, end, option);
     if (opt_start == end) {
         // option not specified
-        return "";
+        return false;
     }
     opt_start++;
     if (opt_start == end) {
         // option has no value
-        //TODO print usage
-        return "";
+        value_destination = "";
+        return true;
     }
-    return *opt_start;
+    value_destination = *opt_start;
+    return true;
 }
 
 /**
@@ -57,19 +76,36 @@ std::string getCmdLineOption(char **start, char **end, std::string option) {
  */
 int main(int argc, char *argv[]) {
     // parse arguments
-    bool server_mode = getCmdLineFlag(argv, argv + argc, SERVER_MODE_FLAG);
+    bool help = getCmdLineFlag(argv, argv + argc, HELP_FLAG_1) ||
+                getCmdLineFlag(argv, argv + argc, HELP_FLAG_2);
+    if (help) {
+        printUsage();
+        return 0;
+    }
+
+    std::string host;
+    bool server_mode = !getCmdLineOption(argv, argv + argc, HOST_OPT, host);
     bool headless = getCmdLineFlag(argv, argv + argc, HEADLESS_FLAG);
-    std::string host = getCmdLineOption(argv, argv + argc, HOST_OPT);
+
+    if (!server_mode && host.empty()) {
+        printUsage();
+        return 1;
+    }
+
+    if (!server_mode && headless) {
+        std::cout << "Headless mode is not supported when running as client" << std::endl;
+        return 1;
+    }
 
     // start the game
     Hopman *hpm;
     if (server_mode) {
-        hpm = new HopmanServer();
+        hpm = new HopmanServer(headless);
     } else {
         hpm = new HopmanClient(host);
     }
 
-    hpm->init(headless);
+    hpm->init();
     int ret = hpm->play();
     hpm->shutdown();
 

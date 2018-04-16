@@ -8,6 +8,9 @@
 
 #include "socket.h"
 
+/**
+ Open a new socket on the given port
+ */
 bool Socket::open(unsigned short port) {
     handle = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (handle <= 0) {
@@ -33,10 +36,16 @@ bool Socket::open(unsigned short port) {
     return true;
 }
 
+/**
+ Tear it down
+ */
 void Socket::close() {
     ::close(handle);
 }
 
+/**
+ Send a message to dest_addr on dest_port
+ */
 bool Socket::send(unsigned int dest_addr, unsigned short dest_port, const void *data, ssize_t data_size) {
     send_addr_buffer.sin_addr.s_addr = dest_addr;
     send_addr_buffer.sin_port = htons(dest_port);
@@ -49,6 +58,10 @@ bool Socket::send(unsigned int dest_addr, unsigned short dest_port, const void *
     return true;
 }
 
+/**
+ Listen for a message.
+ Fill in sender info.
+ */
 ssize_t Socket::receive(unsigned int *sender_addr, unsigned short *sender_port,
                         void *buffer, ssize_t buffer_size) {
     while (true) {

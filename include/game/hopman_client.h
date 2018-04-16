@@ -36,7 +36,7 @@ private:
     bool need_to_load;
     long last_time_sync;
     
-    void init(bool headless) override;
+    void init() override;
     int play() override;
     void updatePlayer(long delta);
     void updateNpcs(long delta);

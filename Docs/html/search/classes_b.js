@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['resourcemanager',['ResourceManager',['../class_resource_manager.html',1,'']]]
+  ['objectstatemsg',['ObjectStateMsg',['../struct_object_state_msg.html',1,'']]]
 ];

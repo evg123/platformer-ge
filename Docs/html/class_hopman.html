@@ -23,7 +23,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Hopman
    </div>
-   <div id="projectbrief">A 2D platformer by Eric VandeGriek</div>
+   <div id="projectbrief">A Multiplayer 2D platformer by Eric VandeGriek</div>
   </td>
  </tr>
  </tbody>
@@ -64,31 +64,561 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="class_hopman-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Hopman Class Reference</div>  </div>
+<div class="title">Hopman Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="hopman_8h_source.html">hopman.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Hopman:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_hopman.png" usemap="#Hopman_map" alt=""/>
+  <map id="Hopman_map" name="Hopman_map">
+<area href="class_hopman_client.html" alt="HopmanClient" shape="rect" coords="0,56,97,80"/>
+<area href="class_hopman_server.html" alt="HopmanServer" shape="rect" coords="107,56,204,80"/>
+</map>
+ </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acf4ccd23a76c2535afc0c475907c8357"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#acf4ccd23a76c2535afc0c475907c8357">init</a> ()</td></tr>
+<tr class="memitem:af4a0d53350695269063ccc80a87493ac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#af4a0d53350695269063ccc80a87493ac">Hopman</a> (bool headless)</td></tr>
+<tr class="separator:af4a0d53350695269063ccc80a87493ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf4ccd23a76c2535afc0c475907c8357"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#acf4ccd23a76c2535afc0c475907c8357">init</a> ()</td></tr>
 <tr class="separator:acf4ccd23a76c2535afc0c475907c8357"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca8607b0dd55539225de275d89eaf513"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#aca8607b0dd55539225de275d89eaf513">shutdown</a> ()</td></tr>
 <tr class="separator:aca8607b0dd55539225de275d89eaf513"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a642e64e18c1769485314252b7ce7fd16"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a642e64e18c1769485314252b7ce7fd16">play</a> ()</td></tr>
-<tr class="separator:a642e64e18c1769485314252b7ce7fd16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd1ae8da3eb1bbcb563bd4eae6f4ce58"><td class="memItemLeft" align="right" valign="top"><a id="afd1ae8da3eb1bbcb563bd4eae6f4ce58"></a>
+virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> ()=0</td></tr>
+<tr class="separator:afd1ae8da3eb1bbcb563bd4eae6f4ce58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a4858e84f8c47acddae50e21afefbaf62"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a4858e84f8c47acddae50e21afefbaf62">exitGame</a> ()</td></tr>
+<tr class="separator:a4858e84f8c47acddae50e21afefbaf62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7018663cef2a203589b9e98764052532"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a7018663cef2a203589b9e98764052532">toggleFps</a> ()</td></tr>
+<tr class="separator:a7018663cef2a203589b9e98764052532"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae618047547937456ffed6b18598d1a96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#ae618047547937456ffed6b18598d1a96">togglePause</a> ()</td></tr>
+<tr class="separator:ae618047547937456ffed6b18598d1a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaddae866e8d33e646ba97d37d82b185a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#aaddae866e8d33e646ba97d37d82b185a">advanceScreen</a> (<a class="el" href="class_player_state.html">PlayerState</a> *pstate)</td></tr>
+<tr class="separator:aaddae866e8d33e646ba97d37d82b185a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd6d5b79ad0ec43eee22a6cf046649d9"><td class="memItemLeft" align="right" valign="top"><a id="abd6d5b79ad0ec43eee22a6cf046649d9"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>registerInputCallbacks</b> ()=0</td></tr>
+<tr class="separator:abd6d5b79ad0ec43eee22a6cf046649d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3864def2d90bd9f34ac3816a6daf37cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a3864def2d90bd9f34ac3816a6daf37cb">render</a> ()</td></tr>
+<tr class="separator:a3864def2d90bd9f34ac3816a6daf37cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eabbdeff6cc4178459ec0a35980b20b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a0eabbdeff6cc4178459ec0a35980b20b">renderGui</a> ()</td></tr>
+<tr class="separator:a0eabbdeff6cc4178459ec0a35980b20b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1431cf9c3db22d4bbfe4f5a7d3d11151"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a1431cf9c3db22d4bbfe4f5a7d3d11151">createUI</a> ()</td></tr>
+<tr class="separator:a1431cf9c3db22d4bbfe4f5a7d3d11151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9a3e58f4b5d4d61a871e2694fa71a4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#af9a3e58f4b5d4d61a871e2694fa71a4d">createStatusBar</a> ()</td></tr>
+<tr class="separator:af9a3e58f4b5d4d61a871e2694fa71a4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7a5a9e1b4a1313239d06b802c0e2d03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#ab7a5a9e1b4a1313239d06b802c0e2d03">createPlayerStatus</a> ()</td></tr>
+<tr class="separator:ab7a5a9e1b4a1313239d06b802c0e2d03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add979ef10a92e2e020e2110e979191b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#add979ef10a92e2e020e2110e979191b1">createPauseMenu</a> ()</td></tr>
+<tr class="separator:add979ef10a92e2e020e2110e979191b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a476e9b59f048d50f00c29354d1e5661c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a476e9b59f048d50f00c29354d1e5661c">createGameMessage</a> ()</td></tr>
+<tr class="separator:a476e9b59f048d50f00c29354d1e5661c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0385faf3ba08497a0729ab68c2e0e7e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a0385faf3ba08497a0729ab68c2e0e7e4">setGameMessage</a> (std::string new_msg)</td></tr>
+<tr class="separator:a0385faf3ba08497a0729ab68c2e0e7e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b0655f6801d9bc4ba8e9c2a0475dd6e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a4b0655f6801d9bc4ba8e9c2a0475dd6e">setGameState</a> (<a class="el" href="class_player_state.html">PlayerState</a> *pstate, GameState state)</td></tr>
+<tr class="separator:a4b0655f6801d9bc4ba8e9c2a0475dd6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12ee4f82eff2c42403ecc245b4144948"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a12ee4f82eff2c42403ecc245b4144948">setAllGameStates</a> (GameState state)</td></tr>
+<tr class="separator:a12ee4f82eff2c42403ecc245b4144948"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ff92b02ee40849b915076250a53204d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a9ff92b02ee40849b915076250a53204d">removeDestroyed</a> ()</td></tr>
+<tr class="separator:a9ff92b02ee40849b915076250a53204d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5bdd7d68cdf7a450b7e6f55e5b8e1ed"><td class="memItemLeft" align="right" valign="top"><a id="ab5bdd7d68cdf7a450b7e6f55e5b8e1ed"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleDeath</b> ()=0</td></tr>
+<tr class="separator:ab5bdd7d68cdf7a450b7e6f55e5b8e1ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96f2b5d100c7806a7bbf22c52be55c82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a96f2b5d100c7806a7bbf22c52be55c82">tryRespawn</a> (<a class="el" href="class_player_state.html">PlayerState</a> *pstate)</td></tr>
+<tr class="separator:a96f2b5d100c7806a7bbf22c52be55c82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd788a8fedc64a26e4d388513bd4f203"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#afd788a8fedc64a26e4d388513bd4f203">cleanupLevel</a> ()</td></tr>
+<tr class="separator:afd788a8fedc64a26e4d388513bd4f203"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8343f596a6c9604f485b652398550c5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a8343f596a6c9604f485b652398550c5b">hitGoal</a> (<a class="el" href="class_drawable.html">Drawable</a> &amp;other)</td></tr>
+<tr class="separator:a8343f596a6c9604f485b652398550c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b865a39440256fa37e0b369a79560a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a3b865a39440256fa37e0b369a79560a9">createBackground</a> ()</td></tr>
+<tr class="separator:a3b865a39440256fa37e0b369a79560a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf7e0aa60e9dcd3a2e85dab98f85f1c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_drawable.html">Drawable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#aaf7e0aa60e9dcd3a2e85dab98f85f1c5">addTile</a> (int tile_type, int tx, int ty, int id)</td></tr>
+<tr class="separator:aaf7e0aa60e9dcd3a2e85dab98f85f1c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6920581cf10a43211f9db71059f9bab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_player_state.html">PlayerState</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#ac6920581cf10a43211f9db71059f9bab">getPlayerState</a> ()</td></tr>
+<tr class="separator:ac6920581cf10a43211f9db71059f9bab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12acc00dba4e0796432cff285739bbae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_player_state.html">PlayerState</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a12acc00dba4e0796432cff285739bbae">getPlayerState</a> (<a class="el" href="class_drawable.html">Drawable</a> *obj)</td></tr>
+<tr class="separator:a12acc00dba4e0796432cff285739bbae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b6eb6865f39411727c99543c840b1b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_being.html">Being</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#a3b6eb6865f39411727c99543c840b1b4">getPlayer</a> ()</td></tr>
+<tr class="separator:a3b6eb6865f39411727c99543c840b1b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a647a2674205c97ba2f27ad9b9da5bbc8"><td class="memItemLeft" align="right" valign="top"><a id="a647a2674205c97ba2f27ad9b9da5bbc8"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>networkUpdate</b> ()=0</td></tr>
+<tr class="separator:a647a2674205c97ba2f27ad9b9da5bbc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a9305f4ca92a2ce9697a24896f576eb96"><td class="memItemLeft" align="right" valign="top"><a id="a9305f4ca92a2ce9697a24896f576eb96"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>headless</b></td></tr>
+<tr class="separator:a9305f4ca92a2ce9697a24896f576eb96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9d596352fbc119b5e36667a62c1b253"><td class="memItemLeft" align="right" valign="top"><a id="ad9d596352fbc119b5e36667a62c1b253"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>running</b></td></tr>
+<tr class="separator:ad9d596352fbc119b5e36667a62c1b253"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa496f86304c656e2e3e5d0337ab463d"><td class="memItemLeft" align="right" valign="top"><a id="afa496f86304c656e2e3e5d0337ab463d"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>level</b></td></tr>
+<tr class="separator:afa496f86304c656e2e3e5d0337ab463d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7e2e3a4708efc0c399506b2147967c3"><td class="memItemLeft" align="right" valign="top"><a id="af7e2e3a4708efc0c399506b2147967c3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>paused</b></td></tr>
+<tr class="separator:af7e2e3a4708efc0c399506b2147967c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e639736f62c0f958cfbef7d4ef168a5"><td class="memItemLeft" align="right" valign="top"><a id="a7e639736f62c0f958cfbef7d4ef168a5"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fps_limit</b></td></tr>
+<tr class="separator:a7e639736f62c0f958cfbef7d4ef168a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1d399f5ef058a25cc51ef339caa6a24"><td class="memItemLeft" align="right" valign="top"><a id="ad1d399f5ef058a25cc51ef339caa6a24"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>score</b></td></tr>
+<tr class="separator:ad1d399f5ef058a25cc51ef339caa6a24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33cbac335ffa08c2d97a114a7e3ff9b1"><td class="memItemLeft" align="right" valign="top"><a id="a33cbac335ffa08c2d97a114a7e3ff9b1"></a>
+<a class="el" href="class_frame_timer.html">FrameTimer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>timer</b></td></tr>
+<tr class="separator:a33cbac335ffa08c2d97a114a7e3ff9b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa60ddcfae81068a5d6114e3a4dc4174b"><td class="memItemLeft" align="right" valign="top"><a id="aa60ddcfae81068a5d6114e3a4dc4174b"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fps_display</b></td></tr>
+<tr class="separator:aa60ddcfae81068a5d6114e3a4dc4174b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf10a395a4355011ed439339902c1289"><td class="memItemLeft" align="right" valign="top"><a id="acf10a395a4355011ed439339902c1289"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>game_message</b></td></tr>
+<tr class="separator:acf10a395a4355011ed439339902c1289"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8dab66ff4dacb5cedd9d08c6dcf523a3"><td class="memItemLeft" align="right" valign="top"><a id="a8dab66ff4dacb5cedd9d08c6dcf523a3"></a>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>player_status_strs</b></td></tr>
+<tr class="separator:a8dab66ff4dacb5cedd9d08c6dcf523a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0d3304939f1893b331da5b34c3824fd"><td class="memItemLeft" align="right" valign="top"><a id="af0d3304939f1893b331da5b34c3824fd"></a>
+std::vector&lt; <a class="el" href="class_player_state.html">PlayerState</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>players</b></td></tr>
+<tr class="separator:af0d3304939f1893b331da5b34c3824fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a480d1803dc6d85bac8e423281c691516"><td class="memItemLeft" align="right" valign="top"><a id="a480d1803dc6d85bac8e423281c691516"></a>
+<a class="el" href="class_background.html">Background</a>&#160;</td><td class="memItemRight" valign="bottom"><b>background</b></td></tr>
+<tr class="separator:a480d1803dc6d85bac8e423281c691516"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96c7d492b82b0a9e2fc704523b1b1eb0"><td class="memItemLeft" align="right" valign="top"><a id="a96c7d492b82b0a9e2fc704523b1b1eb0"></a>
+std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>objects</b></td></tr>
+<tr class="separator:a96c7d492b82b0a9e2fc704523b1b1eb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afac8066e9f02bb4a18319cf6c96bd538"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hopman.html#afac8066e9f02bb4a18319cf6c96bd538">lower_bound</a></td></tr>
+<tr class="separator:afac8066e9f02bb4a18319cf6c96bd538"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Main class for the <a class="el" href="class_hopman.html">Hopman</a> platformer Most of the game logic is handled by this class. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af4a0d53350695269063ccc80a87493ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4a0d53350695269063ccc80a87493ac">&#9670;&nbsp;</a></span>Hopman()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Hopman::Hopman </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>headless</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Constructor Headless runs without a graphical display </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aaf7e0aa60e9dcd3a2e85dab98f85f1c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf7e0aa60e9dcd3a2e85dab98f85f1c5">&#9670;&nbsp;</a></span>addTile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_drawable.html">Drawable</a> * Hopman::addTile </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>tile_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>tx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ty</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>create a tile object at the given tile coordinates </p>
+
+</div>
+</div>
+<a id="aaddae866e8d33e646ba97d37d82b185a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaddae866e8d33e646ba97d37d82b185a">&#9670;&nbsp;</a></span>advanceScreen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::advanceScreen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_player_state.html">PlayerState</a> *&#160;</td>
+          <td class="paramname"><em>pstate</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Check if the user is ready to move on from the end of a level / loss </p>
+
+</div>
+</div>
+<a id="afd788a8fedc64a26e4d388513bd4f203"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd788a8fedc64a26e4d388513bd4f203">&#9670;&nbsp;</a></span>cleanupLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::cleanupLevel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Remove objects at the end of a level or loss </p>
+
+</div>
+</div>
+<a id="a3b865a39440256fa37e0b369a79560a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b865a39440256fa37e0b369a79560a9">&#9670;&nbsp;</a></span>createBackground()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::createBackground </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set up a parallax background </p>
+
+</div>
+</div>
+<a id="a476e9b59f048d50f00c29354d1e5661c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a476e9b59f048d50f00c29354d1e5661c">&#9670;&nbsp;</a></span>createGameMessage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::createGameMessage </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set up the message occasionally displayed across the center of the screen </p>
+
+</div>
+</div>
+<a id="add979ef10a92e2e020e2110e979191b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add979ef10a92e2e020e2110e979191b1">&#9670;&nbsp;</a></span>createPauseMenu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::createPauseMenu </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set up the menu that is displayed when the game is paused </p>
+
+</div>
+</div>
+<a id="ab7a5a9e1b4a1313239d06b802c0e2d03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7a5a9e1b4a1313239d06b802c0e2d03">&#9670;&nbsp;</a></span>createPlayerStatus()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::createPlayerStatus </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set up the box that displays connected player status </p>
+
+</div>
+</div>
+<a id="af9a3e58f4b5d4d61a871e2694fa71a4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9a3e58f4b5d4d61a871e2694fa71a4d">&#9670;&nbsp;</a></span>createStatusBar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::createStatusBar </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set up the status bar displayed at the top of the screen </p>
+
+</div>
+</div>
+<a id="a1431cf9c3db22d4bbfe4f5a7d3d11151"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1431cf9c3db22d4bbfe4f5a7d3d11151">&#9670;&nbsp;</a></span>createUI()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::createUI </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set up the UI for the game </p>
+
+</div>
+</div>
+<a id="a4858e84f8c47acddae50e21afefbaf62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4858e84f8c47acddae50e21afefbaf62">&#9670;&nbsp;</a></span>exitGame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::exitGame </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>set game state to start quitting </p>
+
+</div>
+</div>
+<a id="a3b6eb6865f39411727c99543c840b1b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b6eb6865f39411727c99543c840b1b4">&#9670;&nbsp;</a></span>getPlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_being.html">Being</a> * Hopman::getPlayer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the player object for player 1 This will be the player assigned to the client in <a class="el" href="class_hopman_client.html">HopmanClient</a> </p>
+
+</div>
+</div>
+<a id="ac6920581cf10a43211f9db71059f9bab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6920581cf10a43211f9db71059f9bab">&#9670;&nbsp;</a></span>getPlayerState() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_player_state.html">PlayerState</a> * Hopman::getPlayerState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the state object for player 1 This will be the player assigned to the client in <a class="el" href="class_hopman_client.html">HopmanClient</a> </p>
+
+</div>
+</div>
+<a id="a12acc00dba4e0796432cff285739bbae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12acc00dba4e0796432cff285739bbae">&#9670;&nbsp;</a></span>getPlayerState() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_player_state.html">PlayerState</a> * Hopman::getPlayerState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_drawable.html">Drawable</a> *&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return true if this object is one of the player characters </p>
+
+</div>
+</div>
+<a id="a8343f596a6c9604f485b652398550c5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8343f596a6c9604f485b652398550c5b">&#9670;&nbsp;</a></span>hitGoal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::hitGoal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_drawable.html">Drawable</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Called when something hits a goal tile. If its the player then they beat the level </p>
+
+</div>
+</div>
 <a id="acf4ccd23a76c2535afc0c475907c8357"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acf4ccd23a76c2535afc0c475907c8357">&#9670;&nbsp;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Hopman::init </td>
@@ -97,26 +627,182 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Set up the game </p>
 
 </div>
 </div>
-<a id="a642e64e18c1769485314252b7ce7fd16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a642e64e18c1769485314252b7ce7fd16">&#9670;&nbsp;</a></span>play()</h2>
+<a id="a9ff92b02ee40849b915076250a53204d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ff92b02ee40849b915076250a53204d">&#9670;&nbsp;</a></span>removeDestroyed()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int Hopman::play </td>
+          <td class="memname">void Hopman::removeDestroyed </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Main gameplay loop </p>
+<p>Remove any objects that have been destroyed </p>
+
+</div>
+</div>
+<a id="a3864def2d90bd9f34ac3816a6daf37cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3864def2d90bd9f34ac3816a6daf37cb">&#9670;&nbsp;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::render </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Draw everything to the screen </p>
+
+</div>
+</div>
+<a id="a0eabbdeff6cc4178459ec0a35980b20b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0eabbdeff6cc4178459ec0a35980b20b">&#9670;&nbsp;</a></span>renderGui()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::renderGui </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Draw the UI on top of everthing </p>
+
+</div>
+</div>
+<a id="a12ee4f82eff2c42403ecc245b4144948"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12ee4f82eff2c42403ecc245b4144948">&#9670;&nbsp;</a></span>setAllGameStates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::setAllGameStates </td>
+          <td>(</td>
+          <td class="paramtype">GameState&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set all players to the given state </p>
+
+</div>
+</div>
+<a id="a0385faf3ba08497a0729ab68c2e0e7e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0385faf3ba08497a0729ab68c2e0e7e4">&#9670;&nbsp;</a></span>setGameMessage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::setGameMessage </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>new_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the message displayed at the center of the screen </p>
+
+</div>
+</div>
+<a id="a4b0655f6801d9bc4ba8e9c2a0475dd6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b0655f6801d9bc4ba8e9c2a0475dd6e">&#9670;&nbsp;</a></span>setGameState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::setGameState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_player_state.html">PlayerState</a> *&#160;</td>
+          <td class="paramname"><em>pstate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GameState&#160;</td>
+          <td class="paramname"><em>gstate</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the state of the given player </p>
 
 </div>
 </div>
@@ -135,6 +821,109 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Tear it down </p>
+
+</div>
+</div>
+<a id="a7018663cef2a203589b9e98764052532"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7018663cef2a203589b9e98764052532">&#9670;&nbsp;</a></span>toggleFps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::toggleFps </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>toggle the fps display UI </p>
+
+</div>
+</div>
+<a id="ae618047547937456ffed6b18598d1a96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae618047547937456ffed6b18598d1a96">&#9670;&nbsp;</a></span>togglePause()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::togglePause </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Flip the value of whether we are paused </p>
+
+</div>
+</div>
+<a id="a96f2b5d100c7806a7bbf22c52be55c82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96f2b5d100c7806a7bbf22c52be55c82">&#9670;&nbsp;</a></span>tryRespawn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Hopman::tryRespawn </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_player_state.html">PlayerState</a> *&#160;</td>
+          <td class="paramname"><em>pstate</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>try to respawn after player death </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="afac8066e9f02bb4a18319cf6c96bd538"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afac8066e9f02bb4a18319cf6c96bd538">&#9670;&nbsp;</a></span>lower_bound</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Hopman::lower_bound</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>player dies if they fall past here </p>
 
 </div>
 </div>

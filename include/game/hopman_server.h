@@ -21,12 +21,12 @@ private:
     Server server;
     long last_net_update;
     
-    void init(bool headless) override;
+    void init() override;
     int play() override;
     void update(long delta);
     PlayerState* addNewPlayer();
     void processRegistration(PlayerState *pstate, ClientRegisterMsg *reg);
-    void handleGameState() override;
+    void handleGameState();
     void networkUpdate() override;
     bool shouldSendNetworkUpdate();
     void handleDeath() override;
@@ -35,6 +35,7 @@ private:
     void parseLevelConfig(LevelConfig &config);
     void restartGame();
 public:
+    HopmanServer(bool headless);
 };
 
 #endif /* hopman_server_h */

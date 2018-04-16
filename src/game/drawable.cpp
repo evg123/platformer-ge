@@ -29,6 +29,10 @@ void Drawable::update(long delta, std::map<int, Drawable*> &objects) {
     updateState(delta);
 }
 
+/**
+ Update the physics of the object.
+ Handled movement and collisions
+ */
 void Drawable::updatePhysics(long delta, std::map<int, Drawable*> &objects) {
     if (!intangible) {
         applyAcceleration(delta);
@@ -38,6 +42,9 @@ void Drawable::updatePhysics(long delta, std::map<int, Drawable*> &objects) {
     }
 }
 
+/**
+ Update the game state of the object
+ */
 void Drawable::updateState(long delta) {
     // nothing in base class
 }
@@ -61,6 +68,9 @@ void Drawable::updateWithObjectState(ObjectStateMsg &state) {
     marked_for_removal = state.marked_for_removal;
 }
 
+/**
+ Smooth out an update to a value
+ */
 float Drawable::smoothValue(float current, float update, float min_off, float max_off) {
     float diff = current - update;
     if (std::abs(diff) < min_off) {
@@ -269,6 +279,9 @@ void Drawable::applyAcceleration(long delta) {
     y_vel += delta * y_accel;
 }
 
+/**
+ Fill in the given state message with the state of this drawable
+ */
 void Drawable::fillObjectState(ObjectStateMsg &state) {
     state.id = id;
     state.type = tile_num;

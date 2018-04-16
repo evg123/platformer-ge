@@ -23,7 +23,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Hopman
    </div>
-   <div id="projectbrief">A 2D platformer by Eric VandeGriek</div>
+   <div id="projectbrief">A Multiplayer 2D platformer by Eric VandeGriek</div>
   </td>
  </tr>
  </tbody>
@@ -85,24 +85,41 @@ Inheritance diagram for Tile:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0a984bfd057e454573e0d1865302e05b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tile.html#a0a984bfd057e454573e0d1865302e05b">Tile</a> (int tile_num)</td></tr>
 <tr class="separator:a0a984bfd057e454573e0d1865302e05b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65bf5a12bf6707bd918eec3be8b6f109"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tile.html#a65bf5a12bf6707bd918eec3be8b6f109">update</a> (int delta, std::vector&lt; <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;objects) override</td></tr>
-<tr class="separator:a65bf5a12bf6707bd918eec3be8b6f109"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a9234ad88f1677fc87cb344b5fadd63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tile.html#a3a9234ad88f1677fc87cb344b5fadd63">update</a> (long delta, std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;objects) override</td></tr>
+<tr class="separator:a3a9234ad88f1677fc87cb344b5fadd63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe29f1a34003608790413170bb214b9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tile.html#afe29f1a34003608790413170bb214b9b">render</a> () override</td></tr>
 <tr class="separator:afe29f1a34003608790413170bb214b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_drawable"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_drawable')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_drawable.html">Drawable</a></td></tr>
+<tr class="memitem:aac88608db6081da479c772c96636acb1 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#aac88608db6081da479c772c96636acb1">Drawable</a> ()</td></tr>
+<tr class="separator:aac88608db6081da479c772c96636acb1 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdc2e2d82c51c1703656a2dfba0feabd inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#abdc2e2d82c51c1703656a2dfba0feabd">~Drawable</a> ()</td></tr>
 <tr class="separator:abdc2e2d82c51c1703656a2dfba0feabd inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa521882d9f5ae21ddb8607d438524df5 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#aa521882d9f5ae21ddb8607d438524df5">getId</a> ()</td></tr>
+<tr class="separator:aa521882d9f5ae21ddb8607d438524df5 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa95c91028b9b6e930bc4a077845924b0 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#aa95c91028b9b6e930bc4a077845924b0">setId</a> (int new_id)</td></tr>
+<tr class="separator:aa95c91028b9b6e930bc4a077845924b0 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6cbd568f06a089ec9f530adfbd01d05 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#ad6cbd568f06a089ec9f530adfbd01d05">updatePhysics</a> (long delta, std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;objects)</td></tr>
+<tr class="separator:ad6cbd568f06a089ec9f530adfbd01d05 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af84e55d44bd72c0b5a027ba2eae093d1 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#af84e55d44bd72c0b5a027ba2eae093d1">updateState</a> (long delta)</td></tr>
+<tr class="separator:af84e55d44bd72c0b5a027ba2eae093d1 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92aac2527f899106fb3ba65fbc0674dd inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a92aac2527f899106fb3ba65fbc0674dd">updateWithObjectState</a> (<a class="el" href="struct_object_state_msg.html">ObjectStateMsg</a> &amp;state)</td></tr>
+<tr class="separator:a92aac2527f899106fb3ba65fbc0674dd inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02b1e5a2da9db53135fa40982d6a625c inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a02b1e5a2da9db53135fa40982d6a625c">smoothValue</a> (float current, float <a class="el" href="class_drawable.html#a7e56f583ce4241a6e5eb7adb754b5e0e">update</a>, float min_off, float max_off)</td></tr>
+<tr class="separator:a02b1e5a2da9db53135fa40982d6a625c inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a507bdaf1759692cb7b2466421af396ec inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_evg_rect.html">EvgRect</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a507bdaf1759692cb7b2466421af396ec">getRect</a> ()</td></tr>
 <tr class="separator:a507bdaf1759692cb7b2466421af396ec inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dfbac18ba61d521eab2fddc936d80d5 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a0dfbac18ba61d521eab2fddc936d80d5">getScoreOnDestruction</a> ()</td></tr>
 <tr class="separator:a0dfbac18ba61d521eab2fddc936d80d5 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeefd33d57df54e8115747d20d3ecd996 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#aeefd33d57df54e8115747d20d3ecd996">getDamage</a> ()</td></tr>
 <tr class="separator:aeefd33d57df54e8115747d20d3ecd996 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68cfc1fa65120a8bb97a8e9c974c5f22 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a68cfc1fa65120a8bb97a8e9c974c5f22">getTileNum</a> ()</td></tr>
+<tr class="separator:a68cfc1fa65120a8bb97a8e9c974c5f22 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed0a9ceafd7c08b36d297f742e57f38c inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#aed0a9ceafd7c08b36d297f742e57f38c">isBouncy</a> ()</td></tr>
 <tr class="separator:aed0a9ceafd7c08b36d297f742e57f38c inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a641b4d94aa078a3b1925c6fe3764cbe3 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top"><a id="a641b4d94aa078a3b1925c6fe3764cbe3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (int color_r, int color_g, int color_b, int alpha)</td></tr>
-<tr class="separator:a641b4d94aa078a3b1925c6fe3764cbe3 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9de6ed7e1432a1b807a07df48f8732a9 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a9de6ed7e1432a1b807a07df48f8732a9">isStatic</a> ()</td></tr>
+<tr class="separator:a9de6ed7e1432a1b807a07df48f8732a9 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dec6efb5b7f7febd24b7241998b74c3 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a6dec6efb5b7f7febd24b7241998b74c3">setIntangible</a> (bool value)</td></tr>
+<tr class="separator:a6dec6efb5b7f7febd24b7241998b74c3 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a69578dc11aa87f945b865f31bacf8c inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a6a69578dc11aa87f945b865f31bacf8c">setVelocity</a> (float x_vel, float y_vel)</td></tr>
 <tr class="separator:a6a69578dc11aa87f945b865f31bacf8c inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a307a6ce1237bfdc520556100e167d6a2 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a307a6ce1237bfdc520556100e167d6a2">setAcceleration</a> (float x_acceleration, float y_acceleration)</td></tr>
@@ -115,7 +132,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (int col
 <tr class="separator:aabf82e3bdd6c059dc244291c8029e253 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69306989be5b490f9a8276809ff9f8e5 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a69306989be5b490f9a8276809ff9f8e5">needsRemoval</a> ()</td></tr>
 <tr class="separator:a69306989be5b490f9a8276809ff9f8e5 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bc6528417f090c8b4fdcf61e0c9d724 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a6bc6528417f090c8b4fdcf61e0c9d724">destroy</a> ()</td></tr>
+<tr class="memitem:a6bc6528417f090c8b4fdcf61e0c9d724 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a6bc6528417f090c8b4fdcf61e0c9d724">destroy</a> ()</td></tr>
 <tr class="separator:a6bc6528417f090c8b4fdcf61e0c9d724 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab92b302f7244a6d5d6274b4c86357b1b inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#ab92b302f7244a6d5d6274b4c86357b1b">hitOther</a> (<a class="el" href="class_drawable.html">Drawable</a> &amp;other)</td></tr>
 <tr class="separator:ab92b302f7244a6d5d6274b4c86357b1b inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,19 +140,27 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (int col
 <tr class="separator:ae04fdad31b6ebf36c88234fd6ab2fd10 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09c49bad34dab52c3fb8bd8c6e09bcf0 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a09c49bad34dab52c3fb8bd8c6e09bcf0">ranInto</a> (<a class="el" href="class_drawable.html">Drawable</a> &amp;other)</td></tr>
 <tr class="separator:a09c49bad34dab52c3fb8bd8c6e09bcf0 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac13f6909d432fe530de1c90c6bc33192 inherit pub_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#ac13f6909d432fe530de1c90c6bc33192">fillObjectState</a> (<a class="el" href="struct_object_state_msg.html">ObjectStateMsg</a> &amp;state)</td></tr>
+<tr class="separator:ac13f6909d432fe530de1c90c6bc33192 inherit pub_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_class_drawable"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_class_drawable')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_drawable.html">Drawable</a></td></tr>
-<tr class="memitem:a7db65b8d1eac36e530c29331bb682bc7 inherit pro_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; float, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a7db65b8d1eac36e530c29331bb682bc7">calcVelocityOffset</a> (int delta)</td></tr>
-<tr class="separator:a7db65b8d1eac36e530c29331bb682bc7 inherit pro_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a641d2b59fe07178ebfb1e40d770f6050 inherit pro_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a641d2b59fe07178ebfb1e40d770f6050">applyAcceleration</a> (int delta)</td></tr>
-<tr class="separator:a641d2b59fe07178ebfb1e40d770f6050 inherit pro_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a521a586ee87f6c603753fb0b628826d0 inherit pro_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a521a586ee87f6c603753fb0b628826d0">doMove</a> (float x_offset, float y_offset, std::vector&lt; <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;objects)</td></tr>
-<tr class="separator:a521a586ee87f6c603753fb0b628826d0 inherit pro_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dec3f01ef1014f4aea1b59c52083669 inherit pro_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; float, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a3dec3f01ef1014f4aea1b59c52083669">calcVelocityOffset</a> (long delta)</td></tr>
+<tr class="separator:a3dec3f01ef1014f4aea1b59c52083669 inherit pro_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44e82c54f44c8b982b53564c32f8ca32 inherit pro_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a44e82c54f44c8b982b53564c32f8ca32">applyAcceleration</a> (long delta)</td></tr>
+<tr class="separator:a44e82c54f44c8b982b53564c32f8ca32 inherit pro_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a002cfde209bd438aab342e82ecf707f3 inherit pro_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a002cfde209bd438aab342e82ecf707f3">doMove</a> (float x_offset, float y_offset, std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;objects)</td></tr>
+<tr class="separator:a002cfde209bd438aab342e82ecf707f3 inherit pro_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a434a974662a9b6fa655e3eac06a2c843 inherit pro_methods_class_drawable"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a434a974662a9b6fa655e3eac06a2c843">processCollision</a> (<a class="el" href="class_drawable.html">Drawable</a> &amp;other, float x_off, float y_off)</td></tr>
 <tr class="separator:a434a974662a9b6fa655e3eac06a2c843 inherit pro_methods_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_class_drawable"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_class_drawable')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="class_drawable.html">Drawable</a></td></tr>
+<tr class="memitem:aa7db919f809bd3b8eaf1c1008827ee99 inherit pro_attribs_class_drawable"><td class="memItemLeft" align="right" valign="top"><a id="aa7db919f809bd3b8eaf1c1008827ee99"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>id</b></td></tr>
+<tr class="separator:aa7db919f809bd3b8eaf1c1008827ee99 inherit pro_attribs_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af102ff8b83ee7aaadb3b225c439c9126 inherit pro_attribs_class_drawable"><td class="memItemLeft" align="right" valign="top"><a id="af102ff8b83ee7aaadb3b225c439c9126"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>tile_num</b></td></tr>
+<tr class="separator:af102ff8b83ee7aaadb3b225c439c9126 inherit pro_attribs_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeed865fa54ab2f66b87f24ac938fb337 inherit pro_attribs_class_drawable"><td class="memItemLeft" align="right" valign="top"><a id="aeed865fa54ab2f66b87f24ac938fb337"></a>
 <a class="el" href="class_evg_rect.html">EvgRect</a>&#160;</td><td class="memItemRight" valign="bottom"><b>rect</b></td></tr>
 <tr class="separator:aeed865fa54ab2f66b87f24ac938fb337 inherit pro_attribs_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,6 +194,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>bouncy</b> = false</t
 <tr class="memitem:a79eb1255123a16506e0f6bc51f00896e inherit pro_attribs_class_drawable"><td class="memItemLeft" align="right" valign="top"><a id="a79eb1255123a16506e0f6bc51f00896e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hit_back_when_hopped_on</b> = false</td></tr>
 <tr class="separator:a79eb1255123a16506e0f6bc51f00896e inherit pro_attribs_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae248eb05a5eda8dd6be5363d30bc71ae inherit pro_attribs_class_drawable"><td class="memItemLeft" align="right" valign="top"><a id="ae248eb05a5eda8dd6be5363d30bc71ae"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>intangible</b> = false</td></tr>
+<tr class="separator:ae248eb05a5eda8dd6be5363d30bc71ae inherit pro_attribs_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b39feb52e6794c37ccb055adbdf692b inherit pro_attribs_class_drawable"><td class="memItemLeft" align="right" valign="top"><a id="a1b39feb52e6794c37ccb055adbdf692b"></a>
 std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>collision_callback</b></td></tr>
 <tr class="separator:a1b39feb52e6794c37ccb055adbdf692b inherit pro_attribs_class_drawable"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,8 +252,8 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 
 </div>
 </div>
-<a id="a65bf5a12bf6707bd918eec3be8b6f109"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a65bf5a12bf6707bd918eec3be8b6f109">&#9670;&nbsp;</a></span>update()</h2>
+<a id="a3a9234ad88f1677fc87cb344b5fadd63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a9234ad88f1677fc87cb344b5fadd63">&#9670;&nbsp;</a></span>update()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -236,13 +264,13 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
         <tr>
           <td class="memname">void Tile::update </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">long&#160;</td>
           <td class="paramname"><em>delta</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;&#160;</td>
+          <td class="paramtype">std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;&#160;</td>
           <td class="paramname"><em>objects</em>&#160;</td>
         </tr>
         <tr>
@@ -259,7 +287,7 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 </div><div class="memdoc">
 <p>Update the object based on how much time has passed. delta is in ms. </p>
 
-<p>Reimplemented from <a class="el" href="class_drawable.html#a2ea0a85c40e1b5059c4843c9ac4d0b27">Drawable</a>.</p>
+<p>Reimplemented from <a class="el" href="class_drawable.html#a7e56f583ce4241a6e5eb7adb754b5e0e">Drawable</a>.</p>
 
 </div>
 </div>

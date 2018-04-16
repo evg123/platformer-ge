@@ -23,7 +23,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Hopman
    </div>
-   <div id="projectbrief">A 2D platformer by Eric VandeGriek</div>
+   <div id="projectbrief">A Multiplayer 2D platformer by Eric VandeGriek</div>
   </td>
  </tr>
  </tbody>
@@ -74,12 +74,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aad0d92f905ef031a575f8d05e8303c1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_background.html#aad0d92f905ef031a575f8d05e8303c1d">init</a> (int start_x, int start_y, int lower_bound)</td></tr>
-<tr class="separator:aad0d92f905ef031a575f8d05e8303c1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e19c25f1219e5f54d38ca21b6ca8e2e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_background.html#a6e19c25f1219e5f54d38ca21b6ca8e2e">init</a> (int lower_bound)</td></tr>
+<tr class="separator:a6e19c25f1219e5f54d38ca21b6ca8e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77cc92d39b484c957c3a4815198e0428"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_background.html#a77cc92d39b484c957c3a4815198e0428">shutdown</a> ()</td></tr>
 <tr class="separator:a77cc92d39b484c957c3a4815198e0428"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13409fea7d9f99b81b6668b642bf87f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_background.html#a13409fea7d9f99b81b6668b642bf87f2">setColor</a> (int red, int green, int blue)</td></tr>
 <tr class="separator:a13409fea7d9f99b81b6668b642bf87f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab913816615e1bbdd8fa94756bf0bfe89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_background.html#ab913816615e1bbdd8fa94756bf0bfe89">setLowerBound</a> (int lower_bound)</td></tr>
+<tr class="separator:ab913816615e1bbdd8fa94756bf0bfe89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f81a7643f55c7379b0ab4e424405c03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_background.html#a5f81a7643f55c7379b0ab4e424405c03">addLayer</a> (std::string img_file, int width, int height, int distance)</td></tr>
 <tr class="separator:a5f81a7643f55c7379b0ab4e424405c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73952ed10998425d23fc2c4f5e0f6858"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_background.html#a73952ed10998425d23fc2c4f5e0f6858">updateLayerOffsets</a> (int center_x, int center_y)</td></tr>
@@ -151,8 +153,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aad0d92f905ef031a575f8d05e8303c1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad0d92f905ef031a575f8d05e8303c1d">&#9670;&nbsp;</a></span>init()</h2>
+<a id="a6e19c25f1219e5f54d38ca21b6ca8e2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e19c25f1219e5f54d38ca21b6ca8e2e">&#9670;&nbsp;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -161,24 +163,8 @@ Public Member Functions</h2></td></tr>
           <td class="memname">void Background::init </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>start_x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>lower_bound</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>start_y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>lower_bound</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -236,6 +222,25 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Set the backdrop color that is filled in behind the layers </p>
+
+</div>
+</div>
+<a id="ab913816615e1bbdd8fa94756bf0bfe89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab913816615e1bbdd8fa94756bf0bfe89">&#9670;&nbsp;</a></span>setLowerBound()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Background::setLowerBound </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>lower_bound</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Update the value of the lower bound for the background This determines where the layers will start </p>
 
 </div>
 </div>

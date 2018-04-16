@@ -94,6 +94,10 @@ bool Being::dead() {
     return hp <= 0;
 }
 
+/**
+ Update the pysics of this being
+ Handled movement and collisions
+ */
 void Being::updatePhysics(long delta, std::map<int, Drawable*> &objects) {
     if (!dead()) {
         performAction(delta);
@@ -101,6 +105,9 @@ void Being::updatePhysics(long delta, std::map<int, Drawable*> &objects) {
     }
 }
 
+/**
+ Update the game state of this being
+ */
 void Being::updateState(long delta) {
     if (dead()) {
         long now = getTime();
@@ -389,6 +396,9 @@ void Being::updateSprite() {
     sprite.update();
 }
 
+/**
+ Fill in the given state message with values from this being
+ */
 void Being::fillObjectState(ObjectStateMsg &state) {
     Drawable::fillObjectState(state);
     state.hp = hp;

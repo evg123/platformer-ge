@@ -6,10 +6,15 @@
 #include "hopman.h"
 
 /**
+ Constructor
+ Headless runs without a graphical display
+ */
+Hopman::Hopman(bool headless) : headless(headless) {}
+
+/**
  Set up the game
  */
-void Hopman::init(bool headless) {
-    this->headless = headless;
+void Hopman::init() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         throw std::runtime_error("Failed to initialize SDL");
     }
@@ -119,6 +124,9 @@ void Hopman::createStatusBar() {
     Gui::instance().setGroupDisplay(GuiGroupId::STATUS_BAR, true);
 }
 
+/**
+ Set up the box that displays connected player status
+ */
 void Hopman::createPlayerStatus() {
     int box_x = PLAYER_STATUS_X;
     int box_y = PLAYER_STATUS_Y;
@@ -147,6 +155,9 @@ void Hopman::createPlayerStatus() {
     Gui::instance().setGroupDisplay(GuiGroupId::PLAYER_STATUS, true);
 }
 
+/**
+ Set up the menu that is displayed when the game is paused
+ */
 void Hopman::createPauseMenu() {
     int menu_x = (Graphics::instance().getWindowWidth() / 2) - (PAUSE_MENU_WIDTH / 2);
     int menu_y = (Graphics::instance().getWindowHeight() / 2) - (PAUSE_MENU_HEIGHT / 2);
@@ -236,6 +247,9 @@ void Hopman::tryRespawn(PlayerState *pstate) {
     }
 }
 
+/**
+ Flip the value of whether we are paused
+ */
 void Hopman::togglePause() {
     paused = !paused;
     Gui::instance().toggleGroupDisplay(GuiGroupId::PAUSE);
@@ -358,6 +372,10 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
     return obj;
 }
 
+/**
+ Get the state object for player 1
+ This will be the player assigned to the client in HopmanClient
+ */
 PlayerState* Hopman::getPlayerState() {
     if (players.size() > 0) {
         return players[0];
@@ -365,6 +383,10 @@ PlayerState* Hopman::getPlayerState() {
     return NULL;
 }
 
+/**
+ Get the player object for player 1
+ This will be the player assigned to the client in HopmanClient
+ */
 Being* Hopman::getPlayer() {
     PlayerState *pstate = getPlayerState();
     if (pstate != NULL) {
@@ -433,6 +455,9 @@ PlayerState* Hopman::getPlayerState(Drawable *obj) {
     return NULL;
 }
 
+/**
+ Set the state of the given player
+ */
 void Hopman::setGameState(PlayerState *pstate, GameState gstate) {
     if (gstate == pstate->active_state) {
         // no change
@@ -486,6 +511,9 @@ void Hopman::setGameState(PlayerState *pstate, GameState gstate) {
     pstate->active_state = gstate;
 }
 
+/**
+ Set all players to the given state
+ */
 void Hopman::setAllGameStates(GameState state) {
     for (auto &player_state_obj : players) {
         setGameState(player_state_obj, state);
@@ -494,6 +522,9 @@ void Hopman::setAllGameStates(GameState state) {
 
 // PlayerState Definitions
 
+/**
+ Constructor
+ */
 PlayerState::PlayerState(Being *player)
 : player(player), assigned(false), active_state(GameState::NONE),
   ready(false), lives(DEFAULT_EXTRA_LIVES) {}

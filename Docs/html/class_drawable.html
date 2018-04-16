@@ -23,7 +23,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Hopman
    </div>
-   <div id="projectbrief">A 2D platformer by Eric VandeGriek</div>
+   <div id="projectbrief">A Multiplayer 2D platformer by Eric VandeGriek</div>
   </td>
  </tr>
  </tbody>
@@ -86,10 +86,24 @@ Inheritance diagram for Drawable:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aac88608db6081da479c772c96636acb1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#aac88608db6081da479c772c96636acb1">Drawable</a> ()</td></tr>
+<tr class="separator:aac88608db6081da479c772c96636acb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdc2e2d82c51c1703656a2dfba0feabd"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#abdc2e2d82c51c1703656a2dfba0feabd">~Drawable</a> ()</td></tr>
 <tr class="separator:abdc2e2d82c51c1703656a2dfba0feabd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ea0a85c40e1b5059c4843c9ac4d0b27"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a2ea0a85c40e1b5059c4843c9ac4d0b27">update</a> (int delta, std::vector&lt; <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;objects)</td></tr>
-<tr class="separator:a2ea0a85c40e1b5059c4843c9ac4d0b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa521882d9f5ae21ddb8607d438524df5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#aa521882d9f5ae21ddb8607d438524df5">getId</a> ()</td></tr>
+<tr class="separator:aa521882d9f5ae21ddb8607d438524df5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa95c91028b9b6e930bc4a077845924b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#aa95c91028b9b6e930bc4a077845924b0">setId</a> (int new_id)</td></tr>
+<tr class="separator:aa95c91028b9b6e930bc4a077845924b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e56f583ce4241a6e5eb7adb754b5e0e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a7e56f583ce4241a6e5eb7adb754b5e0e">update</a> (long delta, std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;objects)</td></tr>
+<tr class="separator:a7e56f583ce4241a6e5eb7adb754b5e0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6cbd568f06a089ec9f530adfbd01d05"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#ad6cbd568f06a089ec9f530adfbd01d05">updatePhysics</a> (long delta, std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;objects)</td></tr>
+<tr class="separator:ad6cbd568f06a089ec9f530adfbd01d05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af84e55d44bd72c0b5a027ba2eae093d1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#af84e55d44bd72c0b5a027ba2eae093d1">updateState</a> (long delta)</td></tr>
+<tr class="separator:af84e55d44bd72c0b5a027ba2eae093d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92aac2527f899106fb3ba65fbc0674dd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a92aac2527f899106fb3ba65fbc0674dd">updateWithObjectState</a> (<a class="el" href="struct_object_state_msg.html">ObjectStateMsg</a> &amp;state)</td></tr>
+<tr class="separator:a92aac2527f899106fb3ba65fbc0674dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02b1e5a2da9db53135fa40982d6a625c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a02b1e5a2da9db53135fa40982d6a625c">smoothValue</a> (float current, float <a class="el" href="class_drawable.html#a7e56f583ce4241a6e5eb7adb754b5e0e">update</a>, float min_off, float max_off)</td></tr>
+<tr class="separator:a02b1e5a2da9db53135fa40982d6a625c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada9de3caaac80fbe6d4e80894300b4df"><td class="memItemLeft" align="right" valign="top"><a id="ada9de3caaac80fbe6d4e80894300b4df"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> ()=0</td></tr>
 <tr class="separator:ada9de3caaac80fbe6d4e80894300b4df"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -99,11 +113,14 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> ()
 <tr class="separator:a0dfbac18ba61d521eab2fddc936d80d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeefd33d57df54e8115747d20d3ecd996"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#aeefd33d57df54e8115747d20d3ecd996">getDamage</a> ()</td></tr>
 <tr class="separator:aeefd33d57df54e8115747d20d3ecd996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68cfc1fa65120a8bb97a8e9c974c5f22"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a68cfc1fa65120a8bb97a8e9c974c5f22">getTileNum</a> ()</td></tr>
+<tr class="separator:a68cfc1fa65120a8bb97a8e9c974c5f22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed0a9ceafd7c08b36d297f742e57f38c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#aed0a9ceafd7c08b36d297f742e57f38c">isBouncy</a> ()</td></tr>
 <tr class="separator:aed0a9ceafd7c08b36d297f742e57f38c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a641b4d94aa078a3b1925c6fe3764cbe3"><td class="memItemLeft" align="right" valign="top"><a id="a641b4d94aa078a3b1925c6fe3764cbe3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (int color_r, int color_g, int color_b, int alpha)</td></tr>
-<tr class="separator:a641b4d94aa078a3b1925c6fe3764cbe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9de6ed7e1432a1b807a07df48f8732a9"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a9de6ed7e1432a1b807a07df48f8732a9">isStatic</a> ()</td></tr>
+<tr class="separator:a9de6ed7e1432a1b807a07df48f8732a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dec6efb5b7f7febd24b7241998b74c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a6dec6efb5b7f7febd24b7241998b74c3">setIntangible</a> (bool value)</td></tr>
+<tr class="separator:a6dec6efb5b7f7febd24b7241998b74c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a69578dc11aa87f945b865f31bacf8c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a6a69578dc11aa87f945b865f31bacf8c">setVelocity</a> (float x_vel, float y_vel)</td></tr>
 <tr class="separator:a6a69578dc11aa87f945b865f31bacf8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a307a6ce1237bfdc520556100e167d6a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a307a6ce1237bfdc520556100e167d6a2">setAcceleration</a> (float x_acceleration, float y_acceleration)</td></tr>
@@ -116,7 +133,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (int col
 <tr class="separator:aabf82e3bdd6c059dc244291c8029e253"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69306989be5b490f9a8276809ff9f8e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a69306989be5b490f9a8276809ff9f8e5">needsRemoval</a> ()</td></tr>
 <tr class="separator:a69306989be5b490f9a8276809ff9f8e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bc6528417f090c8b4fdcf61e0c9d724"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a6bc6528417f090c8b4fdcf61e0c9d724">destroy</a> ()</td></tr>
+<tr class="memitem:a6bc6528417f090c8b4fdcf61e0c9d724"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a6bc6528417f090c8b4fdcf61e0c9d724">destroy</a> ()</td></tr>
 <tr class="separator:a6bc6528417f090c8b4fdcf61e0c9d724"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab92b302f7244a6d5d6274b4c86357b1b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#ab92b302f7244a6d5d6274b4c86357b1b">hitOther</a> (<a class="el" href="class_drawable.html">Drawable</a> &amp;other)</td></tr>
 <tr class="separator:ab92b302f7244a6d5d6274b4c86357b1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,20 +141,28 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (int col
 <tr class="separator:ae04fdad31b6ebf36c88234fd6ab2fd10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09c49bad34dab52c3fb8bd8c6e09bcf0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a09c49bad34dab52c3fb8bd8c6e09bcf0">ranInto</a> (<a class="el" href="class_drawable.html">Drawable</a> &amp;other)</td></tr>
 <tr class="separator:a09c49bad34dab52c3fb8bd8c6e09bcf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac13f6909d432fe530de1c90c6bc33192"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#ac13f6909d432fe530de1c90c6bc33192">fillObjectState</a> (<a class="el" href="struct_object_state_msg.html">ObjectStateMsg</a> &amp;state)</td></tr>
+<tr class="separator:ac13f6909d432fe530de1c90c6bc33192"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a7db65b8d1eac36e530c29331bb682bc7"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; float, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a7db65b8d1eac36e530c29331bb682bc7">calcVelocityOffset</a> (int delta)</td></tr>
-<tr class="separator:a7db65b8d1eac36e530c29331bb682bc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a641d2b59fe07178ebfb1e40d770f6050"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a641d2b59fe07178ebfb1e40d770f6050">applyAcceleration</a> (int delta)</td></tr>
-<tr class="separator:a641d2b59fe07178ebfb1e40d770f6050"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a521a586ee87f6c603753fb0b628826d0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a521a586ee87f6c603753fb0b628826d0">doMove</a> (float x_offset, float y_offset, std::vector&lt; <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;objects)</td></tr>
-<tr class="separator:a521a586ee87f6c603753fb0b628826d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dec3f01ef1014f4aea1b59c52083669"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; float, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a3dec3f01ef1014f4aea1b59c52083669">calcVelocityOffset</a> (long delta)</td></tr>
+<tr class="separator:a3dec3f01ef1014f4aea1b59c52083669"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44e82c54f44c8b982b53564c32f8ca32"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a44e82c54f44c8b982b53564c32f8ca32">applyAcceleration</a> (long delta)</td></tr>
+<tr class="separator:a44e82c54f44c8b982b53564c32f8ca32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a002cfde209bd438aab342e82ecf707f3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a002cfde209bd438aab342e82ecf707f3">doMove</a> (float x_offset, float y_offset, std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;objects)</td></tr>
+<tr class="separator:a002cfde209bd438aab342e82ecf707f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a434a974662a9b6fa655e3eac06a2c843"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drawable.html#a434a974662a9b6fa655e3eac06a2c843">processCollision</a> (<a class="el" href="class_drawable.html">Drawable</a> &amp;other, float x_off, float y_off)</td></tr>
 <tr class="separator:a434a974662a9b6fa655e3eac06a2c843"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
+<tr class="memitem:aa7db919f809bd3b8eaf1c1008827ee99"><td class="memItemLeft" align="right" valign="top"><a id="aa7db919f809bd3b8eaf1c1008827ee99"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>id</b></td></tr>
+<tr class="separator:aa7db919f809bd3b8eaf1c1008827ee99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af102ff8b83ee7aaadb3b225c439c9126"><td class="memItemLeft" align="right" valign="top"><a id="af102ff8b83ee7aaadb3b225c439c9126"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>tile_num</b></td></tr>
+<tr class="separator:af102ff8b83ee7aaadb3b225c439c9126"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeed865fa54ab2f66b87f24ac938fb337"><td class="memItemLeft" align="right" valign="top"><a id="aeed865fa54ab2f66b87f24ac938fb337"></a>
 <a class="el" href="class_evg_rect.html">EvgRect</a>&#160;</td><td class="memItemRight" valign="bottom"><b>rect</b></td></tr>
 <tr class="separator:aeed865fa54ab2f66b87f24ac938fb337"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,6 +196,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>bouncy</b> = false</t
 <tr class="memitem:a79eb1255123a16506e0f6bc51f00896e"><td class="memItemLeft" align="right" valign="top"><a id="a79eb1255123a16506e0f6bc51f00896e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hit_back_when_hopped_on</b> = false</td></tr>
 <tr class="separator:a79eb1255123a16506e0f6bc51f00896e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae248eb05a5eda8dd6be5363d30bc71ae"><td class="memItemLeft" align="right" valign="top"><a id="ae248eb05a5eda8dd6be5363d30bc71ae"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>intangible</b> = false</td></tr>
+<tr class="separator:ae248eb05a5eda8dd6be5363d30bc71ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b39feb52e6794c37ccb055adbdf692b"><td class="memItemLeft" align="right" valign="top"><a id="a1b39feb52e6794c37ccb055adbdf692b"></a>
 std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>collision_callback</b></td></tr>
 <tr class="separator:a1b39feb52e6794c37ccb055adbdf692b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,6 +206,24 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Abstract base class for things drawn to the screen. Handles rendering, movement, and collision. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aac88608db6081da479c772c96636acb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac88608db6081da479c772c96636acb1">&#9670;&nbsp;</a></span>Drawable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Drawable::Drawable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a new drawable and assign it an id </p>
+
+</div>
+</div>
 <a id="abdc2e2d82c51c1703656a2dfba0feabd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abdc2e2d82c51c1703656a2dfba0feabd">&#9670;&nbsp;</a></span>~Drawable()</h2>
 
@@ -205,8 +251,8 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a641d2b59fe07178ebfb1e40d770f6050"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a641d2b59fe07178ebfb1e40d770f6050">&#9670;&nbsp;</a></span>applyAcceleration()</h2>
+<a id="a44e82c54f44c8b982b53564c32f8ca32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44e82c54f44c8b982b53564c32f8ca32">&#9670;&nbsp;</a></span>applyAcceleration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -217,7 +263,7 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
         <tr>
           <td class="memname">void Drawable::applyAcceleration </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">long&#160;</td>
           <td class="paramname"><em>delta</em></td><td>)</td>
           <td></td>
         </tr>
@@ -230,12 +276,12 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 </div><div class="memdoc">
 <p>adjust velocity based on acceleration </p>
 
-<p>Reimplemented in <a class="el" href="class_being.html#a9bf5cbb9a938928b29804b5866b3a049">Being</a>.</p>
+<p>Reimplemented in <a class="el" href="class_being.html#a459bba2a8be537eb4db96e9eded87bd9">Being</a>.</p>
 
 </div>
 </div>
-<a id="a7db65b8d1eac36e530c29331bb682bc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7db65b8d1eac36e530c29331bb682bc7">&#9670;&nbsp;</a></span>calcVelocityOffset()</h2>
+<a id="a3dec3f01ef1014f4aea1b59c52083669"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3dec3f01ef1014f4aea1b59c52083669">&#9670;&nbsp;</a></span>calcVelocityOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,7 +292,7 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
         <tr>
           <td class="memname">std::tuple&lt; float, float &gt; Drawable::calcVelocityOffset </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">long&#160;</td>
           <td class="paramname"><em>delta</em></td><td>)</td>
           <td></td>
         </tr>
@@ -266,6 +312,9 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Drawable::destroy </td>
@@ -274,13 +323,20 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Mark the drawable for removal at the next sweep </p>
 
+<p>Reimplemented in <a class="el" href="class_being.html#a123c16ce5e1a5f28ed5f2fa35122a976">Being</a>.</p>
+
 </div>
 </div>
-<a id="a521a586ee87f6c603753fb0b628826d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a521a586ee87f6c603753fb0b628826d0">&#9670;&nbsp;</a></span>doMove()</h2>
+<a id="a002cfde209bd438aab342e82ecf707f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a002cfde209bd438aab342e82ecf707f3">&#9670;&nbsp;</a></span>doMove()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -303,7 +359,7 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;&#160;</td>
+          <td class="paramtype">std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;&#160;</td>
           <td class="paramname"><em>objects</em>&#160;</td>
         </tr>
         <tr>
@@ -320,7 +376,36 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 </div><div class="memdoc">
 <p>Update the position by offsetting previous position. Handle collisions. </p>
 
-<p>Reimplemented in <a class="el" href="class_being.html#a6d3e62c071a0a16d1376c94e180b60f4">Being</a>.</p>
+<p>Reimplemented in <a class="el" href="class_being.html#a7fc9e71bd7fb5cb090f74bd84d2482b0">Being</a>.</p>
+
+</div>
+</div>
+<a id="ac13f6909d432fe530de1c90c6bc33192"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac13f6909d432fe530de1c90c6bc33192">&#9670;&nbsp;</a></span>fillObjectState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Drawable::fillObjectState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_object_state_msg.html">ObjectStateMsg</a> &amp;&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Fill in the given state message with the state of this drawable </p>
+
+<p>Reimplemented in <a class="el" href="class_being.html#a2eaa7e672479db51306feadee7c1dad3">Being</a>.</p>
 
 </div>
 </div>
@@ -347,6 +432,32 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 </table>
 </div><div class="memdoc">
 <p>Return the amount of damage this drawable does when it hits something </p>
+
+</div>
+</div>
+<a id="aa521882d9f5ae21ddb8607d438524df5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa521882d9f5ae21ddb8607d438524df5">&#9670;&nbsp;</a></span>getId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Drawable::getId </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return unique id </p>
 
 </div>
 </div>
@@ -399,6 +510,32 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 </table>
 </div><div class="memdoc">
 <p>Get the number of points earned for destroying this object </p>
+
+</div>
+</div>
+<a id="a68cfc1fa65120a8bb97a8e9c974c5f22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68cfc1fa65120a8bb97a8e9c974c5f22">&#9670;&nbsp;</a></span>getTileNum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Drawable::getTileNum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return the tile number of this drawable </p>
 
 </div>
 </div>
@@ -483,6 +620,34 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 </table>
 </div><div class="memdoc">
 <p>Return true if things will bounce off of this drawable </p>
+
+</div>
+</div>
+<a id="a9de6ed7e1432a1b807a07df48f8732a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9de6ed7e1432a1b807a07df48f8732a9">&#9670;&nbsp;</a></span>isStatic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Drawable::isStatic </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>return true if this object will not update once loaded. Overridden by subclasses </p>
+
+<p>Reimplemented in <a class="el" href="class_being.html#a409e12f3274202cf7491d4111cf8b8b7">Being</a>.</p>
 
 </div>
 </div>
@@ -669,6 +834,60 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 
 </div>
 </div>
+<a id="aa95c91028b9b6e930bc4a077845924b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa95c91028b9b6e930bc4a077845924b0">&#9670;&nbsp;</a></span>setId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Drawable::setId </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>new_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set unique id </p>
+
+</div>
+</div>
+<a id="a6dec6efb5b7f7febd24b7241998b74c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dec6efb5b7f7febd24b7241998b74c3">&#9670;&nbsp;</a></span>setIntangible()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Drawable::setIntangible </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set whether the object should be interactable </p>
+
+</div>
+</div>
 <a id="a64d13472bc980bf4190d4ef32b76958a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a64d13472bc980bf4190d4ef32b76958a">&#9670;&nbsp;</a></span>setPosition()</h2>
 
@@ -735,8 +954,49 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 
 </div>
 </div>
-<a id="a2ea0a85c40e1b5059c4843c9ac4d0b27"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ea0a85c40e1b5059c4843c9ac4d0b27">&#9670;&nbsp;</a></span>update()</h2>
+<a id="a02b1e5a2da9db53135fa40982d6a625c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02b1e5a2da9db53135fa40982d6a625c">&#9670;&nbsp;</a></span>smoothValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Drawable::smoothValue </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>current</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>update</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>min_off</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>max_off</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Smooth out an update to a value </p>
+
+</div>
+</div>
+<a id="a7e56f583ce4241a6e5eb7adb754b5e0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e56f583ce4241a6e5eb7adb754b5e0e">&#9670;&nbsp;</a></span>update()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -747,13 +1007,13 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
         <tr>
           <td class="memname">void Drawable::update </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">long&#160;</td>
           <td class="paramname"><em>delta</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;&#160;</td>
+          <td class="paramtype">std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;&#160;</td>
           <td class="paramname"><em>objects</em>&#160;</td>
         </tr>
         <tr>
@@ -770,7 +1030,104 @@ std::function&lt; void(<a class="el" href="class_drawable.html">Drawable</a> &am
 </div><div class="memdoc">
 <p>Update the object based on how much time has passed. delta is in ms. </p>
 
-<p>Reimplemented in <a class="el" href="class_being.html#a37b0604dd6c325dd46ed9eb0d42b8118">Being</a>, and <a class="el" href="class_tile.html#a65bf5a12bf6707bd918eec3be8b6f109">Tile</a>.</p>
+<p>Reimplemented in <a class="el" href="class_tile.html#a3a9234ad88f1677fc87cb344b5fadd63">Tile</a>.</p>
+
+</div>
+</div>
+<a id="ad6cbd568f06a089ec9f530adfbd01d05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6cbd568f06a089ec9f530adfbd01d05">&#9670;&nbsp;</a></span>updatePhysics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Drawable::updatePhysics </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>delta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::map&lt; int, <a class="el" href="class_drawable.html">Drawable</a> *&gt; &amp;&#160;</td>
+          <td class="paramname"><em>objects</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Update the physics of the object. Handled movement and collisions </p>
+
+<p>Reimplemented in <a class="el" href="class_being.html#aabd5ab576554d5563365277b7ef46c05">Being</a>.</p>
+
+</div>
+</div>
+<a id="af84e55d44bd72c0b5a027ba2eae093d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af84e55d44bd72c0b5a027ba2eae093d1">&#9670;&nbsp;</a></span>updateState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Drawable::updateState </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>delta</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Update the game state of the object </p>
+
+<p>Reimplemented in <a class="el" href="class_being.html#ad5dba20d809c182cd21553bfc2163d1a">Being</a>.</p>
+
+</div>
+</div>
+<a id="a92aac2527f899106fb3ba65fbc0674dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92aac2527f899106fb3ba65fbc0674dd">&#9670;&nbsp;</a></span>updateWithObjectState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Drawable::updateWithObjectState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_object_state_msg.html">ObjectStateMsg</a> &amp;&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Update this drawable using the values from a state object </p>
+
+<p>Reimplemented in <a class="el" href="class_being.html#a43eded8868b6f1c8647bd32a3f9117a8">Being</a>.</p>
 
 </div>
 </div>

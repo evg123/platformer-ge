@@ -8,9 +8,17 @@
 
 #include "hopman_server.h"
 
-void HopmanServer::init(bool headless) {
+/**
+ Constructur
+ */
+HopmanServer::HopmanServer(bool headless) : Hopman(headless) {}
+
+/**
+ Set up the game in dedicated server mode
+ */
+void HopmanServer::init() {
     last_net_update = 0;
-    Hopman::init(headless);
+    Hopman::init();
     Audio::instance().setEnabled(false);
     setupLevel();
     togglePause();
@@ -79,6 +87,10 @@ void HopmanServer::update(long delta) {
     removeDestroyed();
 }
 
+/**
+ Send and receive messages to/from clients
+ Also listen for new clients
+ */
 void HopmanServer::networkUpdate() {
     // handle input from clients
     int *player_id;
@@ -176,6 +188,9 @@ void HopmanServer::networkUpdate() {
     }
 }
 
+/**
+ True if it is time to send another round of updates to clients
+ */
 bool HopmanServer::shouldSendNetworkUpdate() {
     long now = getTime();
     long diff = now - last_net_update;
@@ -186,6 +201,9 @@ bool HopmanServer::shouldSendNetworkUpdate() {
     return false;
 }
 
+/**
+ Handle a new client registration
+ */
 void HopmanServer::processRegistration(PlayerState *pstate, ClientRegisterMsg *reg) {
     if (reg->need_to_load) {
         // client is requesting we set it to loading mode
@@ -197,6 +215,9 @@ void HopmanServer::processRegistration(PlayerState *pstate, ClientRegisterMsg *r
     }
 }
 
+/**
+ Assign a player to a new client
+ */
 PlayerState* HopmanServer::addNewPlayer() {
     // take the first inactive player from the players list
     for (auto &player_state : players) {
@@ -210,6 +231,9 @@ PlayerState* HopmanServer::addNewPlayer() {
     return NULL;
 }
 
+/**
+ Update players that have died
+ */
 void HopmanServer::handleDeath() {
     // check if players were killed
     for (auto &pstate : players) {
@@ -219,6 +243,9 @@ void HopmanServer::handleDeath() {
     }
 }
 
+/**
+ Register callbacks for when keys are pressed
+ */
 void HopmanServer::registerInputCallbacks() {
     // game events
     Input::instance().registerCallback(Action::EXIT_GAME, std::bind(&HopmanServer::exitGame, this));
@@ -258,7 +285,9 @@ void HopmanServer::handleGameState() {
         setAllGameStates(GameState::LOADING);
         for (auto &pstate : players) {
             // give every player an extra life
-            ++pstate->lives;
+            if (pstate->lives > 0) {
+                ++pstate->lives;
+            }
         }
         setupLevel();
     } else if (paused && any_playing) {

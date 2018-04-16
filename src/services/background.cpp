@@ -60,6 +60,10 @@ void Background::init(int lower_bound) {
     setLowerBound(lower_bound);
 }
 
+/**
+ Update the value of the lower bound for the background
+ This determines where the layers will start
+ */
 void Background::setLowerBound(int lower_bound) {
     this->lower_bound = lower_bound - 200;
 }
