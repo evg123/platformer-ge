@@ -129,9 +129,9 @@ void Being::updateWithObjectState(ObjectStateMsg &state) {
     Drawable::updateWithObjectState(state);
     hp = state.hp;
     air_jumps = state.air_jumps;
-    if (state.on_ground) {
+    jump_start_ts = state.jump_start_ts;
+    if (state.jump_start_ts == 0) {
         last_grounded = getTime();
-        jump_start_ts = 0;
     }
 }
 
@@ -403,5 +403,5 @@ void Being::fillObjectState(ObjectStateMsg &state) {
     Drawable::fillObjectState(state);
     state.hp = hp;
     state.air_jumps = air_jumps;
-    state.on_ground = isOnGround();
+    state.jump_start_ts = jump_start_ts;
 }

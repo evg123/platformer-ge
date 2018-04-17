@@ -1,4 +1,4 @@
-# A 2D Platformer using SDL2
+# A Multiplayer 2D Platformer using SDL2
 Website: https://evg-game-engines.herokuapp.com/platformer.html
 
 ### Features:

@@ -30,7 +30,7 @@
 #include "tile.h"
 #include "background.h"
 
-constexpr int STARTING_LEVEL = 2;
+constexpr int STARTING_LEVEL = 1;
 constexpr auto BG_TRACK = "bg_track.mp3";
 constexpr int MAX_PLAYERS = 4;
 

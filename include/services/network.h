@@ -90,7 +90,7 @@ struct ObjectStateMsg {
     int hp;
     bool marked_for_removal;
     int air_jumps;
-    bool on_ground;
+    long jump_start_ts;
 };
 
 struct ClientRecord {

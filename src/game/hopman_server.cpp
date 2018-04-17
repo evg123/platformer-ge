@@ -27,7 +27,9 @@ void HopmanServer::init() {
  */
 int HopmanServer::play() {
     registerInputCallbacks();
-    createUI();
+    if (!headless) {
+        createUI();
+    }
 
     while (true) {
         // wait until it is time to render the next frame
@@ -47,16 +49,18 @@ int HopmanServer::play() {
         // update game objects
         if (!paused) {
             update(delta);
-
-            // focus the screen on the player
-            Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
         }
 
-        // update the GUI
-        Gui::instance().update();
+        if (!headless) {
+            // focus the screen on the player
+            Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
 
-        // draw the new frame
-        render();
+            // update the GUI
+            Gui::instance().update();
+
+            // draw the new frame
+            render();
+        }
 
         // update overall game state based on client states
         handleGameState();

@@ -31,7 +31,7 @@
 #include "hopman_client.h"
 
 #define HOST_OPT  "--server-addr"
-#define HEADLESS_FLAG  "--headless"
+#define DEBUG_FLAG  "--debug"
 #define HELP_FLAG_1 "--help"
 #define HELP_FLAG_2 "-h"
 
@@ -40,8 +40,7 @@
  */
 void printUsage() {
     std::cout << "Usage:" << std::endl;
-    std::cout << "  Hopman [ " << HOST_OPT << " <server IP address>"
-              << " [" << HEADLESS_FLAG << "] ]" << std::endl;
+    std::cout << "  Hopman [ " << HOST_OPT << " <server IP address> ]" << std::endl;
 }
 
 /**
@@ -89,14 +88,14 @@ int main(int argc, char *argv[]) {
 
     std::string host;
     bool server_mode = !getCmdLineOption(argv, argv + argc, HOST_OPT, host);
-    bool headless = getCmdLineFlag(argv, argv + argc, HEADLESS_FLAG);
+    bool debug = getCmdLineFlag(argv, argv + argc, DEBUG_FLAG);
 
     if (!server_mode && host.empty()) {
         printUsage();
         return 1;
     }
 
-    if (!server_mode && headless) {
+    if (!server_mode && debug) {
         std::cout << "Headless mode is not supported when running as client" << std::endl;
         return 1;
     }
@@ -104,7 +103,8 @@ int main(int argc, char *argv[]) {
     // start the game
     Hopman *hpm;
     if (server_mode) {
-        hpm = new HopmanServer(headless);
+        // run in headless mode unless debugging
+        hpm = new HopmanServer(!debug);
     } else {
         hpm = new HopmanClient(host);
     }
