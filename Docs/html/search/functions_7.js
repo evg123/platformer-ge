@@ -1,6 +1,7 @@
 var searchData=
 [
   ['handleclick',['handleClick',['../class_gui.html#aecb696c95cdf0d2d5caba78a66ca6bb0',1,'Gui::handleClick()'],['../class_menu.html#a86a1346bb02fd8e1e914ef991daa4849',1,'Menu::handleClick()']]],
+  ['handledeath',['handleDeath',['../class_hopman.html#ab5bdd7d68cdf7a450b7e6f55e5b8e1ed',1,'Hopman']]],
   ['handleevents',['handleEvents',['../class_input.html#a562550a18665e9eaee2a808c95999741',1,'Input']]],
   ['hasaccuratesync',['hasAccurateSync',['../class_client.html#a210857c585b9f30861c6390a2e0d30f1',1,'Client']]],
   ['height',['height',['../class_evg_rect.html#a25b392498415fdb3dbd433ddc416352a',1,'EvgRect']]],

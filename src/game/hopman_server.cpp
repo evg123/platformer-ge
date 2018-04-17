@@ -1,7 +1,4 @@
 //
-//  hopman_server.cpp
-//  platformer
-//
 //  Created by Vande Griek, Eric on 4/8/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
@@ -31,42 +28,44 @@ void HopmanServer::init() {
 int HopmanServer::play() {
     registerInputCallbacks();
     createUI();
-    
+
     while (true) {
         // wait until it is time to render the next frame
         timer.delayUntilNextFrame();
-        
+
         fps_display = timer.getFps();
-        
+
         // signal a new frame to the fps timer and get the delta since the last frame
         long delta = timer.newFrame();
-        
+
         // tell the input singleton to poll for events
         Input::instance().handleEvents();
         if (!running) {
             break;
         }
-        
+
         // update game objects
         if (!paused) {
             update(delta);
-            
+
             // focus the screen on the player
             Graphics::instance().focusScreenOffsets(getPlayer()->getRect().getCollider());
         }
 
         // update the GUI
         Gui::instance().update();
-        
+
         // draw the new frame
         render();
-        
+
+        // update overall game state based on client states
         handleGameState();
-        
+
         // send/receive updates on the network
-        networkUpdate();
+        sendNetworkUpdates();
+        listenNetworkUpdates();
     }
-    
+
     return 0;
 }
 
@@ -91,7 +90,7 @@ void HopmanServer::update(long delta) {
  Send and receive messages to/from clients
  Also listen for new clients
  */
-void HopmanServer::networkUpdate() {
+void HopmanServer::sendNetworkUpdates() {
     // handle input from clients
     int *player_id;
     int msg_type;
@@ -126,18 +125,7 @@ void HopmanServer::networkUpdate() {
                 Being *player = pstate->player;
                 if (pstate->active_state == GameState::PLAYING) {
                     // only update player if we are playing
-                    /*
-                    long delta;
-                    if (pstate->last_update == 0) {
-                        // first update, use 0
-                        delta = 0;
-                    } else {
-                        delta = input->hdr.ts - pstate->last_update;
-                    }
-                    */
                     player->updateWithInput(*input);
-                    //player->update(delta, objects);
-                    
                 }
                 // handle clicks
                 if (input->clicked) {
@@ -148,7 +136,13 @@ void HopmanServer::networkUpdate() {
             }
         }
     }
-    
+}
+
+/**
+ Listen for messages from clients
+ Register new clients
+ */
+void HopmanServer::listenNetworkUpdates() {
     // send updates to clients periodically
     if (shouldSendNetworkUpdate()) {
         std::set<int> loading_player_ids;
@@ -330,13 +324,6 @@ void HopmanServer::setupLevel() {
     if (!have_goal) {
         throw std::runtime_error("Invalid level file, no goal tile found!");
     }
-    
-    // start the background track for the level
-    //TODO make custom for each level
-    //Audio::instance().setBgTrack(BG_TRACK);
-    
-    // start out on the level start screen
-    //setAllGameStates(GameState::LEVEL_START); should already be loading
 }
 
 /**

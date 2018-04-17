@@ -1,6 +1,6 @@
 //
 //  network.h
-//  platformer
+//  Handle message send/receive over the network
 //
 //  Created by Vande Griek, Eric on 4/3/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.

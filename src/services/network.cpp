@@ -1,7 +1,4 @@
 //
-//  network.cpp
-//  platformer
-//
 //  Created by Vande Griek, Eric on 4/3/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
@@ -102,7 +99,6 @@ void Client::updateServerTime(TimeSyncMsg *msg) {
         // use the collected points to update our guess at the server time
         std::sort(server_time_datapoints.begin(), server_time_datapoints.end());
         server_clock_offset = server_time_datapoints[DATAPOINTS_PER_UPDATE / 2];
-        //server_clock_offset = (server_clock_offset + new_guess) / 2;
         server_time_datapoints.clear();
         accurate_time_sync = true;
     }

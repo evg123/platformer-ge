@@ -88,6 +88,7 @@ public:
     virtual void updateState(long delta);
     virtual void updateWithObjectState(ObjectStateMsg &state);
     float smoothValue(float current, float update, float min_off, float max_off);
+    /** Draw the object at its current position */
     virtual void render() = 0;
     /** Get the bounding rect of this object */
     virtual EvgRect& getRect() { return rect; }

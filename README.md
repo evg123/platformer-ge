@@ -1,12 +1,16 @@
 # A 2D Platformer using SDL2
 Website: https://evg-game-engines.herokuapp.com/platformer.html
 
-### Special Feature:
+### Features:
+* Network Multiplayer
+  * Up to 4 players
+  * Dedicated server mode
+  * Client-side prediction
+  * Mac / Linux cross-platform play
 * Parallax scrolling background
-  * Hopman features a parallax background system that allows the programmer to add multiple background layers that move independently.
-  * Each layer is assigned a distance that affects how much it moves as the screen scrolls.
-  * Layers that are further away will scroll at a slower rate than foreground layers.
-  * Layers repeat to the left and right independently from each other.
+* Multiple enemy types
+* Animated sprites
+* A level editor
 
 
 ### Controls:
@@ -35,12 +39,17 @@ Website: https://evg-game-engines.herokuapp.com/platformer.html
 
 
 ### Build Instructions:
-1. From the root directory run "python src/build_mac.py"
-   A Game directory will be created containing the binary and all assets needed.
-1. Run the game with "./Game/Hopman"
+1. From the root directory run "python src/build_mac.py" or "python src/build_linux.py" depending on your platform
+  * A Game directory will be created containing the binary and all assets needed
+  * The linux build requires that you install several SDL packages:
+    * libsdl2-dev, libsdl2-image-dev, libsdl2-ttf-dev, libsdl2-mixer-dev
+1. Start the server with "./Game/Hopman"
+1. Each player should run the game with "./Game/Hopman --server-addr <server ip address>"
+  * The server listens for connections on all interfaces
+  * Localhost (127.0.0.1) can be used for testing on the same machine the server is running on
 1. Enjoy
 
-Only tested on OSX 10.12
+Tested on OSX 10.12, Ubuntu 16.04 and 17.10
 
 #### Attributions:
 * Player sprite from https://opengameart.org/content/classic-hero
@@ -50,6 +59,7 @@ Only tested on OSX 10.12
 * Fire and chest images from https://0x72.itch.io/16x16-dungeon-tileset
 * Sound effects from https://opengameart.org/content/sfx-the-ultimate-2017-16-bit-mini-pack
 * Background track by HitCtrl downloaded from https://opengameart.org/content/the-swarm
+* Client-side prediction system adapted from https://gafferongames.com/post/networked_physics_2004/
 * Network clock sync algorithm adapted from: http://www.mine-control.com/zack/timesync/timesync.html
 
 ******************
@@ -64,9 +74,6 @@ Note: There is only 1 part to the final project. This is it--the grand finale!
 Team Name: EVG
 
 - Eric VandeGriek
--
--
--
 
 
 ## Final Project - Description

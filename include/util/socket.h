@@ -1,6 +1,6 @@
 //
 //  socket.h
-//  platformer
+//  Layer on top of UDP sockets
 //
 //  Created by Vande Griek, Eric on 4/3/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.

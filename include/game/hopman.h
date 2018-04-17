@@ -142,6 +142,7 @@ protected:
     void togglePause();
 
     void advanceScreen(PlayerState *pstate);
+    /** Register callbacks with the input subsystem that get called on certain actions */
     virtual void registerInputCallbacks() = 0;
     void render();
     void renderGui();
@@ -156,6 +157,7 @@ protected:
     void setAllGameStates(GameState state);
 
     void removeDestroyed();
+    /** Mark objects as destroyed if they need it */
     virtual void handleDeath() = 0;
     void tryRespawn(PlayerState *pstate);
     void cleanupLevel();
@@ -163,14 +165,15 @@ protected:
 
     void createBackground();
     Drawable* addTile(int tile_type, int tx, int ty, int id);
+    Being* addPlayerTile(int id, int xpos, int ypos);
     PlayerState* getPlayerState();
     PlayerState* getPlayerState(Drawable *obj);
     Being* getPlayer();
-    virtual void networkUpdate() = 0;
 public:
     Hopman(bool headless);
     virtual void init();
     void shutdown();
+    /** Start the game. Blocking call */
     virtual int play() = 0;
 };
 

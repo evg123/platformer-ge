@@ -1,7 +1,4 @@
 //
-//  hopman_client.cpp
-//  platformer
-//
 //  Created by Vande Griek, Eric on 4/8/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
 //
@@ -40,6 +37,7 @@ void HopmanClient::init() {
 int HopmanClient::play() {
     registerInputCallbacks();
     createUI();
+    Audio::instance().setBgTrack(BG_TRACK);
     
     while (true) {
         // wait until it is time to render the next frame
@@ -75,7 +73,8 @@ int HopmanClient::play() {
         render();
 
         // send/receive updates on the network
-        networkUpdate();
+        sendNetworkUpdates();
+        listenNetworkUpdates();
     }
 
     return 0;
@@ -121,9 +120,9 @@ bool HopmanClient::shouldTimeSync() {
 }
 
 /**
- Send and receive messages to/from the server
+ Send and messages to the server
  */
-void HopmanClient::networkUpdate() {
+void HopmanClient::sendNetworkUpdates() {
     if (shouldTimeSync()) {
         client.sendTimeSync();
     }
@@ -140,7 +139,12 @@ void HopmanClient::networkUpdate() {
         player_input.clicked = false;
         player_input.jumped = false;
     }
-    
+}
+
+/**
+ Receive messages from the server
+ */
+void HopmanClient::listenNetworkUpdates() {
     // process incoming state updates
     int msg_type;
     char buffer[client.msg_buffer_size];
@@ -148,10 +152,9 @@ void HopmanClient::networkUpdate() {
         switch (msg_type) {
             case MSG_TYPE::GAME_STATE: {
                 GameStateMsg *state = reinterpret_cast<GameStateMsg*>(buffer);
-                PlayerState *pstate;
                 if (state->you) {
                     // we got a state update for our client
-                    pstate = getPlayerState();
+                    PlayerState *pstate = getPlayerState();
                     pstate->lives = state->lives;
                     score = state->score;
                     level = state->level;
@@ -168,43 +171,12 @@ void HopmanClient::networkUpdate() {
                         setGameState(pstate, static_cast<GameState>(state->state));
                     }
                 } else {
+                    // not out state
                     if (!state->assigned) {
                         // player hasn't been assigned yet, ignore
                         break;
                     }
-                    // update gui based on the state of other players
-                    for (int pidx = 0; pidx < players.size(); pidx++) {
-                        if (players[pidx]->player->getId() == state->player_id) {
-                            pstate = players[pidx];
-                            if (pstate->active_state == state->state) {
-                                // no update
-                                break;
-                            }
-                            std::string new_status;
-                            switch (state->state) {
-                                case GameState::LOADING:
-                                    new_status = "Loading";
-                                    break;
-                                case GameState::LOSS:
-                                    new_status = "GameOver";
-                                    break;
-                                case GameState::LEVEL_START:
-                                    new_status = "Starting";
-                                    break;
-                                case GameState::RESPAWN:
-                                    new_status = "Dead";
-                                    break;
-                                default:
-                                    new_status = "Playing";
-                                    break;
-                            }
-                            player_status_strs.at(pidx).replace(PLAYER_STATUS_DESCRIPTION_START,
-                                                                PLAYER_STATUS_MAX_LEN,
-                                                                new_status);
-                            setGameState(pstate, static_cast<GameState>(state->state));
-                            break;
-                        }
-                    }
+                    handleOtherPlayerGameState(state);
                 }
                 break;
             }
@@ -228,6 +200,45 @@ void HopmanClient::networkUpdate() {
                 obj->updateWithObjectState(*state);
                 break;
             }
+        }
+    }
+}
+
+/**
+ Update gui based on the state of other players
+ */
+void HopmanClient::handleOtherPlayerGameState(GameStateMsg *state) {
+    for (int pidx = 0; pidx < players.size(); pidx++) {
+        if (players[pidx]->player->getId() == state->player_id) {
+            PlayerState *pstate = players[pidx];
+            if (pstate->active_state == state->state) {
+                // no update
+                break;
+            }
+            // update the message in the player status box
+            std::string new_status;
+            switch (state->state) {
+                case GameState::LOADING:
+                    new_status = "Loading";
+                    break;
+                case GameState::LOSS:
+                    new_status = "GameOver";
+                    break;
+                case GameState::LEVEL_START:
+                    new_status = "Starting";
+                    break;
+                case GameState::RESPAWN:
+                    new_status = "Dead";
+                    break;
+                default:
+                    new_status = "Playing";
+                    break;
+            }
+            player_status_strs.at(pidx).replace(PLAYER_STATUS_DESCRIPTION_START,
+                                                PLAYER_STATUS_MAX_LEN,
+                                                new_status);
+            setGameState(pstate, static_cast<GameState>(state->state));
+            break;
         }
     }
 }
@@ -313,18 +324,6 @@ void HopmanClient::updatePlayerInput() {
         client_state_history[state_history_head].input = player_input;
         getPlayer()->fillObjectState(client_state_history[state_history_head].state);
     }
-}
-
-/**
- Not currently used
- */
-void HopmanClient::handleDeath() {
-    // check if the player was killed
-    /*
-    if (getPlayer()->dead() || getPlayer()->needsRemoval()) {
-        tryRespawn(getPlayer());
-    }
-     */
 }
 
 /**

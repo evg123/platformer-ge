@@ -1,6 +1,6 @@
 //
 //  hopman_client.h
-//  platformer
+//  Hopman subclass for running as a client
 //
 //  Created by Vande Griek, Eric on 4/8/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
@@ -41,12 +41,14 @@ private:
     void updatePlayer(long delta);
     void updateNpcs(long delta);
     GameState getPlayerGameState();
-    void networkUpdate() override;
+    void sendNetworkUpdates();
+    void listenNetworkUpdates();
     void handlePlayerObjectState(ObjectStateMsg *state);
+    void handleOtherPlayerGameState(GameStateMsg *state);
     bool doStatesDiffer(ObjectStateMsg *state1, ObjectStateMsg *state2);
     void replayClientHistory(Being *player, ObjectStateMsg *state, int history_idx);
     void updatePlayerInput();
-    void handleDeath() override;
+    void handleDeath() override {};
     void registerInputCallbacks() override;
     void setGameState(PlayerState *pstate, GameState state) override;
     bool shouldTimeSync();

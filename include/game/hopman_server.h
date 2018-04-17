@@ -1,6 +1,6 @@
 //
 //  hopman_server.h
-//  platformer
+//  Hopman subclass for running as the dedicated server
 //
 //  Created by Vande Griek, Eric on 4/8/18.
 //  Copyright © 2018 Vande Griek, Eric. All rights reserved.
@@ -27,7 +27,8 @@ private:
     PlayerState* addNewPlayer();
     void processRegistration(PlayerState *pstate, ClientRegisterMsg *reg);
     void handleGameState();
-    void networkUpdate() override;
+    void sendNetworkUpdates();
+    void listenNetworkUpdates();
     bool shouldSendNetworkUpdate();
     void handleDeath() override;
     void registerInputCallbacks() override;

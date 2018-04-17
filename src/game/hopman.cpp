@@ -318,32 +318,7 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
 
     Drawable *obj = NULL;
     if (tile_type == TileNum::PLAYER) {
-        for (auto &pstate : players) {
-            if (id == pstate->player->getId() ||
-                (id == 0 && !pstate->placed)) {
-                // use this existing player state for this player in the level
-                obj = pstate->player;
-                pstate->player->init(BeingType::player());
-                // set the x and y position to respawn to
-                pstate->starting_x = xpos;
-                pstate->starting_y = ypos;
-                pstate->placed = true;
-                break;
-            }
-        }
-        if (obj == NULL) {
-            // need to allcoate a new player
-            Being *player = new Being();
-            PlayerState *player_state = new PlayerState(player);
-            setGameState(player_state, GameState::LOADING);
-            player_state->placed = true;
-            player->init(BeingType::player());
-            // set the x and y position to respawn to
-            player_state->starting_x = xpos;
-            player_state->starting_y = ypos;
-            players.push_back(player_state);
-            obj = player;
-        }
+        obj = addPlayerTile(id, xpos, ypos);
     } else if (tile_type == TileNum::RED_ENEMY) {
         Being *enemy = new Being();
         enemy->init(BeingType::redEnemy());
@@ -370,6 +345,34 @@ Drawable* Hopman::addTile(int tile_type, int tx, int ty, int id) {
     obj->setPosition(xpos, ypos);
     objects[obj->getId()] = obj;
     return obj;
+}
+
+/**
+ Add a player tile by claiming an available PlayerState or create a new one
+ */
+Being* Hopman::addPlayerTile(int id, int xpos, int ypos) {
+    PlayerState *pstate = NULL;
+    for (auto &ps_obj : players) {
+        if (id == ps_obj->player->getId() ||
+            (id == 0 && !ps_obj->placed)) {
+            // use this existing player state for this player in the level
+            pstate = ps_obj;
+            break;
+        }
+    }
+    if (pstate == NULL) {
+        // need to allcoate a new player
+        Being *player = new Being();
+        pstate = new PlayerState(player);
+        setGameState(pstate, GameState::LOADING);
+        players.push_back(pstate);
+    }
+    pstate->player->init(BeingType::player());
+    // set the x and y position to respawn to
+    pstate->starting_x = xpos;
+    pstate->starting_y = ypos;
+    pstate->placed = true;
+    return pstate->player;
 }
 
 /**

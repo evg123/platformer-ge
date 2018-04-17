@@ -1,9 +1,10 @@
 /**
  \mainpage Hopman Documentation Main Page
  
- # A 2D platformer using SDL2
+ # A Mulitplayer 2D platformer using SDL2
  
  ### Features:
+ - Up to 4 player Multiplayer
  - Parallax scrolling background
  - Multiple enemy types
  - Animated sprites
@@ -18,6 +19,8 @@
  - The F key toggles an FPS display
  
  The main game class is Hopman
+ Server mode uses HopmanServer
+ Client mode uses HopmanClient
 */
 
 #include <string>
@@ -27,7 +30,7 @@
 #include "hopman_server.h"
 #include "hopman_client.h"
 
-#define HOST_OPT  "--server-host"
+#define HOST_OPT  "--server-addr"
 #define HEADLESS_FLAG  "--headless"
 #define HELP_FLAG_1 "--help"
 #define HELP_FLAG_2 "-h"
@@ -37,7 +40,8 @@
  */
 void printUsage() {
     std::cout << "Usage:" << std::endl;
-    std::cout << "  Hopman " << HOST_OPT << " <server address>" << " [" << HEADLESS_FLAG << "]" << std::endl;
+    std::cout << "  Hopman [ " << HOST_OPT << " <server IP address>"
+              << " [" << HEADLESS_FLAG << "] ]" << std::endl;
 }
 
 /**
