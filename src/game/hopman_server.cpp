@@ -124,6 +124,10 @@ void HopmanServer::sendNetworkUpdates() {
                 break;
             }
             case MSG_TYPE::CLIENT_INPUT: {
+                if (pstate == NULL) {
+                    // ignore unrecognized clients until they register
+                    break;
+                }
                 auto *input = reinterpret_cast<ClientInputMsg*>(buffer);
                 // update the player object based on input
                 Being *player = pstate->player;
@@ -283,7 +287,8 @@ void HopmanServer::handleGameState() {
         setAllGameStates(GameState::LOADING);
         for (auto &pstate : players) {
             // give every player an extra life
-            if (pstate->lives > 0) {
+            // we will bring back dead players as well
+            if (!pstate->player->dead()) {
                 ++pstate->lives;
             }
         }

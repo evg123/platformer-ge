@@ -101,7 +101,7 @@ void HopmanClient::updatePlayer(long delta) {
  */
 void HopmanClient::updateNpcs(long delta) {
     for (auto &obj_rec : objects) {
-        if (getPlayerState(obj_rec.second) == NULL) {
+        if (getPlayer() != obj_rec.second) {
             obj_rec.second->updateState(delta);
         }
     }
