@@ -66,8 +66,8 @@ int HopmanServer::play() {
         handleGameState();
 
         // send/receive updates on the network
-        sendNetworkUpdates();
         listenNetworkUpdates();
+        sendNetworkUpdates();
     }
 
     return 0;
@@ -91,15 +91,16 @@ void HopmanServer::update(long delta) {
 }
 
 /**
- Send and receive messages to/from clients
- Also listen for new clients
+ Listen for messages from clients
+ Register new clients
  */
-void HopmanServer::sendNetworkUpdates() {
+void HopmanServer::listenNetworkUpdates() {
     // handle input from clients
     int *player_id;
     int msg_type;
     char buffer[server.msg_buffer_size];
     while (server.getMessage(msg_type, &player_id, buffer)) {
+        // find the player state for the client this message is from
         PlayerState *pstate = NULL;
         for (auto &player_record : players) {
             if (player_record->player->getId() == *player_id) {
@@ -147,10 +148,9 @@ void HopmanServer::sendNetworkUpdates() {
 }
 
 /**
- Listen for messages from clients
- Register new clients
+ Send game state and game object updates to clients
  */
-void HopmanServer::listenNetworkUpdates() {
+void HopmanServer::sendNetworkUpdates() {
     // send updates to clients periodically
     if (shouldSendNetworkUpdate()) {
         std::set<int> loading_player_ids;
