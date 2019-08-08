@@ -2,7 +2,8 @@
 
 ![Screenshot](https://github.com/evg123/platformer-ge/blob/master/media/img1.png)
 
-Website: https://evg-game-engines.herokuapp.com/platformer.html
+Website: https://evg-game-engines.herokuapp.com/platformer.html  
+Network multiplayer version on branch [multiplayer](https://github.com/evg123/platformer-ge/tree/multiplayer)
 
 ### Special Feature:
 * Parallax scrolling background
